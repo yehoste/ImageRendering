@@ -1,6 +1,7 @@
 package primitives;
 
 public class Point {
+
     /*#xyz: Double3
 +equals (Object): boolean
 +toString(): String

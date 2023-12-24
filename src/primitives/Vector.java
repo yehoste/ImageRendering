@@ -2,6 +2,7 @@ package primitives;
 
 public class Vector extends Point {
 
+
     /*
      +equals (Object): boolean
      +toString(): String
