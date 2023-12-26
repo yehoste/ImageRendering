@@ -34,7 +34,7 @@ public class Vector extends Point {
     public Vector normalize(){
         double normal = this.distance(Point.ZERO); // find the len of the vector
         // Dividing all the cords by the len, and return the vector 
-        return new Vector(this.cords.d1/normal,this.cords.d2/normal,this.cords.d3/normal); 
+        return new Vector(this.cords.reduce(normal)); 
     }
 
     /**
