@@ -3,20 +3,13 @@ import java.lang.Math;
 
 public class Point {
     protected Double3 cords;
-    /*#xyz: Double3
-+equals (Object): boolean
-+toString(): String
-+add (Vector): Point
-+subtract (Point): Vector
-+distance(Point): double
-+distanceSquared (Point): double*/
-
+    
     public Point(double x,double y,double z){
         cords = new Double3(x,y,z);
     }
 
     public Point(Double3 cord){//check if works
-        cords= cord;
+        cords = cord;
     }
 
     public Vector subtract(Point ourPoint){

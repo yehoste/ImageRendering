@@ -23,6 +23,35 @@ public class Vector extends Point {
         return this;
     }
 
+    public Vector add(Vector v1) {
+        return new Vector(this.cords.add(v1.cords));
+    }
+
+    public Vector scale(double d1) {
+        return new Vector(this.cords.scale(d1));
+    }
+
+    public Vector dotProduct(Vector v1) {
+        double d1 = (this.cords.d1 * v1.cords.d1 + this.cords.d2 * v1.cords.d2 + this.cords.d3 * v1.cords.d3);
+        return this.scale(d1);
+    }
+
+    public Vector crossProduct(Vector v1) {
+        return new Vector(  (this.cords.d2 * v1.cords.d3 - this.cords.d3 * v1.cords.d2),
+                            (this.cords.d3 * v1.cords.d1 - this.cords.d1 * v1.cords.d3), 
+                            (this.cords.d1 * v1.cords.d2 - this.cords.d2 * v1.cords.d1));
+    }
+
+    public double lengthSquared() {
+        return  ((this.cords.d1 * this.cords.d1) + 
+                (this.cords.d2 * this.cords.d2) + 
+                (this.cords.d3 * this.cords.d3));
+    }     
+
+    public double length() {
+        return Math.sqrt(this.lengthSquared());
+    }
+
     @Override
     public boolean equals(Object obj) {
         return ((obj instanceof Vector other)
@@ -33,25 +62,5 @@ public class Vector extends Point {
     public String toString() {
         return "vector:" + cords;   
     }
-
-
-
-
-
-
-
-
-    
-    /*
-     +toString(): String
-    +lengthSquared (): double
-    +length(): double
-    +add(Vector): Vector
-    +scale(double): Vector
-    +dotProduct (Vector): Vector
-    +crossProduct (Vector): Vector
-    +normalize(): Vector
-    */
-    
 
 }
