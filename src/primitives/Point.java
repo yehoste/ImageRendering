@@ -18,9 +18,12 @@ public class Point {
         cords= cord;
     }
 
-
     public Vector subtract(Point ourPoint){
-        Vector newVector= new Vector(cords);
+        return new Vector(this.cords.subtract(ourPoint.cords));
+    }
+
+    public Point add(Vector v1) {
+        return new Point(v1.cords.add(this.cords));
     }
 
 
