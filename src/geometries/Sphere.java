@@ -4,8 +4,8 @@ import primitives.Point;
 import primitives.Vector;
 
 public class Sphere {
-    private Point center;
-    private double radius;
+    private final Point center;
+    private final double radius;
 
     public Sphere(Point center, double radius) {
         this.center = center;

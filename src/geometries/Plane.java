@@ -4,8 +4,8 @@ import primitives.Point;
 import primitives.Vector;
 
 public class Plane {
-        private Point q;
-        private Vector normal;
+        private final Point q;
+        private final Vector normal;
 
 
         public Plane(Point point1,Point point2,Point point3){
@@ -15,7 +15,7 @@ public class Plane {
 
         public Plane(Point ourPoint, Vector thatNormal){
                 this.q=ourPoint;
-                normal=thatNormal.normalize();
+                this.normal=thatNormal.normalize();
         }
 
 

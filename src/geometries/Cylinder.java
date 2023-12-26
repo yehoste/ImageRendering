@@ -4,7 +4,7 @@ import primitives.Point;
 import primitives.Vector;
 
 public class Cylinder {
-    private double height;
+    private final double height;
 
     public Cylinder(double height) {
         this.height = height;

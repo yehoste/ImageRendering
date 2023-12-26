@@ -6,8 +6,8 @@ import primitives.Ray;
 
 
 public class Tube {
-    private Ray axis;
-    private double radius;
+    private final Ray axis;
+    private final double radius;
 
     public Tube(Ray axis, double radius) {
         this.axis = axis;
