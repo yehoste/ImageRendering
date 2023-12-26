@@ -3,7 +3,7 @@ import java.lang.Math;
 
 public class Point {
     protected Double3 cords;
-    
+
     public Point(double x,double y,double z){
         cords = new Double3(x,y,z);
     }
@@ -11,6 +11,8 @@ public class Point {
     protected Point(Double3 cord){//check if works
         cords = cord;
     }
+
+    public static final Point ZERO = new Point(0, 0, 0);
 
     public Vector subtract(Point ourPoint){
         return new Vector(this.cords.subtract(ourPoint.cords));
