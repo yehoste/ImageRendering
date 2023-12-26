@@ -9,7 +9,7 @@ public class Vector extends Point {
         if(cords == Double3.ZERO) throw new IllegalArgumentException("the zero vector not ok");
     }
 
-    protected Vector(Double3 ObjD3) {
+    public Vector(Double3 ObjD3) {
         super(ObjD3.d1, ObjD3.d2, ObjD3.d3);
         if(cords == Double3.ZERO) throw new IllegalArgumentException("the zero vector not ok");
     }
@@ -31,9 +31,14 @@ public class Vector extends Point {
         return new Vector(this.cords.scale(d1));
     }
 
-    public Vector dotProduct(Vector v1) {
-        double d1 = (this.cords.d1 * v1.cords.d1 + this.cords.d2 * v1.cords.d2 + this.cords.d3 * v1.cords.d3);
-        return this.scale(d1);
+    /**
+     * Returns the dot product of this vector and another vector.
+     * 
+     * @param v1 the other vector
+     * @return the dot product of this vector and the other vector
+     */
+    public double dotProduct(Vector v1) {
+        return (this.cords.d1 * v1.cords.d1 + this.cords.d2 * v1.cords.d2 + this.cords.d3 * v1.cords.d3);
     }
 
     public Vector crossProduct(Vector v1) {

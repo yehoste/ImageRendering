@@ -8,7 +8,7 @@ public class Point {
         cords = new Double3(x,y,z);
     }
 
-    public Point(Double3 cord){//check if works
+    protected Point(Double3 cord){//check if works
         cords = cord;
     }
 
@@ -30,8 +30,6 @@ public class Point {
     public double distance(Point thatPoint){
         return Math.sqrt(this.distanceSquared(thatPoint));
     }
-
-
 
     @Override
     public boolean equals(Object Check){
