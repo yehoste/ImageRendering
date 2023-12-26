@@ -19,6 +19,13 @@ public class Point {
         cords= cord;
     }
 
+    public Vector subtract(Point ourPoint){
+        return new Vector(this.cords.subtract(ourPoint.cords));
+    }
+
+    public Point add(Vector v1) {
+        return new Point(v1.cords.add(this.cords));
+    }
 
     public double distanceSquared(Point thatPoint){
         return(((this.cords.d1-thatPoint.cords.d1)*(this.cords.d1-thatPoint.cords.d1))+
