@@ -13,11 +13,12 @@ public class Ray {
     // Direction.normalize(); }` is the constructor of the `Ray` class.
     public Ray(Point Head, Vector Direction) {
         head = Head;
-        direction = Direction.normalize();
+        direction = Direction.normalize(); // Normalize the vector
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) return true;
         return ((obj instanceof Ray other)
         && this.head.cords.equals(other.head.cords)
         && this.direction.cords.equals(other.direction.cords));

@@ -6,6 +6,7 @@ import java.lang.Math;
  * operations on points.
  */
 public class Point {
+
     protected final Double3 cords;
 
     // The `public Point(double x,double y,double z)` constructor is creating a new `Point` object with the
@@ -19,7 +20,7 @@ public class Point {
     // `Point` object with the specified `Double3` object as its coordinates. It is used to create a new
     // `Point` object from an existing `Double3` object. The `cords` variable is initialized with the
     // `Double3` object passed as the parameter.
-    protected Point(Double3 cord){
+    private Point(Double3 cord){
         cords = cord;
     }
 
@@ -51,6 +52,7 @@ public class Point {
 
     /**
      * The function calculates the squared distance between two points in three-dimensional space.
+     * (x₂ - x₁)² + (y₂ - y₁)² + (z₂ - z₁)²
      * 
      * @param thatPoint thatPoint is an instance of the Point class, representing another point in
      * three-dimensional space.
@@ -65,6 +67,9 @@ public class Point {
 
     /**
      * The function calculates the distance between two points using the distance formula.
+     * √(return from distanceSquared) because Distance between two points in 3D space is: 
+     * d = √((x₂ - x₁)² + (y₂ - y₁)² + (z₂ - z₁)²). 
+     * And (x₂ - x₁)² + (y₂ - y₁)² + (z₂ - z₁)² provided by the distanceSquared func.
      * 
      * @param thatPoint The parameter "thatPoint" is of type "Point". It represents another point in a
      * two-dimensional space.
@@ -76,9 +81,10 @@ public class Point {
 
 
     @Override
-    public boolean equals(Object Check){
-        Point CheckIfEqual=(Point) Check;
-        return ((CheckIfEqual.cords.d1==this.cords.d1) &&
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        return ((obj instanceof Point CheckIfEqual) &&
+                (CheckIfEqual.cords.d1==this.cords.d1) &&
                 (CheckIfEqual.cords.d2==this.cords.d2) &&
                 (CheckIfEqual.cords.d3==this.cords.d3));
     }

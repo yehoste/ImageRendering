@@ -32,8 +32,9 @@ public class Vector extends Point {
      * @return The method is returning the normalized vector.
      */
     public Vector normalize(){
-        double normal = this.distance(Point.ZERO);
-        return new Vector(this.cords.d1/normal,this.cords.d2/normal,this.cords.d3/normal);
+        double normal = this.distance(Point.ZERO); // find the len of the vector
+        // Dividing all the cords by the len, and return the vector 
+        return new Vector(this.cords.d1/normal,this.cords.d2/normal,this.cords.d3/normal); 
     }
 
     /**
@@ -53,7 +54,7 @@ public class Vector extends Point {
      * @param d1 The parameter `d1` is a double value that represents the scaling factor.
      * @return The method is returning a new Vector object.
      */
-    public Vector scale(double d1) {
+    public Vector scale(double d1) { // privet for ex 2+
         return new Vector(this.cords.scale(d1));
     }
 
@@ -69,6 +70,10 @@ public class Vector extends Point {
 
     /**
      * The crossProduct function calculates the cross product of two vectors.
+     * It using the equation for cross product of two vectors:
+     * (a₂b₃ - a₃b₂) is the x-component
+     * (a₃b₁ - a₁b₃) is the y-component
+     * (a₁b₂ - a₂b₁) is the z-component
      * 
      * @param v1 The parameter `v1` is a Vector object that represents the second vector in the cross
      * product calculation.
@@ -82,12 +87,13 @@ public class Vector extends Point {
 
     /**
      * The function calculates the squared length of a vector in three-dimensional space.
+     * It from the mathematical property: v * v = v^2 => |v|^2 (length Squared)
      * 
      * @return The method `lengthSquared()` returns the sum of the squares of the three coordinates (`d1`,
      * `d2`, and `d3`).
      */
     public double lengthSquared() {
-        return  ((this.cords.d1 * this.cords.d1) + 
+        return ((this.cords.d1 * this.cords.d1) + 
                 (this.cords.d2 * this.cords.d2) + 
                 (this.cords.d3 * this.cords.d3));
     }     
@@ -96,7 +102,7 @@ public class Vector extends Point {
      * The function calculates the length of a vector by taking the square root of the sum of its squared
      * components.
      * 
-     * @return The method is returning the square root of the length squared.
+     * @return The method is returning the *square root of the length squared*.
      */
     public double length() {
         return Math.sqrt(this.lengthSquared());
@@ -104,13 +110,14 @@ public class Vector extends Point {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) return true;
         return ((obj instanceof Vector other)
         && this.cords.equals(other.cords));
     }
 
     @Override
     public String toString() {
-        return "vector:" + cords;   
+        return "vector:" + super.toString();   
     }
 
 }
