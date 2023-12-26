@@ -14,9 +14,19 @@ public class Vector extends Point {
         if(cords == Double3.ZERO) throw new IllegalArgumentException("the zero vector not ok");
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return ((obj instanceof Vector other)
+        && this.cords ==  other.cords);
+    }
+
+    @Override
+    public String toString() {
+        return "vector:" + cords;   
+    }
+
     
     /*
-     +equals (Object): boolean
      +toString(): String
     +lengthSquared (): double
     +length(): double
