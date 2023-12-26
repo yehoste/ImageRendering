@@ -13,8 +13,8 @@ public class Ray {
     @Override
     public boolean equals(Object obj) {
         return ((obj instanceof Ray other)
-        && this.head.cords ==  other.head.cords
-        && this.direction.cords ==  other.direction.cords);
+        && this.head.cords.equals(other.head.cords)
+        && this.direction.cords.equals(other.direction.cords));
     }
 
     @Override
