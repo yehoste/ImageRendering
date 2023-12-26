@@ -1,4 +1,5 @@
 package primitives;
+import java.lang.Math;
 
 public class Point {
     protected Double3 cords;
@@ -18,18 +19,17 @@ public class Point {
         cords= cord;
     }
 
-    public Vector subtract(Point ourPoint){
-        return new Vector(this.cords.subtract(ourPoint.cords));
+
+    public double distanceSquared(Point thatPoint){
+        return(((this.cords.d1-thatPoint.cords.d1)*(this.cords.d1-thatPoint.cords.d1))+
+                ((this.cords.d2-thatPoint.cords.d2)*(this.cords.d2-thatPoint.cords.d2))+
+                ((this.cords.d3-thatPoint.cords.d3)*(this.cords.d3-thatPoint.cords.d3))
+        );
     }
 
-    public Point add(Vector v1) {
-        return new Point(v1.cords.add(this.cords));
+    public double distance(Point thatPoint){
+        return Math.sqrt(this.distanceSquared(thatPoint));
     }
-
-
-
-
-
 
 
 
