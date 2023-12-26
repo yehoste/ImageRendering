@@ -102,25 +102,12 @@ public class Vector extends Point {
         return Math.sqrt(this.lengthSquared());
     }
 
-    /**
-     * The equals() function checks if two objects are equal by comparing their coordinates.
-     * 
-     * @param obj The `obj` parameter is an object that we are comparing for equality with the current
-     * object.
-     * @return The method is returning a boolean value.
-     */
     @Override
     public boolean equals(Object obj) {
         return ((obj instanceof Vector other)
         && this.cords.equals(other.cords));
     }
 
-    /**
-     * The toString() function returns a string representation of the vector object.
-     * 
-     * @return The method is returning a string representation of the vector, which includes the word
-     * "vector:" followed by the coordinates of the vector.
-     */
     @Override
     public String toString() {
         return "vector:" + cords;   

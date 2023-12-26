@@ -74,20 +74,18 @@ public class Point {
         return Math.sqrt(this.distanceSquared(thatPoint));
     }
 
-    /**
-     * The function checks if two Point objects are equal by comparing their coordinates.
-     * 
-     * @param Check The parameter "Check" is an Object, which means it can accept any type of object as an
-     * argument. In this case, it is being casted to a Point object inside the method.
-     * @return The method is returning a boolean value, which indicates whether the two objects being
-     * compared are equal or not.
-     */
+
     @Override
     public boolean equals(Object Check){
         Point CheckIfEqual=(Point) Check;
         return ((CheckIfEqual.cords.d1==this.cords.d1) &&
                 (CheckIfEqual.cords.d2==this.cords.d2) &&
                 (CheckIfEqual.cords.d3==this.cords.d3));
+    }
+
+    @Override
+    public String toString() {
+        return "Point:" + cords;
     }
 
 

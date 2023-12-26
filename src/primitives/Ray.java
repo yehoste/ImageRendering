@@ -16,13 +16,6 @@ public class Ray {
         direction = Direction.normalize();
     }
 
-    /**
-     * The equals() function checks if two Ray objects have the same head and direction coordinates.
-     * 
-     * @param obj The `obj` parameter is the object that we are comparing with the current object for
-     * equality.
-     * @return The method is returning a boolean value.
-     */
     @Override
     public boolean equals(Object obj) {
         return ((obj instanceof Ray other)
@@ -30,11 +23,6 @@ public class Ray {
         && this.direction.cords.equals(other.direction.cords));
     }
 
-    /**
-     * The toString() function returns a string representation of the head and direction coordinates.
-     * 
-     * @return The method is returning a string representation of the head and direction coordinates.
-     */
     @Override
     public String toString()  {
         return "head: " +  head.cords +  "\ndirection: " + direction.cords;
