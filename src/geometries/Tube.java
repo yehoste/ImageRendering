@@ -5,15 +5,15 @@ import primitives.Vector;
 import primitives.Ray;
 
 
-public class Tube {
+public class Tube extends RadialGeometry{
     private final Ray axis;
-    private final double radius;
 
     public Tube(Ray axis, double radius) {
+        super(radius);
         this.axis = axis;
-        this.radius = radius;
     }
 
+    @Override
     public Vector getNormal(Point ourPoint){
         return null;
     }

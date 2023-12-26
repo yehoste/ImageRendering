@@ -9,10 +9,10 @@ import primitives.Vector;
 public interface Geometry {
 
     /**
-     * Returns the normal vector at the given point in space.
+     * The function "getNormal" returns a vector representing the normal of a given point.
      * 
-     * @param p the point in space
-     * @return the normal vector at the given point
+     * @param p The point for which we want to calculate the normal vector.
+     * @return A vector is being returned.
      */
     Vector getNormal(Point p);
 
