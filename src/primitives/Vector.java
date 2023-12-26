@@ -14,6 +14,15 @@ public class Vector extends Point {
         if(cords == Double3.ZERO) throw new IllegalArgumentException("the zero vector not ok");
     }
 
+    public Vector normalize(){
+        Point flag=new Point(0,0,0);
+        double normal=this.distance(flag);
+        Vector temp=new Vector(this.cords.d1/normal,this.cords.d2/normal,this.cords.d3/normal);
+        this.subtract(this);
+        this.add(temp);
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return ((obj instanceof Vector other)
@@ -24,6 +33,13 @@ public class Vector extends Point {
     public String toString() {
         return "vector:" + cords;   
     }
+
+
+
+
+
+
+
 
     
     /*
