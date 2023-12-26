@@ -6,8 +6,8 @@ package primitives;
  */
 public class Ray {
 
-    private Point head;
-    private Vector direction;
+    private final Point head;
+    private final Vector direction;
         
     // The code snippet `public Ray(Point Head, Vector Direction) { head = Head; direction =
     // Direction.normalize(); }` is the constructor of the `Ray` class.

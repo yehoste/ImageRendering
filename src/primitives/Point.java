@@ -6,7 +6,7 @@ import java.lang.Math;
  * operations on points.
  */
 public class Point {
-    protected Double3 cords;
+    protected final Double3 cords;
 
     // The `public Point(double x,double y,double z)` constructor is creating a new `Point` object with the
     // specified coordinates `(x, y, z)`. It initializes the `cords` variable with a new `Double3` object
