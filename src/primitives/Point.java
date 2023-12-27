@@ -84,7 +84,7 @@ public class Point {
     public boolean equals(Object obj){
         if (this == obj) return true;
         return ((obj instanceof Point CheckIfEqual) &&
-                (CheckIfEqual.cords.equals(CheckIfEqual.cords)));
+                (this.cords.equals(CheckIfEqual.cords)));
     }
 
     @Override
