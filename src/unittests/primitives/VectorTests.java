@@ -1,14 +1,11 @@
-/**
- * 
- */
-package unittests;
+package unittests.primitives;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 /**
- * 
+ * Unit tests for primitives.Vector class
  */
 class VectorTests {
 
