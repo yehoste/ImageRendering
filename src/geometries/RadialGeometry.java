@@ -7,6 +7,11 @@ public abstract class RadialGeometry implements Geometry {
 
     protected final double radius;
 
+    /**
+     * Constructs a new RadialGeometry with the specified radius.
+     * 
+     * @param radius the radius of the circle
+     */
     public RadialGeometry(double radius) {
         this.radius = radius;
     }
@@ -16,3 +21,4 @@ public abstract class RadialGeometry implements Geometry {
         return null;
     }
 }
+

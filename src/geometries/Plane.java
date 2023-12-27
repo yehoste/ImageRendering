@@ -25,9 +25,15 @@ public class Plane {
         this.normal=null;
     }
 
-    public Plane(Point ourPoint, Vector thatNormal){
-        this.q=ourPoint;
-        this.normal=thatNormal.normalize();
+    /**
+     * Creates a new plane with the given point as the origin and the given normal vector as the plane's normal.
+     * 
+     * @param ourPoint the point that serves as the origin of the plane
+     * @param thatNormal the normal vector of the plane
+     */
+    public Plane(Point ourPoint, Vector thatNormal) {
+        this.q = ourPoint;
+        this.normal = thatNormal.normalize();
     }
 
     public Vector getNormal(){
@@ -37,4 +43,5 @@ public class Plane {
     public Vector getNormal(Point ourPoint){
         return normal;
     }
+
 }
