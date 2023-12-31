@@ -3,12 +3,19 @@ package unittests.primitives;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import primitives.Vector;
 
 /**
  * Unit tests for primitives.Vector class
  */
 class VectorTests {
 
+
+	Vector v1 = new Vector(1, 2, 3);
+	Vector v1Opposite = new Vector(-1, -2, -3);
+	Vector v2 = new Vector(-2, -4, -6);
+	Vector v3 = new Vector(0, 3, -2);
+	Vector v4 = new Vector(1, 2, 2);
 	/**
 	 * Test method for {@link primitives.Vector#normalize()}.
 	 */
