@@ -21,7 +21,15 @@ class VectorTests {
 	 */
 	@Test
 	void testNormalize() {
-		fail("Not yet implemented");
+		Vector v = new Vector(1, 2, 3);
+      	Vector u = v.normalize();
+
+		assertEquals(0, u.length() - 1, "ERROR: the normalized vector is not a unit vector");
+		assertThrows(IllegalArgumentException.class , () -> v.crossProduct(u), "ERROR: the normalized vector is not parallel to the original one");
+		
+		double ch = v.dotProduct(u); //(v.dotProduct(u) < 0)
+		assertEquals(0, (ch - ch), "ERROR: the normalized vector is opposite to the original one");
+
 	}
 
 	/**
@@ -29,7 +37,11 @@ class VectorTests {
 	 */
 	@Test
 	void testAddVector() {
-		fail("Not yet implemented");
+
+		assertEquals(v1Opposite, v1.add(v2), "ERROR: Vector + Vector wrong value");
+
+		assertThrows(IllegalArgumentException.class, () -> v1.add(v1Opposite), "ERROR: Vector + -itself does not throw an exception");
+		assertThrowsExactly(IllegalArgumentException.class, () -> v1.add(v1Opposite), "ERROR: Vector + -itself throws wrong exception");
 	}
 
 	/**
@@ -45,7 +57,9 @@ class VectorTests {
 	 */
 	@Test
 	void testDotProduct() {
-		fail("Not yet implemented");
+		assertEquals(0, v1.dotProduct(v3), "ERROR: dotProduct() for orthogonal vectors is not zero");
+
+		assertEquals(0, v1.dotProduct(v2) + 28, "ERROR: dotProduct() wrong value");
 	}
 
 	/**
@@ -53,7 +67,15 @@ class VectorTests {
 	 */
 	@Test
 	void testCrossProduct() {
-		fail("Not yet implemented");
+		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2), "ERROR: crossProduct() for parallel vectors does not throw an exception");
+
+		Vector vr = v1.crossProduct(v3);
+
+		assertEquals(0, (vr.length() - v1.length() * v3.length()), "ERROR: crossProduct() wrong result length");
+
+		assertEquals(0, vr.dotProduct(v1) , "ERROR: crossProduct() result is not orthogonal to its operands");
+		assertEquals(0, vr.dotProduct(v3) , "ERROR: crossProduct() result is not orthogonal to its operands");
+
 	}
 
 	/**
@@ -61,7 +83,7 @@ class VectorTests {
 	 */
 	@Test
 	void testLengthSquared() {
-		fail("Not yet implemented");
+		assertEquals(0, v4.lengthSquared()-9, "ERROR: lengthSquared() wrong value");
 	}
 
 	/**
@@ -69,7 +91,7 @@ class VectorTests {
 	 */
 	@Test
 	void testLength() {
-		fail("Not yet implemented");
+		assertEquals(0, v4.length()-3, "ERROR: length() wrong value");
 	}
 
 }
