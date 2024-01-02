@@ -1,7 +1,6 @@
 package unittests.geometries;
 
 import geometries.*;
-import primitives.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,7 +12,7 @@ class SphereTest {
 
 	@Test
 	void getNormal() {
-		Sphere sphere=new Sphere(2, new Point(0,0,0));
+		Sphere sphere= new Sphere(new Point(0,0,0), 2);
 
 		assertEquals(new Vector(0.577, 0.577, 0.577), sphere.getNormal(new Point(2,3,4)));
 
