@@ -12,10 +12,8 @@ class SphereTest {
 
 	@Test
 	void getNormal() {
-		Sphere sphere= new Sphere(new Point(0,0,0), 2);
+		Sphere sphere = new Sphere(new Point(0,0,0), 1);
 
-		assertEquals(new Vector(0.577, 0.577, 0.577), sphere.getNormal(new Point(2,3,4)));
-
-
+		assertEquals(new Vector(1, 0, 0), sphere.getNormal(new Point(1,0,0)));
 	}
 }
