@@ -19,6 +19,8 @@ class TriangleTests {
 	 */
 	@Test
 	void testGetNormal() {
+		// ============ Equivalence Partitions Tests ==============
+
 		// Create three points representing the vertices of the triangle
 
 		// Create a triangle with the three points
@@ -33,7 +35,7 @@ class TriangleTests {
 		// Get the actual normal vector from the getNormal function
 		Vector actualNormal = triangle.getNormal(testPoint);
 
-		// Assert that the actual normal vector is equal to the expected normal vector
+		// TC01: Assert that the actual normal vector is equal to the expected normal vector
 		assertEquals(expectedNormal, actualNormal,"The calculated normal vector is not as expected");
 	}
 

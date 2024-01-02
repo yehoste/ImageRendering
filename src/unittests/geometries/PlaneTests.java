@@ -24,18 +24,16 @@ class PlaneTest {
 	void getNormal() {
 		// ============ Equivalence Partitions Tests ==============
 
-		// TC01: creates a new Plane object with the given points
 		Plane plane = new Plane(new Point(1, 0, 0), new Point(0, 1, 0), new Point(0, 0, 1));
-
-		// TC02: creates a new Vector object with the given coordinates
 		Vector normal = plane.getNormal(new Point(2, -1, 0));
 
-		// TC03: Test that plane return normal in the correct direction.
+		// TC01: Test that normal to plane is normalised
+		// Test that plane return normal in the correct direction.
 		assertThrows(IllegalArgumentException.class,
 				() -> (new Vector(1, 1, 1)).crossProduct(normal),
 				"ERROR: plane doesn't return normal in the correct direction.");
 
-		// TC04: Test that normal to plane is normalised.
+		// TC01: that plane normal lengthSquared = 1
 		assertEquals(1, normal.lengthSquared(), 0.000001, "ERROR: normal to plane isn't normalised.");
 	}
 
