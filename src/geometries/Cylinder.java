@@ -24,30 +24,30 @@ public class Cylinder extends Tube {
 
 
     public Vector getNormal(Point p) {
-        
-        if (p.equals(axis.getHead())) return (axis.getDirection().scale(-1));
-        
+
+        // if the point is on the bottom base
+        if (p.equals(axis.getHead())) return (axis.getDirection().scale(-1)); // center
+        if (((p.subtract(axis.getHead())).dotProduct(axis.getDirection()) ) == 0) return axis.getDirection().scale(-1);
+
         // Vector from the base of the cylinder to the point
         Vector v = p.subtract(axis.getHead());
-    
+
         // Projection of v onto the cylinder's axis
         double projScalar = v.dotProduct(axis.getDirection()) / axis.getDirection().lengthSquared();
-        if (projScalar == 0) return (axis.getDirection().scale(-1));
         Vector vProjected = axis.getDirection().scale(projScalar);
 
-        // Vector from the point to the closest point on the axis
-        if (vProjected.equals(v)) return axis.getDirection();
-        Vector vToAxis = vProjected.subtract(v);
-    
-        // Handle points on the bases:
-        if (Math.abs(vToAxis.dotProduct(axis.getDirection())) >= height / 2) {
-            // Point is on a base, normal is parallel to the axis
-            return axis.getDirection().scale(vToAxis.dotProduct(axis.getDirection()) > 0 ? 1 : -1);
-        } else {
-            // Point is on the side surface, normal is perpendicular to the axis
-            return vToAxis.normalize();
+        // if Point at the the top base
+        if (vProjected.equals(v)) return axis.getDirection(); // center
+        Vector _p = (axis.getDirection().scale(height)).subtract(Point.ZERO);
+        if((_p.subtract((p.subtract(axis.getHead())))).dotProduct(axis.getDirection()) == 0) {
+            return axis.getDirection().scale(1);
         }
+
+        // Vector from the point to the closest point on the axis
+        Vector vToAxis = vProjected.subtract(v);
+        return vToAxis.normalize();
+
     }
-    
-    
+
+
 }
