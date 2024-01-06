@@ -5,7 +5,7 @@ import primitives.Vector;
 import primitives.Ray;
 
 public class Tube extends RadialGeometry {
-    private final Ray axis;
+    protected final Ray axis;
 
     /**
      * Constructs a new Tube with the specified axis and radius.
@@ -20,7 +20,13 @@ public class Tube extends RadialGeometry {
 
     @Override
     public Vector getNormal(Point ourPoint) {
-        // TODO: Implement this method
-        return null;
+        //the "shade" of the action point-head on the main axis
+        double t = axis.getDirection().dotProduct(ourPoint.subtract(axis.getHead()));
+        //border case
+        if(t == 0){
+            return ourPoint.subtract(axis.getHead());
+        }
+        //multiply the direction vector of the axis by t, and you have the point on the axis infront of the point
+        return ourPoint.subtract(axis.getHead().add(axis.getDirection().scale(t))).normalize() ;
     }
 }

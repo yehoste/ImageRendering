@@ -15,14 +15,12 @@ public class Plane {
     public Plane(Point point1,Point point2,Point point3){
         this.q=point1;
         
-        /* 
-        // Calculate two vectors from the points
+        //Calculate two vectors from the points
         Vector v1 = point2.subtract(point1);
         Vector v2 = point3.subtract(point1);
         // Calculate the cross product of the vectors to get the normal vector 
         // And normalize the normal vector to have a unit length
-        this.normal = (v1.crossProduct(v2)).normalize();*/
-        this.normal=null;
+        this.normal = (v1.crossProduct(v2)).normalize();
     }
 
     /**

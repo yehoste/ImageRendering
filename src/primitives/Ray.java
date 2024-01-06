@@ -24,6 +24,14 @@ public class Ray {
         && this.direction.cords.equals(other.direction.cords));
     }
 
+    public Point getHead() {
+        return head;
+    }
+
+    public Vector getDirection() {
+        return direction;
+    }
+
     @Override
     public String toString()  {
         return "head: " +  head.cords +  "\ndirection: " + direction.cords;
