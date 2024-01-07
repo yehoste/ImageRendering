@@ -38,8 +38,8 @@ public class Cylinder extends Tube {
 
         // if Point at the the top base
         if (vProjected.equals(v)) return axis.getDirection(); // center
-        Vector _p = (axis.getDirection().scale(height)).subtract(Point.ZERO);
-        if((_p.subtract((p.subtract(axis.getHead())))).dotProduct(axis.getDirection()) == 0) {
+        Point _p = axis.getHead().add(axis.getDirection().scale(height));
+        if(_p.subtract(p).dotProduct(axis.getDirection()) == 0) {
             return axis.getDirection().scale(1);
         }
 
