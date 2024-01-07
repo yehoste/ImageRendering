@@ -3,6 +3,9 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 import primitives.Ray;
+
+import java.util.List;
+
 import static primitives.Util.isZero;
 
 public class Tube extends RadialGeometry {
@@ -29,5 +32,10 @@ public class Tube extends RadialGeometry {
         }
         //multiply the direction vector of the axis by t, and you have the point on the axis infront of the point
         return ourPoint.subtract(axis.getHead().add(axis.getDirection().scale(t))).normalize();
+    }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
     }
 }

@@ -1,14 +1,17 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 
 /**
  * The Plane class represents a plane in three-dimensional space defined by a point and a normal
  * vector.
  */
-public class Plane {
+public class Plane implements Geometry {
     private final Point q;
     private final Vector normal;
 
@@ -40,6 +43,11 @@ public class Plane {
 
     public Vector getNormal(Point ourPoint){
         return normal;
+    }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
     }
 
 }

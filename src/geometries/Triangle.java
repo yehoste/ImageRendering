@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /**
  * A triangle is a polygon with 3 sides and 3 angles.
@@ -21,7 +24,12 @@ public class Triangle extends Polygon {
 
     @Override
     public Vector getNormal(Point p) {
-        return plane.getNormal();
+        return super.getNormal(p);
+    }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
     }
 }
 

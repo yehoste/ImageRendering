@@ -3,6 +3,9 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
 import static primitives.Util.isZero;
 /**
  * A cylinder is a tube with a circular cross-section that extends infinitely in one direction.
@@ -40,6 +43,11 @@ public class Cylinder extends Tube {
         // Vector from the point to the closest point on the axis
         return super.getNormal(p);
 
+    }
+
+    @Override
+    public List<Point> findIntsersections(Ray ray) {
+        return null;
     }
 
 
