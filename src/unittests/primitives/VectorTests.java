@@ -11,12 +11,8 @@ import primitives.Vector;
  */
 class VectorTests {
 
-
-
-
 	private final Point p1 = new Point(1, 2, 3);
 	private final Point  p2 = new Point(2, 4, 6);
-	private final Point  p3 = new Point(2, 4, 5);
 
 	Vector v1 = new Vector(1, 2, 3);
 	Vector v1Opposite = new Vector(-1, -2, -3);

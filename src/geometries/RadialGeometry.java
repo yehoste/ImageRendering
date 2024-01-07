@@ -1,10 +1,7 @@
 package geometries;
 
-import primitives.Ray;
 import primitives.Vector;
 import primitives.Point;
-
-import java.util.List;
 
 public abstract class RadialGeometry implements Geometry {
 
@@ -21,11 +18,6 @@ public abstract class RadialGeometry implements Geometry {
 
     @Override
     public Vector getNormal(Point p) {
-        return null;
-    }
-
-    @Override
-    public List<Point> findIntsersections(Ray ray) {
         return null;
     }
 }
