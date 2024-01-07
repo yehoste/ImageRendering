@@ -20,7 +20,7 @@ class CylinderTests {
 
         // TC01: Point on the side surface of the cylinder
         Point pSide = new Point(1, 2, 0);  // On the side surface
-        Vector expectedNormalSide = new Vector(-1, 0, 0);  // Perpendicular to axis, pointing away from surface
+        Vector expectedNormalSide = new Vector(1, 0, 0);  // Perpendicular to axis, pointing away from surface
         assertEquals(expectedNormalSide, cylinder.getNormal(pSide));
 
         // TC02: Point on the top base of the cylinder

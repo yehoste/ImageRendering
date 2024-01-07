@@ -3,6 +3,7 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 import primitives.Ray;
+import static primitives.Util.isZero;
 
 public class Tube extends RadialGeometry {
     protected final Ray axis;
@@ -23,7 +24,7 @@ public class Tube extends RadialGeometry {
         //the "shade" of the action point-head on the main axis
         double t = axis.getDirection().dotProduct(ourPoint.subtract(axis.getHead()));
         //border case
-        if(t == 0){
+        if(isZero(t)){
             return ourPoint.subtract(axis.getHead());
         }
         //multiply the direction vector of the axis by t, and you have the point on the axis infront of the point

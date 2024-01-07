@@ -3,6 +3,7 @@ package unittests.primitives;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import primitives.Point;
 import primitives.Vector;
 
 /**
@@ -11,11 +12,34 @@ import primitives.Vector;
 class VectorTests {
 
 
+
+
+	private final Point p1 = new Point(1, 2, 3);
+	private final Point  p2 = new Point(2, 4, 6);
+	private final Point  p3 = new Point(2, 4, 5);
+
 	Vector v1 = new Vector(1, 2, 3);
 	Vector v1Opposite = new Vector(-1, -2, -3);
 	Vector v2 = new Vector(-2, -4, -6);
 	Vector v3 = new Vector(0, 3, -2);
 	Vector v4 = new Vector(1, 2, 2);
+
+	/**
+	 * Test method for primitives.Vector#subtract
+	 */
+	@Test
+	void testSubtract() {
+		// ============ Equivalence Partitions Tests ==============
+		//TC01 checks if subtract works as intended
+		assertEquals(v1, p2.subtract(p1), "ERROR: (point2 - point1) does not work correctly");
+		// =============== Boundary Values Tests ==================
+		//TC11 checks if throws exeption when getting 0 vector
+		assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), //
+				"Error does not throw exeption at all");
+		//TC12 checks if throws the correct exeption
+		assertThrowsExactly(IllegalArgumentException.class, () -> p1.subtract(p1),"ERROR: does no throw correct exeption");
+	}
+
 
 	/**
 	 * Test method for {@link primitives.Vector#normalize()}.

@@ -3,6 +3,7 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import static primitives.Util.isZero;
 /**
  * A cylinder is a tube with a circular cross-section that extends infinitely in one direction.
  * It is defined by an axis, a radius, and a height.
@@ -27,25 +28,17 @@ public class Cylinder extends Tube {
 
         // if the point is on the bottom base
         if (p.equals(axis.getHead())) return (axis.getDirection().scale(-1)); // center
-        if (((p.subtract(axis.getHead())).dotProduct(axis.getDirection()) ) == 0) return axis.getDirection().scale(-1);
-
-        // Vector from the base of the cylinder to the point
-        Vector v = p.subtract(axis.getHead());
-
-        // Projection of v onto the cylinder's axis
-        double projScalar = v.dotProduct(axis.getDirection()) / axis.getDirection().lengthSquared();
-        Vector vProjected = axis.getDirection().scale(projScalar);
+        if (isZero((p.subtract(axis.getHead())).dotProduct(axis.getDirection()) )) return axis.getDirection().scale(-1);
 
         // if Point at the the top base
-        if (vProjected.equals(v)) return axis.getDirection(); // center
         Point _p = axis.getHead().add(axis.getDirection().scale(height));
-        if(_p.subtract(p).dotProduct(axis.getDirection()) == 0) {
+        if (_p.equals(p)) return axis.getDirection(); // center
+        if(isZero(_p.subtract(p).dotProduct(axis.getDirection()))) {
             return axis.getDirection().scale(1);
         }
 
         // Vector from the point to the closest point on the axis
-        Vector vToAxis = vProjected.subtract(v);
-        return vToAxis.normalize();
+        return super.getNormal(p);
 
     }
 
