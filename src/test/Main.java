@@ -29,7 +29,7 @@ public final class Main {
       Vector v3         = new Vector(0, 3, -2);
       Vector v4         = new Vector(1, 2, 2);
 
-      // test zero vector =====================================================
+      // test zero vector ======================================================
       try {
          new Vector(0, 0, 0);
          new Vector(Double3.ZERO);
