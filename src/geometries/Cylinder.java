@@ -34,7 +34,7 @@ public class Cylinder extends Tube {
         if (isZero((p.subtract(axis.getHead())).dotProduct(axis.getDirection()) )) return axis.getDirection().scale(-1);
 
         // if Point at the the top base
-        Point _p = axis.getHead().add(axis.getDirection().scale(height));
+        Point _p = axis.getPoint(height);
         if (_p.equals(p)) return axis.getDirection(); // center
         if(isZero(_p.subtract(p).dotProduct(axis.getDirection()))) {
             return axis.getDirection().scale(1);
