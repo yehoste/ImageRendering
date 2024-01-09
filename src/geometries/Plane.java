@@ -6,8 +6,6 @@ import primitives.Vector;
 
 import java.util.List;
 
-import org.junit.Test.None;
-
 import static primitives.Util.*;
 
 /**

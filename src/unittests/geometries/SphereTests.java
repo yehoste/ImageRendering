@@ -1,8 +1,6 @@
 package unittests.geometries;
-
-import geometries.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import geometries.*;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;

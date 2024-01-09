@@ -1,8 +1,9 @@
 package unittests.geometries;
-import geometries.*;
-import primitives.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import geometries.*;
+import primitives.*;
 
 /**
  * Testing Plane
