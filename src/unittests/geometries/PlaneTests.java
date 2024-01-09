@@ -4,6 +4,8 @@ import primitives.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 class PlaneTest {
 	@Test
 	void testConstructor(){
@@ -35,6 +37,50 @@ class PlaneTest {
 
 		// TC01: that plane normal lengthSquared = 1
 		assertEquals(1, normal.lengthSquared(), 0.000001, "ERROR: normal to plane isn't normalised.");
+	}
+	@Test
+	void testFindIntersections() {
+		Plane plane = new Plane(
+				new Point(1, 0, 0),
+				new Point(0, 1, 0),
+				new Point(0, 0, 1)
+		);
+
+		// ============ Equivalence Partitions Tests ==============
+
+		// TC01: Ray intersects the plane (1 points)
+		var result=plane.findIntersections(new Ray(new Point(0, 1, 1), new Vector(0, 0, -1)));
+		assertEquals(1, result.size(), "Wrong number of points");
+		assertEquals(new Point(0, 1, 0), result.get(0), "Ray intersects the plane");
+
+		// TC02: Ray doesn't intersects the plane (0 points)
+		assertNull(plane.findIntersections(new Ray(new Point(0, 1, 1), new Vector(0, 0, 1))), "Ray doesn't intersects the plane");
+
+		// =============== Boundary Values Tests ==================
+
+		// **** Group: Ray is parallel to the plane (all tests 0 points)
+		// TC03: Ray is included in the plane
+		assertNull(plane.findIntersections(new Ray(new Point(0, 0, 1), new Vector(-1, -1, 2))), "Ray is included in the plane");
+
+		// TC04: Ray isn't included in the plane
+		assertNull(plane.findIntersections(new Ray(new Point(0, 0, 2), new Vector(-1, -1, 2))), "Ray is parallel to the plane and not included in the plane");
+
+		// **** Group: Ray is orthogonal to the plane
+		// TC05: Ray starts before the plane (1 points)
+		result = plane.findIntersections(new Ray(new Point(-1, -1, -1), new Vector(1, 1, 1)));
+		assertEquals(1, result.size(), "Wrong number of points");
+		double third = 1d / 3;
+		assertEquals(new Point(third, third, third), result.get(0), "Ray starts before the plane and is orthogonal to the plane");
+
+		// TC06: Ray starts inside the plane (0 points)
+		assertNull(plane.findIntersections(new Ray(new Point(0, 0, 1), new Vector(1, 1, 1))), "Ray starts inside the plane and is orthogonal to the plane");
+
+		// TC07: Ray starts after the plane (0 points)
+		assertNull(plane.findIntersections(new Ray(new Point(2, 2, 2), new Vector(1, 1, 1))), "Ray starts after the plane and is orthogonal to the plane");
+
+		// **** Group: Special cases
+		// TC08: Ray begins in the plane's referenced point (0 points)
+		assertNull(plane.findIntersections(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0))), "Ray begins in the plane's referenced point");
 	}
 
 }
