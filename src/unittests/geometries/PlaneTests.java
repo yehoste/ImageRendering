@@ -8,7 +8,7 @@ import primitives.*;
 /**
  * Testing Plane
  */
-class PlaneTest {
+class PlaneTests {
 	@Test
 	void testConstructor(){
 		// =============== Boundary Values Tests ==================

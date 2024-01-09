@@ -7,7 +7,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-class GeometriesTest {
+class GeometriesTests {
 
     Plane plane = new Plane(
             new Point(3,0,0),

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Testing Sphere
  */
-class SphereTest {
+class SphereTests {
 
 	@Test
 	void getNormal() {
