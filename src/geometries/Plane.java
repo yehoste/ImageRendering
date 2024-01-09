@@ -63,7 +63,7 @@ public class Plane implements Geometry {
         }
         double t = alignZero(this.normal.dotProduct(q.subtract(ray.getHead())))/(this.normal.dotProduct(ray.getDirection()));
         if (t <=0) return null;
-        Point p = ray.getHead().add(ray.getDirection().scale(t));
+        Point p = ray.getPoint(t);
         if (p.subtract(Point.ZERO).equals(Point.ZERO)) return null; 
         return List.of(p);
     }
