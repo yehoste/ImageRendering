@@ -1,8 +1,6 @@
 package unittests.geometries;
-
-import geometries.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import geometries.*;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
@@ -12,6 +10,9 @@ import primitives.Vector;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Testing Sphere
+ */
 class SphereTest {
 
 	@Test
@@ -22,12 +23,9 @@ class SphereTest {
 		Sphere sphere = new Sphere(new Point(0, 0, 0), 1);
 		assertEquals(new Vector(1, 0, 0), sphere.getNormal(new Point(1, 0, 0)));
 	}
-
-
-	private final Point p001 = new Point(0, 0, 1);
+	
 	private final Point p100 = new Point(1, 0, 0);
-	private final Vector v001 = new Vector(0, 0, 1);
-
+	
 	/**
 	 * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
 	 */
@@ -120,4 +118,6 @@ class SphereTest {
 		// TC22: Ray's line is outside the sphere. The ray is orthogonal to the ray that goes through the center line (0 points)
 		assertNull(sphere.findIntersections(new Ray(new Point(1, 1.5, 0), new Vector(1, 0, 0))), "Ray's line is outside the sphere. The ray is orthogonal to the ray that goes through the center line");
 	}
+
+	
 }
