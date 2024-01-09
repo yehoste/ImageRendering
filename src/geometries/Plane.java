@@ -48,6 +48,15 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
+        if(ray.getHead().equals(q)){
+            return null;
+        }
+        if(isZero(this.normal.dotProduct(q.subtract(ray.getHead())))){
+            return null;
+        }
+        if (isZero(normal.dotProduct(ray.getDirection()))){
+            return null;
+        }
         double t = alignZero(this.normal.dotProduct(q.subtract(ray.getHead())))/(this.normal.dotProduct(ray.getDirection()));
         if (t <=0) return null;
         Point p = ray.getHead().add(ray.getDirection().scale(t));
