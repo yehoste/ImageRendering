@@ -6,26 +6,43 @@ import java.util.List;
 import primitives.Point;
 import primitives.Ray;
 
-public class Geometries implements Intersectable{
 
-    private final List<Intersectable> ListOfIntersectable = List.of();
 
-    public Geometries() {
+/**
+ * This class represents a group of shapes in the space that represent a picture.
+ * Composite class which includes components and composite geometries.
+ */
+public class Geometries implements Intersectable {
 
+    /**
+     * geometriesList - list of all components in the scene
+     */
+    public List<Intersectable> geometriesList = List.of();
+
+    public Geometries(Intersectable... geometriesList) {
+
+        this.add(geometriesList);
     }
 
-    public Geometries(Intersectable... geometries) {
-        this.add(geometries);
+    public void add(Intersectable... newGeometriesList) {
+        this.geometriesList.addAll(Arrays.asList(newGeometriesList));
     }
 
-    public void add(Intersectable... geometries) {
-        ListOfIntersectable.addAll(Arrays.asList(geometries));
-    }
-
-
+    /**
+     * This method returns all intersection points with this group of shapes
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        List<Point> intersections = null;
+        for (Intersectable geometry: this.geometriesList) {
+            List<Point> geometryIntersections = geometry.findIntersections(ray);
+            if (geometryIntersections != null) {
+                if (intersections == null) {
+                    intersections = List.of();
+                }
+                intersections.addAll(geometryIntersections);
+            }
+        }
+        return intersections;
     }
-
 }
