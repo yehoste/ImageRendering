@@ -4,8 +4,6 @@ import primitives.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 class PlaneTest {
 	@Test
 	void testConstructor(){
@@ -38,6 +36,10 @@ class PlaneTest {
 		// TC01: that plane normal lengthSquared = 1
 		assertEquals(1, normal.lengthSquared(), 0.000001, "ERROR: normal to plane isn't normalised.");
 	}
+
+	/**
+	 * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+	 */
 	@Test
 	void testFindIntersections() {
 		Plane plane = new Plane(

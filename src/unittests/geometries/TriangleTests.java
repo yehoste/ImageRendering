@@ -40,6 +40,9 @@ class TriangleTests {
 		assertEquals(expectedNormal, actualNormal,"The calculated normal vector is not as expected");
 	}
 
+	/**
+	 * Test method for {@link geometries.Triangle#findIntersections(primitives.Ray)}.
+	 */
 	@Test
 	void testFindIntersections() {
 		Triangle triangle = new Triangle(
