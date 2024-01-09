@@ -32,6 +32,10 @@ public class Ray {
         return direction;
     }
 
+    public Point getPoint(double t) {
+        return this.getHead().add(this.getDirection().scale(t));
+    }
+
     @Override
     public String toString()  {
         return "head: " +  head.cords +  "\ndirection: " + direction.cords;
