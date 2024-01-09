@@ -35,6 +35,7 @@ public class Ray {
     }
 
     public Point getPoint(double t) {
+        if (t < 0) throw new IllegalArgumentException("Negitive is not ok");
         if(isZero(t)) return this.getHead();
         return this.getHead().add(this.getDirection().scale(t));
     }
