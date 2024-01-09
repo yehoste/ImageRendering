@@ -1,10 +1,12 @@
 package geometries;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import primitives.Point;
 import primitives.Ray;
+
 
 
 
@@ -17,7 +19,7 @@ public class Geometries implements Intersectable {
     /**
      * geometriesList - list of all components in the scene
      */
-    public List<Intersectable> geometriesList = List.of();
+    public List<Intersectable> geometriesList = new LinkedList<>();
 
     public Geometries(Intersectable... geometriesList) {
 
@@ -38,7 +40,7 @@ public class Geometries implements Intersectable {
             List<Point> geometryIntersections = geometry.findIntersections(ray);
             if (geometryIntersections != null) {
                 if (intersections == null) {
-                    intersections = List.of();
+                    intersections = new LinkedList<>();
                 }
                 intersections.addAll(geometryIntersections);
             }
