@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import geometries.Polygon;
 import primitives.Point;
 import primitives.Vector;
+import primitives.Ray;
 
 /**
  * Testing Polygons
@@ -90,6 +91,30 @@ public class PolygonTests {
       for (int i = 0; i < 3; ++i)
          assertEquals(0d, result.dotProduct(pts[i].subtract(pts[i == 0 ? 3 : i - 1])), DELTA,
                       "Polygon's normal is not orthogonal to one of the edges");
+   }
+
+   /**
+    * Test method for {@link geometries.Polygon#findIntersections(primitives.Ray)}.
+    */
+   @Test
+   void testFindIntersections() {
+      Polygon polygon = new Polygon(
+              new Point(1, 0, 0),
+              new Point(0, 1, 0),
+              new Point(0, 0, 1),
+              new Point(1, -1, 1)
+      );
+
+      // ============ Equivalence Partitions Tests ==============
+      // TC01: Ray intersects inside the polygon (1 points)
+      var result = polygon.findIntersections(new Ray(new Point(-1, -1, -2), new Vector(1, 1, 2)));
+      assertEquals(1, result.size(), "Wrong number of points");
+      assertEquals(new Point(0.25, 0.25, 0.5), result.get(0), "Ray intersects inside the polygon");
+
+      // TC02: Ray intersects outside the polygon against an edge (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(-1, -2.5, -1), new Vector(1, 1, 2))), "Ray intersects outside the polygon against an edge");
+      // TC03: Ray intersects outside the polygon against a vertex (0 points)
+      assertNull(polygon.findIntersections(new Ray(new Point(-2, -1, 0), new Vector(1, 1, 2))), "Ray intersects outside the polygon against a vertex");
    }
 
 }
