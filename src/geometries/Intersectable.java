@@ -5,6 +5,9 @@ import primitives.Ray;
 
 import java.util.List;
 
+/**
+ * Interface for all the objects that can be intersected
+ */
 public interface Intersectable {
 
 

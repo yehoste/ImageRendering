@@ -7,6 +7,9 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+/**
+ * Test class for geometries.Geometries.
+ */
 class GeometriesTests {
 
     Plane plane = new Plane(
@@ -22,6 +25,9 @@ class GeometriesTests {
 
     Geometries geometries = new Geometries(plane, triangle, sphere);
 
+    /**
+     * Test mothod for {@link geometries.Geometries#findIntersections(ray)}.
+     */
     @Test
     void testFindIntersections() {
 

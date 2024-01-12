@@ -9,6 +9,10 @@ import primitives.*;
  * Testing Plane
  */
 class PlaneTests {
+
+	/**
+	 * Test method for {@link geometries.Plane#constructor(primitives.Point, primitives.Point, primitives.Point)}.
+	 */
 	@Test
 	void testConstructor(){
 		// =============== Boundary Values Tests ==================
@@ -24,6 +28,9 @@ class PlaneTests {
 				"ERROR: constructor does not throw error in illegal definition - all points on same line.");
 	}
 
+	/**
+	 * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.
+	 */
 	@Test
 	void getNormal() {
 		// ============ Equivalence Partitions Tests ==============

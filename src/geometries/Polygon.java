@@ -80,15 +80,24 @@ public class Polygon implements Geometry {
       }
    }
 
+   /**
+    * Returns the normal vector of the polygon at the given point.
+    *
+    * @param point the point for which to return the normal vector
+    * @return the normal vector of the polygon at the given point
+    */
    @Override
-   public Vector getNormal(Point point) { return plane.getNormal(); }
-
+   public Vector getNormal(Point point) {
+      return plane.getNormal();
+   }
+   /**
+    * Returns the intersections of the ray with the polygon.
+    *
+    * @param ray the ray to intersect with the polygon
+    * @return the intersections of the ray with the polygon, or null if there are no intersections
+    */
    @Override
    public List<Point> findIntersections(Ray ray) {
-      var result = plane.findIntersections(ray);
-      if (result == null) {
-         return null;
-      }
 
       int numVertices = vertices.size();
       Point p0 = ray.getHead();
@@ -117,6 +126,8 @@ public class Polygon implements Geometry {
             return null;
          }
       }
+
+      var result = plane.findIntersections(ray);
 
       return result;
    }

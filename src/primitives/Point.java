@@ -9,17 +9,21 @@ public class Point {
 
     protected final Double3 cords;
 
-    // The `public Point(double x,double y,double z)` constructor is creating a new `Point` object with the
-    // specified coordinates `(x, y, z)`. It initializes the `cords` variable with a new `Double3` object
-    // that holds the coordinates `(x, y, z)`.
+    /**
+     * The constructor initializes the x, y, and z coordinates of the point.
+     * 
+     * @param x the x-coordinate of the point.
+     * @param y the y-coordinate of the point.
+     * @param z the z-coordinate of the point.
+     */
     public Point(double x,double y,double z){
         cords = new Double3(x,y,z);
     }
 
-    // The `protected Point(Double3 cord)` constructor is a protected constructor that creates a new
-    // `Point` object with the specified `Double3` object as its coordinates. It is used to create a new
-    // `Point` object from an existing `Double3` object. The `cords` variable is initialized with the
-    // `Double3` object passed as the parameter.
+    /**
+     * Constructor for Point using a Double3 object as input.
+     * @param cord
+     */
     private Point(Double3 cord){
         cords = cord;
     }

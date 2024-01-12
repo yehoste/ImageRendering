@@ -7,9 +7,6 @@ import java.util.List;
 import primitives.Point;
 import primitives.Ray;
 
-
-
-
 /**
  * This class represents a group of shapes in the space that represent a picture.
  * Composite class which includes components and composite geometries.

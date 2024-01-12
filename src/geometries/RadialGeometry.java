@@ -3,6 +3,9 @@ package geometries;
 import primitives.Vector;
 import primitives.Point;
 
+/**
+ * A abstract class representing a Radial Geometry.
+ */
 public abstract class RadialGeometry implements Geometry {
 
     protected final double radius;

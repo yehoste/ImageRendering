@@ -7,8 +7,14 @@ import org.junit.jupiter.api.Test;
 import geometries.Cylinder;
 import primitives.*;
 
+/**
+ * Testing Cylinder
+ */
 class CylinderTests {
 
+    /*
+     * Test method for {@link geometries.Cylinder#getNormal(primitives.Point)}.
+     */
     @Test
     public void getNormal() {
         // ============ Equivalence Partitions Tests ==============

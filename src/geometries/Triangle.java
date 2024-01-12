@@ -29,6 +29,9 @@ public class Triangle extends Polygon {
         return super.getNormal(p);
     }
 
+    /**
+     * Finds the intersections of the ray with the triangle.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         // Check if the point inside the area of the triangle

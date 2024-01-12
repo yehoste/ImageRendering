@@ -16,6 +16,12 @@ public class Plane implements Geometry {
     private final Point q;
     private final Vector normal;
 
+    /**
+     * Constracts a new plane with the given three points.
+     * @param point1
+     * @param point2
+     * @param point3
+     */
     public Plane(Point point1,Point point2,Point point3){
         this.q=point1;
         
@@ -50,6 +56,13 @@ public class Plane implements Geometry {
         return normal;
     }
 
+
+    /**
+     * Finds where a ray crosses this object (if it does at all).
+     *
+     * @param ray The ray to check for intersections.
+     * @return A list containing the intersection point(s), or null if none exist.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         if(ray.getHead().equals(q)){

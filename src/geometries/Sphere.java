@@ -2,7 +2,6 @@
  * A sphere is a three-dimensional shape with a definite radius and center.
  * It is defined by its center point and its radius.
  * 
- * @author your name
  */
 package geometries;
 
@@ -28,12 +27,23 @@ public class Sphere extends RadialGeometry {
         this.center = center;
     }
 
-    @Override
+    /**
+     * Returns the normal vector at the specified point on the sphere.
+     * 
+     * @param point the point on the sphere
+     * @return the normal vector at the specified point on the sphere
+     */
     public Vector getNormal(Point point) {
-        Vector v= point.subtract(center);
+        Vector v = point.subtract(center);
         return v.normalize();
     }
 
+    /**
+     Point* Returns a list of points where the ray intersects the sphere.
+    * 
+    * @param ray the ray to test for intersection with the sphere
+    * @return a list of points where the ray intersects the sphere, or null if there are no intersections
+    */
     @Override
     public List<Point> findIntersections(Ray ray) {
         Vector u = null;
@@ -48,8 +58,8 @@ public class Sphere extends RadialGeometry {
         if (d>radius){
             return null;
         }
-        double th=Math.sqrt(radius*radius-(d*d));
-        if(th*th<=0){
+        double th=alignZero(Math.sqrt(radius*radius-(d*d)));
+        if(isZero(th)){
             return null;
         }
 

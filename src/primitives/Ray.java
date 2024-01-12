@@ -11,8 +11,11 @@ public class Ray {
     private final Point head;
     private final Vector direction;
         
-    // The code snippet `public Ray(Point Head, Vector Direction) { head = Head; direction =
-    // Direction.normalize(); }` is the constructor of the `Ray` class.
+    /**
+     * constructor for ray.
+     * @param Head
+     * @param Direction
+     */
     public Ray(Point Head, Vector Direction) {
         head = Head;
         direction = Direction.normalize(); // Normalize the vector
@@ -34,6 +37,15 @@ public class Ray {
         return direction;
     }
 
+    /**
+     * Returns a new point that is the sum of the current point and the given vector scaled by the given
+     * parameter. It the equation P(t) = Head ± t * V.
+     * 
+     * @param t the scalar value to be multiplied with the direction vector
+     * @return a new point that is the sum of the current point and the given vector scaled by the given
+     *         parameter
+     * @throws IllegalArgumentException if the given parameter is negative
+     */
     public Point getPoint(double t) {
         if (t < 0) throw new IllegalArgumentException("Negitive is not ok");
         if(isZero(t)) return this.getHead();

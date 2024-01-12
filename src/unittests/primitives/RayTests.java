@@ -6,10 +6,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import primitives.*;
 
+/**
+ * unit test class for Ray
+ */
 class RayTests {
 
     Ray ray = new Ray(new Point(0,0,0), new Vector(0,0,1));
 
+    /*
+     * Test Method for {@link primitives.Ray#getPoint(double)}.
+     */
     @Test
     void testGetPoint() {
         // ============ Equivalence Partitions Tests ==============

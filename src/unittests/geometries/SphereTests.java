@@ -15,6 +15,9 @@ import java.util.List;
  */
 class SphereTests {
 
+	/**
+	 * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
+	 */
 	@Test
 	void getNormal() {
 		// ============ Equivalence Partitions Tests ==============
