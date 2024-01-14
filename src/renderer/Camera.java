@@ -65,13 +65,13 @@ public class Camera implements Cloneable {
             if (camera.position==Point.ZERO){
                 throw new MissingResourceException(comment,"camera","position");
             }
-            if(camera.Dist==0.0){
+            if(isZero(camera.Dist)){
                 throw new MissingResourceException(comment,"camera","Dist");
             }
-            if(camera.Height==0.0){
+            if(isZero(camera.Height)){
                 throw new MissingResourceException(comment,"camera","Height");
             }
-            if(camera.Width==0.0){
+            if(isZero(camera.Width)){
                 throw new MissingResourceException(comment,"camera","Width");
             }
             camera.Vr=camera.Vu.subtract(camera.position).crossProduct(camera.Vt.subtract(camera.position)).normalize();
