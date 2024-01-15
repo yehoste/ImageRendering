@@ -61,6 +61,14 @@ class TriangleTests {
 		assertNull(triangle.findIntersections(new Ray(new Point(-1, -2, -2), new Vector(1, 1, 2))), "Ray intersects outside the triangle against an edge");
 		// TC03: Ray intersects outside the triangle against a vertex (0 points)
 		assertNull(triangle.findIntersections(new Ray(new Point(-2, -2, -2), new Vector(1, 1, 2))), "Ray intersects outside the triangle against a vertex");
+	
+		// =============== Boundary Values Tests ==================
+		// TC11: intersection on the edge of the triangle (0 points)
+		assertNull(triangle.findIntersections(new Ray(new Point(0.5, 0.5, 0), new Vector(0, 0, 1))), "intersection on the edge of the triangle");
+        // TC12: intersection on the vertex of the triangle (0 points)
+        assertNull(triangle.findIntersections(new Ray(new Point(1, 0, 0), new Vector(0, 0, 1))), "intersection on the vertex of the triangle");
+        // TC13: intersection on the continue line of the triangle (0 points)
+		assertNull(triangle.findIntersections(new Ray(new Point(0, 2, 0), new Vector(0, 1, 0))), "intersection on the continue line of the triangle");
 	}
 
 }

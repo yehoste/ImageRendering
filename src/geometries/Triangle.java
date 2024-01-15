@@ -4,8 +4,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import static primitives.Util.*;
-
 import java.util.List;
 
 /**
@@ -34,6 +32,13 @@ public class Triangle extends Polygon {
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
+
+        var result = plane.findIntersections(ray);
+        // Check if the ray intersects the plane
+        if (result == null) {
+            return null;
+        }
+
         // Check if the point inside the area of the triangle
         Vector v1 = this.vertices.get(0).subtract(ray.getHead());
         Vector v2 = this.vertices.get(1).subtract(ray.getHead());
@@ -48,24 +53,9 @@ public class Triangle extends Polygon {
             return null;
         }
 
-        double numerator = this.plane.getNormal().dotProduct(this.plane.getq().subtract(ray.getHead()));
-        double denominator = this.plane.getNormal().dotProduct(ray.getDirection());
-        
-        if (isZero(denominator)) {
-            throw new IllegalArgumentException("denominator cannot be zero");
-        }
-        double t = alignZero(numerator / denominator);
 
-        // The ray starts from the triangle
-        if (t == 0) {
-            return null;
-        }
 
-        if (t > 0) {
-            return List.of(ray.getPoint(t));
-        }
-
-        return null;
+        return result;
     }
 }
 

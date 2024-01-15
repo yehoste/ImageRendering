@@ -127,8 +127,7 @@ public class Polygon implements Geometry {
          }
       }
 
-      var result = plane.findIntersections(ray);
+      return plane.findIntersections(ray);
 
-      return result;
    }
 }
