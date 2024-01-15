@@ -33,7 +33,7 @@ public class Camera implements Cloneable {
             return this;
         }
         public Builder setDirection(Vector V_t,Vector V_u){
-            if (V_t.dotProduct(V_u)==1){
+            if (isZero(V_t.dotProduct(V_u))){
                 camera.Vu=(V_u.normalize());
                 camera.Vt=(V_t.normalize());
             }
@@ -85,12 +85,49 @@ public class Camera implements Cloneable {
     }
 
     public static Builder getBuilder() {
-        // TODO: CHANGE IT 
-        return null;
+        return new Builder();
     }
 
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return null;
+        // pCenter is the point in the center of the view plane
+        Point pCenter = this.position.add(this.Vt.scale(this.Dist));
+
+        // pixels size
+        double ratioX = this.Width / nX;
+        double ratioY = this.Height / nY;
+
+        // the center of P[i,j] pixel
+        Point pIJ = pCenter;                            // In case that pCenter is exactly P[i,j] pixel
+        double yI = -(i - (nY-1) / 2d) * ratioY;        // The distance from pCenter to p[i,j] pixel's center in the y-axis
+        double xJ = (j - (nX-1) / 2d) * ratioX;         // The distance from pCenter to p[i,j] pixel's center in the x-axis
+
+
+        if (!isZero(xJ)) {
+            pIJ = pIJ.add(this.Vr.scale(xJ));
+        }
+        if (!isZero(yI)) {
+            pIJ = pIJ.add(this.Vu.scale(yI));
+        }
+
+        Vector vIJ = pIJ.subtract(this.position); // vector to the center of the pixel
+
+        return new Ray(this.position, vIJ);
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public Vector getVu() {
+        return Vu;
+    }
+
+    public Vector getVt() {
+        return Vt;
+    }
+
+    public Vector getVr() {
+        return Vr;
     }
 
 
