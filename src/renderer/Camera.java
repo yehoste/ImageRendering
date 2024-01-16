@@ -6,17 +6,24 @@ import java.util.MissingResourceException;
 
 import static primitives.Util.isZero;
 
+
+//TODO: JAVA DOC
 public class Camera implements Cloneable {
 
     private Point position;
+
     private Vector Vr, Vu, Vt;
 
-    double Height=0.0,Width=0.0,Dist=0.0;
-    
+    private double Height = 0.0;
+    private double Width = 0.0;
+    private double Dist = 0.0;
+
     private Camera() {
 
     }
+
     public static class Builder{
+
         private final Camera camera;
 
         public Builder() {
@@ -29,40 +36,41 @@ public class Camera implements Cloneable {
         }
 
         public Builder setLocation(Point point){
-            camera.position=point;
+            camera.position = point;
             return this;
         }
-        public Builder setDirection(Vector V_t,Vector V_u){
-            if (isZero(V_t.dotProduct(V_u))){
-                camera.Vu=(V_u.normalize());
-                camera.Vt=(V_t.normalize());
-            }
-            else {
+        public Builder setDirection(Vector Vto,Vector Vup){
+            if (isZero(Vto.dotProduct(Vup))) {
+                camera.Vu=(Vup.normalize());
+                camera.Vt=(Vto.normalize());
+            } else {
                 throw new IllegalArgumentException("the vectors are not vertical to each other");
             }
             return this;
         }
 
         public Builder setVpSize(double width, double height){
-            if (width<0 || height<0){
+            if (width < 0 || height < 0) {
                 throw new IllegalArgumentException("the width or height are negative");
             }
-            camera.Width=width;
-            camera.Height=height;
+            camera.Width = width;
+            camera.Height = height;
+
             return this;
         }
 
         public Builder setVpDistance(double dist){
-            if (dist<0){
+            if (dist < 0) {
                 throw new IllegalArgumentException("the dist is negative");
-            }
-            camera.Dist=dist;
+            } 
+            camera.Dist = dist;
+            
             return this;
         }
 
         public Camera build(){
             final String comment="there is no value in this argument" ;
-            if (camera.position==Point.ZERO){
+            if (camera.position == null){
                 throw new MissingResourceException(comment,"camera","position");
             }
             if(isZero(camera.Dist)){
