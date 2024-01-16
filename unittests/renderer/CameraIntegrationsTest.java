@@ -10,6 +10,9 @@ import renderer.*;
 
 import java.util.List;
 
+/**
+ * This class tests the camera integrations.
+ */
 public class CameraIntegrationsTest {
 
     //List<Point> allPoints = null;
@@ -26,6 +29,16 @@ public class CameraIntegrationsTest {
         .setVpDistance(1)
         .setVpSize(3, 3);
 
+    
+    /**
+     * Calculates the number of intersection points between a camera and an intersectable shape.
+     * 
+     * @param camera the camera
+     * @param shape the intersectable shape
+     * @param nX the number of pixels in the X direction
+     * @param nY the number of pixels in the Y direction
+     * @return the number of intersection points
+     */
     private int intersectionsNum(Camera camera, Intersectable shape, int nX, int nY) {
         int sumOfIntersectionPoints = 0;
         for (int i = 0; i < nY; i++) {
@@ -39,6 +52,10 @@ public class CameraIntegrationsTest {
         return sumOfIntersectionPoints;
     }
 
+
+    /**
+     * test sphere with camera
+     */
     @Test
     void testSphereWithCamera() {
 
@@ -63,6 +80,9 @@ public class CameraIntegrationsTest {
         assertEquals(0, this.intersectionsNum(camera2.build(), sphere5,3,3), "Integration of sphere is incorrect");
     }
 
+    /**
+     * test plane with camera
+     */
     @Test
     void testPlaneWithCamera() {
 
@@ -80,6 +100,9 @@ public class CameraIntegrationsTest {
 
     }
 
+    /**
+     * test triangle with camera 
+     */
     @Test
     void testTriangleWithCamera() {
 
