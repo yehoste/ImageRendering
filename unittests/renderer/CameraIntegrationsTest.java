@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class CameraIntegrationsTest {
 
-    //List<Point> allPoints = null;
+    List<Point> allPoints = null;
 
     private final Camera.Builder camera1 = Camera.getBuilder()
             .setLocation(Point.ZERO)
