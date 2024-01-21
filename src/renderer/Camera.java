@@ -22,6 +22,8 @@ public class Camera implements Cloneable {
     private double Width = 0.0;
     private double Dist = 0.0;
 
+    private Point viewPlaneCenter;
+
     /**
      * default constructor for camera.
      */
@@ -57,7 +59,7 @@ public class Camera implements Cloneable {
         double xj = (j - ((double) (nX - 1) / 2)) * (Width / nX);
         double yi = -(i - ((double) (nY - 1) / 2)) * (Height / nY);
 
-        Point pIJ = position.add(this.Vt.scale(Dist));
+        Point pIJ = this.viewPlaneCenter;
         if (!isZero(xj)) pIJ = pIJ.add(this.Vr.scale(xj));
         if (!isZero(yi)) pIJ = pIJ.add(this.Vu.scale(yi));
 
@@ -159,6 +161,8 @@ public class Camera implements Cloneable {
             }
 
             camera.Vr = camera.Vt.crossProduct(camera.Vu).normalize();
+            camera.viewPlaneCenter = camera.position.add(this.camera.Vt.scale(camera.Dist));
+
             return (Camera) camera.clone();
         }
 
