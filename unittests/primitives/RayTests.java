@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  * unit test class for Ray
  */
@@ -29,5 +31,26 @@ class RayTests {
         // =============== Boundary Values Tests ==================
         //TC11 checks if work on zero
         assertEquals(ray.getHead(), ray.getPoint(0), "Not work on Zero");
+    }
+
+    @Test
+    void testFindClosestPoint() {
+
+        Point p1 = new Point(1, 1, 2);
+        Point p2 = new Point(1, 1, 3);
+        Point p3 = new Point(1, 1, 4);
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC1: The closest point is in the middle of the list
+        assertEquals(p1, ray.findClosestPoint(List.of(p2, p1, p3)), "findClosestPoint() is incorrect");
+
+        // =============== Boundary Values Tests ==================
+        // TC2: Empty list of points
+        assertNull(ray.findClosestPoint(List.of()), "findClosestPoint() is incorrect");
+        // TC3: The closest point is the first point in the list
+        assertEquals(p1, ray.findClosestPoint(List.of(p1, p2, p3)), "findClosestPoint() is incorrect");
+        // TC4: The closest point is the last point in the list
+        assertEquals(p1, ray.findClosestPoint(List.of(p2, p3, p1)), "findClosestPoint() is incorrect");
+
     }
 }

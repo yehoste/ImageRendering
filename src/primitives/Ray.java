@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 import static primitives.Util.isZero;
 
 /**
@@ -55,5 +57,26 @@ public class Ray {
     @Override
     public String toString()  {
         return "head: " +  head.cords +  "\ndirection: " + direction.cords;
+    }
+
+
+    /**
+     * return the point which is the closset point to the ray head
+     * @param ClusterPoints
+     * @return
+     */
+    public Point findClosestPoint(List<Point> ClusterPoints){
+        if (ClusterPoints.isEmpty()) {
+            return null;
+        }
+        Point closestPoint = ClusterPoints.get(0);
+        double closestPointDistance = this.head.distance(ClusterPoints.get(0));
+        for (int i = 1; i < ClusterPoints.size(); i++) {
+            if (this.head.distance(ClusterPoints.get(i)) < closestPointDistance) {
+                closestPoint = ClusterPoints.get(i);
+                closestPointDistance = this.head.distance(ClusterPoints.get(i));
+            }
+        }
+        return closestPoint;
     }
 }
