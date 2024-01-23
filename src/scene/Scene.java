@@ -11,7 +11,7 @@ public class Scene {
     public Color background;
     public AmbientLight ambientLight;
 
-    public Geometries geometries;
+    public Geometries geometries = new Geometries();
 
     public Scene(String name) {
         this.name = name;

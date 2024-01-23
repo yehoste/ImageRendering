@@ -1,10 +1,13 @@
 package renderer;
 
 import scene.Scene;
+
+import java.util.List;
+
 import primitives.*;
 
 /**
- * A simple ray tracer that uses the ray-sphere intersection algorithm to calculate the color of each pixel.
+ * hA simple ray tracer that uses the ray-sphere intersection algorithm to calculate the color of each pixel.
  */
 public class SimpleRayTracer extends RayTracerBase {
 
@@ -22,10 +25,18 @@ public class SimpleRayTracer extends RayTracerBase {
      * 
      * @param trace the ray to be traced
      * @return the color of the pixel the ray intersects with
-     *
+     */
     @Override
-    public Color traceRay(Ray trace) {
-        return Color.BLACK; // TODO: implement
-    }*/
+    public Color traceRay(Ray ray) {
+        List<Point> intersections = this.scene.geometries.findIntersections(ray);
+        if (intersections == null) {
+            return this.scene.background;
+        }
+        return this.calcColor(ray.findClosestPoint(intersections));
+    }
+
+    private Color calcColor(Point point) {
+        return this.scene.ambientLight.getIntensity();
+    }
 
 }

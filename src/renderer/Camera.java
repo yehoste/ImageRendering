@@ -2,6 +2,7 @@ package renderer;
 
 import primitives.*;
 
+import java.io.IOException;
 import java.util.MissingResourceException;
 
 import static primitives.Util.alignZero;
@@ -53,11 +54,35 @@ public class Camera implements Cloneable {
         }
     }
 
-    public void renderImage(){
-        throw new UnsupportedOperationException();
+    private void castRay(int nx, int ny, int i, int j) {
+        Ray ray = this.constructRay(nx, ny, i, j);
+        Color pixelColor = this.rayTracer.traceRay(ray);
+        this.imageWriter.writePixel(i, j, pixelColor);
     }
 
-    public void printGrid(int interval, Color color){
+    /**
+     * This method is not supported.
+     * 
+     * @throws UnsupportedOperationException if the method is called
+     */
+    public Camera renderImage() {
+        // IMAGE RENDERING
+        // Pass a ray from the camera through each pixel in the view plane and set the color
+        for (int i = 0; i < this.imageWriter.getNy(); i++) {
+            for (int j = 0; j < this.imageWriter.getNx(); j++) {
+                castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), i, j);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * This method is used to draw a grid on the image.
+     * 
+     * @param interval the interval between each grid line
+     * @param color    the color of the grid lines
+     */
+    public Camera printGrid(int interval, Color color){
         if (this.imageWriter == null) {
             throw new MissingResourceException("missing resource value", ImageWriter.class.getName(), "");
         }
@@ -69,8 +94,14 @@ public class Camera implements Cloneable {
                 }
             }
         }
+        return this;
     }
 
+    /**
+     * Writes the image data to the file.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     public void writeToImage() {
         if (this.imageWriter == null) {
             throw new MissingResourceException("missing resource value", ImageWriter.class.getName(), "");
@@ -161,8 +192,8 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder RayTracer(SimpleRayTracer srt){
-            camera.rayTracer=srt;
+        public Builder setRayTracer(SimpleRayTracer srt){
+            camera.rayTracer = srt;
             return this;
         }
 
@@ -201,14 +232,14 @@ public class Camera implements Cloneable {
             if (isZero(camera.Dist)) {
                 throw new MissingResourceException(fMsg, cMsg, "vpDistance");
             }
-
+            /* 
             if (camera.rayTracer == null) {
                 throw new MissingResourceException(fMsg, cMsg, "rayTracer");
             }
 
             if (camera.imageWriter == null) {
                 throw new MissingResourceException(fMsg, cMsg, "imageWriter");
-            }
+            }*/
 
             camera.Vr = camera.Vt.crossProduct(camera.Vu).normalize();
             camera.viewPlaneCenter = camera.position.add(this.camera.Vt.scale(camera.Dist));
