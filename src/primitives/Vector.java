@@ -7,6 +7,7 @@ package primitives;
  */
 public class Vector extends Point {
 
+    public static final Vector Y = new Vector(0,1,0);
     /**
      * Creates a new Vector object with the specified coordinates.
      *
