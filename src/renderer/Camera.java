@@ -24,6 +24,13 @@ public class Camera implements Cloneable {
 
     private Point viewPlaneCenter;
 
+    private ImageWriter imageWriter;
+
+    private RayTracerBase rayTracer;
+
+
+
+
     /**
      * default constructor for camera.
      */
@@ -44,6 +51,31 @@ public class Camera implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    public void renderImage(){
+        throw new UnsupportedOperationException();
+    }
+
+    public void printGrid(int interval, Color color){
+        if (this.imageWriter == null) {
+            throw new MissingResourceException("missing resource value", ImageWriter.class.getName(), "");
+        }
+
+        for (int i = 0; i < this.imageWriter.getNy(); i++) {
+            for (int j = 0; j < this.imageWriter.getNx(); j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    imageWriter.writePixel(i, j, color);
+                }
+            }
+        }
+    }
+
+    public void writeToImage() {
+        if (this.imageWriter == null) {
+            throw new MissingResourceException("missing resource value", ImageWriter.class.getName(), "");
+        }
+        this.imageWriter.writeToImage();
     }
 
     /**
@@ -128,7 +160,17 @@ public class Camera implements Cloneable {
             
             return this;
         }
-        
+
+        public Builder RayTracer(SimpleRayTracer srt){
+            camera.rayTracer=srt;
+            return this;
+        }
+
+        public Builder setImageWriter(ImageWriter iw){
+            camera.imageWriter=iw;
+            return this;
+        }
+
         /**
          * a build method for the Builder that build camera.
          * @return a new camera object.
@@ -158,6 +200,14 @@ public class Camera implements Cloneable {
 
             if (isZero(camera.Dist)) {
                 throw new MissingResourceException(fMsg, cMsg, "vpDistance");
+            }
+
+            if (camera.rayTracer == null) {
+                throw new MissingResourceException(fMsg, cMsg, "rayTracer");
+            }
+
+            if (camera.imageWriter == null) {
+                throw new MissingResourceException(fMsg, cMsg, "imageWriter");
             }
 
             camera.Vr = camera.Vt.crossProduct(camera.Vu).normalize();
