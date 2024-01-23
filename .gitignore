@@ -24,6 +24,7 @@ bin/
 
 ### VS Code ###
 .vscode/
+images/
 
 ### Mac OS ###
 .DS_Store
