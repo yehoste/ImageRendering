@@ -4,8 +4,6 @@ import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
 
-import java.awt.*;
-import java.util.LinkedList;
 
 public class Scene {
 
