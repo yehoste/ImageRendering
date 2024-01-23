@@ -27,12 +27,20 @@ public class RenderTests {
    @Test
    public void renderTwoColorTest() {
       scene.geometries.add(new Sphere(new Point(0, 0, -100), 50d),
-                           new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)), // up
+
+                           new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), 
+                                        new Point(-100, 100, -100)), // up
+
+                           new Triangle(new Point(100, 0, -100), new Point(0, 100, -100), 
+                                        new Point(100, 100, -100)), // up
+
                            // left
                            new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100),
                                         new Point(-100, -100, -100)), // down
-                           // left
-                           new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100))); // down
+                           // right
+                           new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), 
+                                        new Point(100, -100, -100))
+                           ); // down
       scene.setAmbientLight(new AmbientLight(new Color(255, 191, 191), Double3.ONE))
          .setBackground(new Color(75, 127, 90));
 

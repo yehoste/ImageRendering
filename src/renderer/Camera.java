@@ -29,9 +29,6 @@ public class Camera implements Cloneable {
 
     private RayTracerBase rayTracer;
 
-
-
-
     /**
      * default constructor for camera.
      */
@@ -232,14 +229,14 @@ public class Camera implements Cloneable {
             if (isZero(camera.Dist)) {
                 throw new MissingResourceException(fMsg, cMsg, "vpDistance");
             }
-            /* 
+            
             if (camera.rayTracer == null) {
                 throw new MissingResourceException(fMsg, cMsg, "rayTracer");
             }
 
             if (camera.imageWriter == null) {
                 throw new MissingResourceException(fMsg, cMsg, "imageWriter");
-            }*/
+            }
 
             camera.Vr = camera.Vt.crossProduct(camera.Vu).normalize();
             camera.viewPlaneCenter = camera.position.add(this.camera.Vt.scale(camera.Dist));

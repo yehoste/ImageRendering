@@ -10,6 +10,8 @@ import renderer.*;
 
 import java.util.List;
 
+import scene.Scene;
+
 /**
  * This class tests the camera integrations.
  */
@@ -17,16 +19,23 @@ public class CameraIntegrationsTest {
 
     List<Point> allPoints = null;
 
+    /** Scene of the tests */
+   private final Scene scene  = new Scene("Test scene");
+
     private final Camera.Builder camera1 = Camera.getBuilder()
             .setLocation(Point.ZERO)
             .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
             .setVpDistance(1)
-            .setVpSize(3, 3);
+            .setVpSize(3, 3)
+            .setImageWriter(new ImageWriter("xml render test", 1000, 1000))
+            .setRayTracer(new SimpleRayTracer(scene));
 
     private final Camera.Builder camera2 = Camera.getBuilder()
         .setLocation(new Point(0, 0, 0.5))
         .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
         .setVpDistance(1)
+        .setImageWriter(new ImageWriter("xml render test", 1000, 1000))
+        .setRayTracer(new SimpleRayTracer(scene))
         .setVpSize(3, 3);
 
     
