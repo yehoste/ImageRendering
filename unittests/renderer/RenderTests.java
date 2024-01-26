@@ -14,7 +14,7 @@ import scene.Scene;
  * @author Dan */
 public class RenderTests {
    /** Scene of the tests */
-   private final Scene          scene  = new Scene("Test scene");
+   private final Scene          scene  = new Scene("Test scene").setGeometries( new Geometries(new Sphere(new Point(0, 0, -100), 50d)));   
    /** Camera builder of the tests */
    private final Camera.Builder camera = Camera.getBuilder()
       .setRayTracer(new SimpleRayTracer(scene))

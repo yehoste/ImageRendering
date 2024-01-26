@@ -7,55 +7,37 @@ import primitives.Vector;
 import java.util.List;
 
 /**
- * A triangle is a polygon with 3 sides and 3 angles.
+ * A class that represents a triangle in three-dimensional space defined by three vertices.
+ * The class inherits from the Polygon class.
  */
-public class Triangle extends Polygon {
-
+public class Triangle extends Polygon{
     /**
-     * Creates a new triangle with the given points.
+     * Constructs a new Triangle with three specified vertices.
      *
-     * @param point1 the first point of the triangle
-     * @param point2 the second point of the triangle
-     * @param point3 the third point of the triangle
+     * @param point1 The first vertex of the triangle.
+     * @param point2 The second vertex of the triangle.
+     * @param point3 The third vertex of the triangle.
      */
-    public Triangle(Point point1, Point point2, Point point3) {
+    public Triangle(Point point1, Point point2, Point point3){
         super(point1, point2, point3);
     }
 
     @Override
-    public Vector getNormal(Point p) {
-        return super.getNormal(p);
-    }
-
-    /**
-     * Finds the intersections of the ray with the triangle.
-     */
-    @Override
     public List<Point> findIntersections(Ray ray) {
-
-        var result = plane.findIntersections(ray);
-        // Check if the ray intersects the plane
-        if (result == null) {
+        var result = this.plane.findIntersections(ray);
+        if (result == null){
             return null;
         }
-
-        // Check if the point inside the area of the triangle
         Vector v1 = this.vertices.get(0).subtract(ray.getHead());
         Vector v2 = this.vertices.get(1).subtract(ray.getHead());
         Vector v3 = this.vertices.get(2).subtract(ray.getHead());
         Vector n1 = v1.crossProduct(v2).normalize();
         Vector n2 = v2.crossProduct(v3).normalize();
         Vector n3 = v3.crossProduct(v1).normalize();
-
-        if (ray.getDirection().dotProduct(n1) <= 0 ||
-                ray.getDirection().dotProduct(n2) <= 0 ||
-                ray.getDirection().dotProduct(n3) <= 0) {
-            return null;
+        if ((ray.getDirection().dotProduct(n1) > 0 && ray.getDirection().dotProduct(n2) > 0 && ray.getDirection().dotProduct(n3) > 0)
+                || (ray.getDirection().dotProduct(n1) < 0 && ray.getDirection().dotProduct(n2) < 0 && ray.getDirection().dotProduct(n3) < 0)){
+                    return result;
         }
-
-
-
-        return result;
+        return null;
     }
 }
-

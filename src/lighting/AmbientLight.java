@@ -10,7 +10,7 @@ public class AmbientLight {
     // The intensity of ambient light
     private final Color intensity;
 
-    public static AmbientLight NONE = new AmbientLight(new Color(255,255,255), 0);
+    public static AmbientLight NONE = new AmbientLight(Color.BLACK, 0);
 
     /**
      *
