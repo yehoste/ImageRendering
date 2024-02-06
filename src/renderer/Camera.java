@@ -65,8 +65,10 @@ public class Camera implements Cloneable {
     public Camera renderImage() {
         // IMAGE RENDERING
         // Pass a ray from the camera through each pixel in the view plane and set the color
-        for (int i = 0; i < this.imageWriter.getNy(); i++) {
-            for (int j = 0; j < this.imageWriter.getNx(); j++) {
+        int Ny=this.imageWriter.getNy();
+        int Nx=this.imageWriter.getNx();
+        for (int i = 0; i < Ny; i++) {
+            for (int j = 0; j < Nx; j++) {
                 castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), i, j);
             }
         }
