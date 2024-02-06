@@ -5,10 +5,7 @@ import primitives.*;
 /**
  * Ambient light for all objects in 3D space
  */
-public class AmbientLight {
-
-    // The intensity of ambient light
-    private final Color intensity;
+public class AmbientLight extends Light{
 
     public static AmbientLight NONE = new AmbientLight(Color.BLACK, 0);
 
@@ -18,14 +15,12 @@ public class AmbientLight {
      * @param Ka light factor
      */
     public AmbientLight(Color Ia, Double3 Ka) {
-        this.intensity = Ia.scale(Ka);
+        super(Ia.scale(Ka));
+        //this.intensity = Ia.scale(Ka);
     }
 
     public AmbientLight(Color Ia, double Ka) {
-        this.intensity = Ia.scale(Ka);
-    }
-
-    public Color getIntensity() {
-        return intensity;
+        super(Ia.scale(Ka));
+        //this.intensity = Ia.scale(Ka);
     }
 }
