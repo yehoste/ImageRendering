@@ -43,14 +43,11 @@ public class Tube extends RadialGeometry {
         return ourPoint.subtract(axis.getPoint(t)).normalize();
     }
 
-    /**
-     * Returns all points of intersection between this object and the given ray.
-     * 
-     * @param ray the ray to test for intersection with this object
-     * @return a list of all points of intersection between the ray and this object, or null if there are no intersections
-     */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        /*if (this.axis.getDirection().isParallel(ray.getDirection())) {
+            return null;
+        }*/
         return null;
     }
 }

@@ -2,6 +2,7 @@ package geometries;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import primitives.Point;
@@ -13,7 +14,7 @@ import primitives.Vector;
  * system
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
    /** List of polygon's vertices */
    protected final List<Point> vertices;
    /** Associated plane in which the polygon lays */
@@ -90,14 +91,37 @@ public class Polygon implements Geometry {
    public Vector getNormal(Point point) {
       return plane.getNormal();
    }
-   /**
-    * Returns the intersections of the ray with the polygon.
-    *
-    * @param ray the ray to intersect with the polygon
-    * @return the intersections of the ray with the polygon, or null if there are no intersections
-    */
+
    @Override
-   public List<Point> findIntersections(Ray ray) {
-      return plane.findIntersections(ray);
-   }
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+
+        List<GeoPoint> intersections = this.plane.findGeoIntersections(ray);
+
+        // The ray does not intersect the polygon plane
+        if (intersections == null) {
+            return null;
+        }
+
+        // rayDirection.dotProduct(Normal)
+        double firstVecDotNormal = alignZero(ray.getDirection().dotProduct(this.vertices.get(0).subtract(ray.getHead()).crossProduct(this.vertices.get(1).subtract(ray.getHead())).normalize()));
+        double otherVecDotNormal;
+
+        for (int i = 1; i < this.vertices.size() - 1; i++) {
+
+            otherVecDotNormal = alignZero(ray.getDirection().dotProduct(this.vertices.get(i).subtract(ray.getHead()).crossProduct(this.vertices.get(i + 1).subtract(ray.getHead())).normalize()));
+
+            if (!((firstVecDotNormal < 0 && otherVecDotNormal < 0) ||
+                    (firstVecDotNormal > 0 && otherVecDotNormal > 0))) {
+                return null;
+            }
+        }
+
+        otherVecDotNormal = alignZero(ray.getDirection().dotProduct(this.vertices.get(this.vertices.size() - 1).subtract(ray.getHead()).crossProduct(this.vertices.get(0).subtract(ray.getHead())).normalize()));
+        if (!((firstVecDotNormal < 0 && otherVecDotNormal < 0) ||
+                (firstVecDotNormal > 0 && otherVecDotNormal > 0))) {
+            return null;
+        }
+
+        return List.of(new GeoPoint(this, intersections.get(0).point));
+    }
 }

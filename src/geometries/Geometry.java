@@ -1,12 +1,33 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 /**
  * Interface for geometric objects.
  */
-public interface Geometry extends Intersectable {
+public abstract class Geometry extends Intersectable {
+
+    protected Color emission = Color.BLACK;
+
+    /**
+     * The function "getEmission" returns the color of the object.
+     * 
+     * @return The color of the object.
+     */
+    public Color getEmission() {
+        return emission;
+    }
+
+    /**
+     * The function "setEmission" sets the color of the object.
+     * 
+     * @param emission The color of the object.
+     * @return this object.
+     */
+    public Geometry setEmission(Color emission) {
+        this.emission = emission;
+        return this;
+    }
 
     /**
      * The function "getNormal" returns a vector representing the normal of a given point.
@@ -14,7 +35,7 @@ public interface Geometry extends Intersectable {
      * @param p The point for which we want to calculate the normal vector.
      * @return A vector is being returned.
      */
-    Vector getNormal(Point p);
+    public abstract Vector getNormal(Point p);
 
 }
     
