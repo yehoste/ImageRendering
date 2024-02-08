@@ -10,18 +10,18 @@ public class SpotLight extends PointLight{
         direction=vector;
     }
     @Override
-    public void setkC(double kC) {
-        super.setkC(kC);
+    public SpotLight setkC(double kC) {
+        return ((SpotLight) (super.setkC(kC)));
     }
 
     @Override
-    public void setkL(double kL) {
-        super.setkL(kL);
+    public SpotLight setkL(double kL) {
+        return ((SpotLight) (super.setkL(kL)));
     }
 
     @Override
-    public void setkQ(double kQ) {
-        super.setkQ(kQ);
+    public SpotLight setkQ(double kQ) {
+        return ((SpotLight) (super.setkQ(kQ)));
     }
 
     @Override
