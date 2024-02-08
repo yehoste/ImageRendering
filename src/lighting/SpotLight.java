@@ -12,6 +12,7 @@ import primitives.*;
 public class SpotLight extends PointLight {
 
     private Vector direction;
+    private double narrowBeam = 1;
 
     /**
      * Creates a new spot light with the specified color, position, and direction.
@@ -63,8 +64,20 @@ public class SpotLight extends PointLight {
         return direction.normalize();
     }
 
+    public SpotLight setNarrowBeam(double narrowBeam) {
+        this.narrowBeam = narrowBeam;
+        return this;
+    }
+
+    public double getNarrowBeam() {
+        return this.narrowBeam;
+    }
+
     @Override
     public Color getIntensity(Point p) {
-        return super.getIntensity();
+        Color Ic = super.getIntensity(p);
+        double Lv = super.getL(p).dotProduct(this.direction);
+        double factor = Math.pow(Math.max(0, Lv), narrowBeam);
+        return Ic.scale(factor);
     }
 }
