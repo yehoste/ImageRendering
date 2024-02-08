@@ -27,7 +27,7 @@ public class SimpleRayTracer extends RayTracerBase {
     /**
      * Traces the specified ray and returns the color of the pixel it intersects with.
      * 
-     * @param trace the ray to be traced
+     * @param ray the ray to be traced
      * @return the color of the pixel the ray intersects with
      */
     @Override
@@ -40,9 +40,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Color calcColor(GeoPoint geoPoint, Ray ray) {
-        return this.scene.ambientLight
-                         .getIntensity()
-                         .add(geoPoint.geometry.getEmission())
+        return this.scene.ambientLight.getIntensity()
                          .add(calcLocalEffects(geoPoint, ray));
     }
 
@@ -61,8 +59,8 @@ public class SimpleRayTracer extends RayTracerBase {
             if (nl * nv > 0) { // sign(nl) == sign(nv)
                 Color iL = lightSource.getIntensity(geoPoint.point);
                 color = color.add(
-                        iL.scale(calcDiffusive(material, nl)),
-                        iL.scale(calcSpecular(material, n, l, nl, v)));
+                        iL.scale(calcDiffusive(material, nl))
+                        .add(iL.scale(calcSpecular(material, n, l, nl, v))));
             }
         }
         return color;
@@ -73,11 +71,12 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {
-        Vector r = l.subtract(n.scale(2).scale(nl)).normalize();
-        if (-alignZero(r.dotProduct(v)) <= 0) {
+        Vector r = l.subtract(n.scale(2 * nl));
+        double minusVR = -alignZero(r.dotProduct(v));
+        if (minusVR <= 0) {
             return Double3.ZERO;
         }
-        return material.getKs().scale(Math.pow(-alignZero(r.dotProduct(v)), material.getnShininess()));
+        return material.getKs().scale(Math.pow(minusVR, material.getnShininess()));
     }
 
     

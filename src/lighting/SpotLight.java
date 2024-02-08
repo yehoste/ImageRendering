@@ -1,5 +1,7 @@
 package lighting;
 
+import static primitives.Util.alignZero;
+
 import primitives.*;
 
 /**
@@ -23,7 +25,7 @@ public class SpotLight extends PointLight {
      */
     public SpotLight(Color color, Point point, Vector vector) {
         super(color, point);
-        direction = vector;
+        direction = vector.normalize();
     }
 
     /**
@@ -59,11 +61,6 @@ public class SpotLight extends PointLight {
         return (SpotLight) super.setkQ(kQ);
     }
 
-    @Override
-    public Vector getL(Point p) {
-        return direction.normalize();
-    }
-
     public SpotLight setNarrowBeam(double narrowBeam) {
         this.narrowBeam = narrowBeam;
         return this;
@@ -75,9 +72,10 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point p) {
-        Color Ic = super.getIntensity(p);
-        double Lv = super.getL(p).dotProduct(this.direction);
-        double factor = Math.pow(Math.max(0, Lv), narrowBeam);
-        return Ic.scale(factor);
+        double lDir = direction.dotProduct(getL(p));
+        if (alignZero(lDir) <= 0) return Color.BLACK;
+        Color color = super.getIntensity(p);
+        return color.scale(Math.pow(lDir, narrowBeam));
+        
     }
 }
