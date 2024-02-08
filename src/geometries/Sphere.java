@@ -11,7 +11,6 @@ import primitives.Vector;
 
 import java.util.List;
 import static primitives.Util.*;
-import static java.lang.Math.sqrt;
 
 public class Sphere extends RadialGeometry {
 
@@ -41,15 +40,23 @@ public class Sphere extends RadialGeometry {
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        Vector u = this.center.subtract(ray.getHead());
-        double tm = ray.getDirection().dotProduct(u);
-        double d = sqrt(u.lengthSquared() - tm * tm);
-
-        if (d > this.radius) {
+        Vector u = null;
+        if(!center.equals(ray.getHead())){
+            u=center.subtract(ray.getHead());
+        }
+        else{
+            return List.of(new GeoPoint(this, center.add(ray.getDirection().scale(radius))));
+        }
+        double tm=ray.getDirection().dotProduct(u);
+        double d=Math.sqrt(u.lengthSquared()-(tm*tm));
+        if (d>radius){
+            return null;
+        }
+        double th=alignZero(Math.sqrt(radius*radius-(d*d)));
+        if(isZero(th)){
             return null;
         }
 
-        double th = sqrt(this.radius * this.radius - d * d);
         double t1 = tm + th;
         double t2 = tm - th;
 
