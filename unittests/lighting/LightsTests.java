@@ -203,7 +203,7 @@ public class LightsTests {
 
 
    private final Geometry       sphere2                  = new Sphere(sphereCenter, SPHERE_RADIUS)
-      .setEmission(new Color(150, 0, 50)).setMaterial(new Material().setKd(KD).setKs(KS).setShininess(SHININESS));
+      .setEmission(new Color(50, 0, 150)).setMaterial(new Material().setKd(KD).setKs(KS).setShininess(SHININESS));
 
    @Test
    public void sphereAllAndMultiLights() {
@@ -212,7 +212,7 @@ public class LightsTests {
       scene3.lights.add(new SpotLight(sphereLightColor, sphereLightPosition, sphereLightDirection)
                .setkL(0.001).setkQ(0.0001));
 
-      scene3.lights.add(new PointLight(new Color(138,43,226), new Point(75,0,50))
+      scene3.lights.add(new PointLight(new Color(255,0,20), new Point(75,0,50))
                .setkL(0.0001).setkQ(0.0001));
 
       scene3.lights.add(new DirectionalLight(new Color(800,300,600), new Vector(150,-150,-25)));
@@ -228,7 +228,7 @@ public class LightsTests {
    public void TriangleAllAndMultiLights(){
 
        scene2.geometries.add(triangle1, triangle2);
-       scene2.lights.add(new SpotLight(new Color (200, 600, 800), new Point(50, 20, -100), new Vector(-2, 3, 0))
+       scene2.lights.add(new SpotLight(new Color (200, 600, 1000), new Point(50, 20, -100), new Vector(-2, 3, 0))
                .setkL(0.001).setkQ(0.0001));
        scene2.lights.add(new PointLight(new Color(800, 100, 700), new Point(30, -10, -100))
                .setkL(0.001).setkQ(0.0002));
