@@ -15,6 +15,8 @@ import primitives.*;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
+    private static final double DELTA = 0.1;
+
     /**
      * Constructs a new SimpleRayTracer with the specified scene.
      * 
@@ -22,6 +24,23 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     public SimpleRayTracer(Scene scene) {
         super(scene);
+    }
+
+
+    private boolean unshaded(GeoPoint gp, LightSource light, Vector l, Vector n, double nl) {
+        Vector lightDirection = l.scale(-1); // from point to light source
+        Vector epsVector = n.scale(nl < 0 ? DELTA : -DELTA);
+        Point point = gp.point.add(epsVector);
+        Ray ray = new Ray(point, lightDirection);
+        List<Point> intersections = scene.geometries.findIntersections(ray);
+        if (intersections == null) return true;
+        double lightDistance = alignZero(light.getDistance(gp.point));
+        for (Point p : intersections) {
+            if (lightDistance >= alignZero(p.distance(gp.point))){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -40,8 +59,8 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Color calcColor(GeoPoint geoPoint, Ray ray) {
-        return this.scene.ambientLight.getIntensity()
-                         .add(calcLocalEffects(geoPoint, ray));
+        return this.scene.ambientLight.getIntensity().add(calcLocalEffects(geoPoint, ray));
+
     }
 
     private Color calcLocalEffects(GeoPoint geoPoint, Ray ray) {
@@ -56,7 +75,7 @@ public class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource : scene.lights) {
             Vector l = lightSource.getL(geoPoint.point);
             double nl = alignZero(n.dotProduct(l));
-            if (nl * nv > 0) { // sign(nl) == sign(nv)
+            if (nl * nv > 0 && unshaded(geoPoint, lightSource, l, n, nl)) { // sign(nl) == sign(nv)
                 Color iL = lightSource.getIntensity(geoPoint.point);
                 color = color.add(
                         iL.scale(calcDiffusive(material, nl))

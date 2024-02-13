@@ -19,6 +19,10 @@ public class DirectionalLight extends Light implements LightSource {
         this.direction = direction.normalize();
     }
 
+    public double getDistance(Point point){
+        return Double.POSITIVE_INFINITY;
+    }
+
     @Override
     public Color getIntensity(Point p) {
         return intensity;
