@@ -17,6 +17,13 @@ public class SimpleRayTracer extends RayTracerBase {
 
     private static final double DELTA = 0.1;
 
+    private static final Double3 INITIAL_K = Double3.ONE;
+
+    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    
+    private static final double MIN_CALC_COLOR_K = 0.001;
+
+
     /**
      * Constructs a new SimpleRayTracer with the specified scene.
      * 
@@ -43,27 +50,77 @@ public class SimpleRayTracer extends RayTracerBase {
         return true;
     }
 
-    /**
-     * Traces the specified ray and returns the color of the pixel it intersects with.
-     * 
-     * @param ray the ray to be traced
-     * @return the color of the pixel the ray intersects with
+   /**
+     * Traces a given ray and returns the color of the hit object
+     *
+     * @param ray the ray to trace
+     * @return the color of the hit object
      */
     @Override
     public Color traceRay(Ray ray) {
-        List<GeoPoint> intersections = this.scene.geometries.findGeoIntersections(ray);
+        GeoPoint closestPoint = findClosestIntersection(ray);
+        return closestPoint == null ? this.scene.background : calcColor(closestPoint, ray);
+    }
+
+    /**
+     * calculate color using recursion
+     *
+     * @param geoPoint the closest intersection point between the ray and the object
+     */
+    private Color calcColor(GeoPoint gp, Ray ray) {
+        return calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K);
+    }
+
+    /**
+     * A method that returns the color of the intersection point between a ray and an object.
+     * If there is no intersection point the method returns the ambient light color.
+     *
+     * @param geoPoint the closest intersection point between the ray and the object
+     * @param level    number of iterations in the recursion
+     * @param k        coefficient for recursive calculations of reflection and refraction
+     */
+    private Color calcColor(GeoPoint geoPoint, Ray ray, int level, Double3 k) {
+        Color color = calcLocalEffects(geoPoint, ray, k);
+        return 1 == level ? color : color.add(calcGlobalEffects(geoPoint, ray, level, k));
+    }
+
+    /**
+     * Method to find the closest intersection point to the ray's origin
+     */
+    private GeoPoint findClosestIntersection(Ray ray) {
+        List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray);
         if (intersections == null) {
-            return this.scene.background;
+            return null;
         }
-        return this.calcColor(ray.findClosestGeoPoint(intersections), ray);
+        return ray.findClosestGeoPoint(intersections);
     }
 
-    private Color calcColor(GeoPoint geoPoint, Ray ray) {
-        return this.scene.ambientLight.getIntensity().add(calcLocalEffects(geoPoint, ray));
-
+    
+    
+    private Color calcGlobalEffects(GeoPoint gp, Ray ray, int level, Double3 k) {
+        Material material = gp.geometry.getMaterial();
+        return calcColorGLobalEffect(  constructReflectedRay(gp, ray), material.kR , level, k)
+            .add(calcColorGLobalEffect(constructReflectedRay(gp, ray), material.kT , level, k));
     }
 
-    private Color calcLocalEffects(GeoPoint geoPoint, Ray ray) {
+
+    private Color calcColorGLobalEffect(Ray ray, Double3 k, int level, Double3 kx) {
+        Double3 kkx = k.product(kx);
+        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+        GeoPoint gp = findClosestIntersection(ray);
+        return (gp == null ? scene.background : calcColor(gp, ray, level -1, kkx)).scale(kx);
+    }
+
+    /**
+     * Method to construct a new ray that reflected from the hit point where the main ray hits
+     *
+     * @param point hit's point of the main ray on the surface of the geometry
+     */
+    private Ray constructReflectedRay(GeoPoint point, Ray ray) {
+        return null;
+    }
+
+    private Color calcLocalEffects(GeoPoint geoPoint, Ray ray, Double3 k) {
         Color color = geoPoint.geometry.getEmission();
         Vector v = ray.getDirection();
         Vector n = geoPoint.geometry.getNormal(geoPoint.point);
@@ -96,8 +153,6 @@ public class SimpleRayTracer extends RayTracerBase {
             return Double3.ZERO;
         }
         return material.getKs().scale(Math.pow(minusVR, material.getnShininess()));
-    }
-
-    
+    }    
 
 }
