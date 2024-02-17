@@ -30,17 +30,22 @@ public class Geometries extends Intersectable {
      * This method returns all intersection points with this group of shapes
      */
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        List<GeoPoint> intersections = null;
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        List<GeoPoint> points = null;
+        // Iterate over each geometry in the collection
         for (Intersectable geometry : this.geometriesList) {
-            List<GeoPoint> geometryIntersections = geometry.findGeoIntersections(ray);
-            if (geometryIntersections != null) {
-                if (intersections == null) {
-                    intersections = new LinkedList<>();
-                }
-                intersections.addAll(geometryIntersections);
+            var geoPoints = geometry.findGeoIntersections(ray, maxDistance);
+            // If there are intersections, add them to the list
+            if (geoPoints != null) {
+                if (points == null)
+                    points = new LinkedList<>();
+                // Add the first intersection point
+                points.add(geoPoints.get(0));
+                // If there is a second intersection point, add it as well
+                if (geoPoints.size() > 1)
+                    points.add(geoPoints.get(1));
             }
         }
-        return intersections;
+        return points;
     }
 }

@@ -19,7 +19,7 @@ public class ShadowTests {
    /** Camera builder of the tests */
    private final Camera.Builder camera     = Camera.getBuilder()
       .setDirection(new Vector(0, 0, -1), Vector.Y)
-      .setLocation(new Point(0, 0, 1000)).setVpDistance(1000)
+      .setLocation(new Point(0, 0, 2000)).setVpDistance(1000)
       .setVpSize(200, 200)
       .setRayTracer(new SimpleRayTracer(scene));
 
@@ -104,7 +104,7 @@ public class ShadowTests {
                        new SpotLight(new Color(700, 400, 400), new Point(40, 40, 115), new Vector(-1, -1, -4)) //
                           .setkL(4E-4).setkQ(2E-5));
 
-      camera.setImageWriter(new ImageWriter("shadowTrianglesSphere", 1, 1))
+      camera.setImageWriter(new ImageWriter("shadowTrianglesSphere", 600, 600))
          .build()
          .renderImage()
          .writeToImage();

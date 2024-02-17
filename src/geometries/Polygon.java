@@ -2,7 +2,6 @@ package geometries;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import primitives.Point;
@@ -93,35 +92,41 @@ public class Polygon extends Geometry {
    }
 
    @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+      Plane plane = this.plane;
+      if (plane.findIntersections(ray) == null)
+         return null;
+      Point intersection = plane.findIntersections(ray).getFirst();
+      Point p0 = ray.getHead();
+      // Calculate vectors from the intersection point to each vertex of the polygon
+      Vector [] v = new Vector[this.size];
+      for(int i=0; i<this.size; i++) {
+         v[i] = vertices.get(i).subtract(p0);
+      }
+      Vector [] n = new Vector[this.size];
+      // Calculate normal vectors of the  polygon formed by the intersection point
+      for(int i=0; i<this.size; i++) {
+         if(i == this.size-1) {
+            n[i] = v[i].crossProduct(v[0]).normalize();
+            break;
+         }
+         n[i] = v[i].crossProduct(v[i+1]).normalize();
+      }
+      Vector v0 = ray.getDirection();
+      double nv = v0.dotProduct(n[0]);
+      if (isZero(nv)) return null;
+      // in the first dot product, set the sign
+      boolean sign = !(nv < 0);
 
-        List<GeoPoint> intersections = this.plane.findGeoIntersections(ray);
-
-        // The ray does not intersect the polygon plane
-        if (intersections == null) {
+      for(int i=1; i<this.size; i++) {
+         nv = v0.dotProduct(n[i]);
+         // Check if the dot product is close to zero, meaning the ray is nearly parallel to the polygon
+         if (isZero(nv)) return null;
+         // check if the sign is consistent
+         if((nv < 0 && sign) || (nv > 0 && !sign))
             return null;
-        }
-
-        // rayDirection.dotProduct(Normal)
-        double firstVecDotNormal = alignZero(ray.getDirection().dotProduct(this.vertices.get(0).subtract(ray.getHead()).crossProduct(this.vertices.get(1).subtract(ray.getHead())).normalize()));
-        double otherVecDotNormal;
-
-        for (int i = 1; i < this.vertices.size() - 1; i++) {
-
-            otherVecDotNormal = alignZero(ray.getDirection().dotProduct(this.vertices.get(i).subtract(ray.getHead()).crossProduct(this.vertices.get(i + 1).subtract(ray.getHead())).normalize()));
-
-            if (!((firstVecDotNormal < 0 && otherVecDotNormal < 0) ||
-                    (firstVecDotNormal > 0 && otherVecDotNormal > 0))) {
-                return null;
-            }
-        }
-
-        otherVecDotNormal = alignZero(ray.getDirection().dotProduct(this.vertices.get(this.vertices.size() - 1).subtract(ray.getHead()).crossProduct(this.vertices.get(0).subtract(ray.getHead())).normalize()));
-        if (!((firstVecDotNormal < 0 && otherVecDotNormal < 0) ||
-                (firstVecDotNormal > 0 && otherVecDotNormal > 0))) {
-            return null;
-        }
-
-        return List.of(new GeoPoint(this, intersections.get(0).point));
-    }
+      }
+      // Return the intersection point as a list
+      return List.of(new GeoPoint(this, intersection));
+   }
 }

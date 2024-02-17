@@ -56,35 +56,51 @@ public class Plane extends Geometry {
         return normal;
     }
 
+    public List<Point> findIntersections(Ray ray) {
+        // Calculate the dot product between the plane's normal and the ray's direction vector
+        double nv = alignZero(this.normal.dotProduct(ray.getDirection()));
+
+        // Check if the ray is parallel to the plane
+        if (isZero(nv))
+            return null;
+
+        // Check if the ray starts on the plane, if true, return null (no intersections)
+        if (this.q.equals(ray.getHead()))
+            return null;
+
+        // Calculate the parameter 't' for the intersection point
+        double t = alignZero(this.normal.dotProduct(q.subtract(ray.getHead()))) / nv;
+
+        // Check if the intersection point is in the direction of the ray
+        if (t <= 0)
+            return null;
+
+        // Return the intersection point as a list
+        return List.of(ray.getPoint(t));
+    }
+
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        // Calculate the dot product between the plane's normal and the ray's direction vector
+        double nv = alignZero(this.normal.dotProduct(ray.getDirection()));
 
-        // The ray is contained in the plane
-        if (isZero(ray.getDirection().dotProduct(this.normal))) {
+        // Check if the ray is parallel to the plane
+        if (isZero(nv))
             return null;
-        }
 
-        // Ray origin is the head of the normal
-        if (ray.getHead().equals(this.q)) {
+        // Check if the ray starts on the plane, if true, return null (no intersections)
+        if (this.q.equals(ray.getHead()))
             return null;
-        }
 
-        double numerator = this.normal.dotProduct(this.q.subtract(ray.getHead()));
-        double denominator = this.normal.dotProduct(ray.getDirection());
-        if (isZero(denominator)) {
-            throw new IllegalArgumentException("denominator cannot be zero");
-        }
-        double t = alignZero(numerator / denominator);
+        // Calculate the parameter 't' for the intersection point
+        double t = alignZero(this.normal.dotProduct(q.subtract(ray.getHead()))) / nv;
 
-        // The ray starts from the plane
-        if (t == 0) {
+        // Check if the intersection point is in the direction of the ray
+        if (t <= 0)
             return null;
-        }
 
-        if (t > 0) {
+        if (alignZero(t - maxDistance) <= 0)
             return List.of(new GeoPoint(this, ray.getPoint(t)));
-        }
-
         return null;
     }
 

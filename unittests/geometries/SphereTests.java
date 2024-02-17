@@ -79,7 +79,7 @@ class SphereTests {
 		//if (result.get(0).getX() > result.get(1).getX()) {
 		//	result = List.of(result.get(1), result.get(0));
 		//}
-		if(result.get(0)==Point.ZERO){
+		if(result.get(0).equals(Point.ZERO)){
 			assertEquals(List.of(Point.ZERO, new Point(2, 0, 0)), result, "Ray starts before the sphere and it's line goes through the center");
 		}
 		else{

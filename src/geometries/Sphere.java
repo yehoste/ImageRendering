@@ -39,28 +39,47 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         Point p0 = ray.getHead();
         Vector v = ray.getDirection();
-        if (center.equals(p0)) return List.of(new GeoPoint(this, ray.getPoint(radius)));
 
-        Vector u = center.subtract(p0);
+        // Check if the ray starts at the center of the sphere
+        if (this.center.equals(p0))
+            return List.of(new GeoPoint(this, ray.getPoint(radius)));
 
-        double tm = v.dotProduct(u);
-        if ((tm < 0) && (u.length() > radius)) return null;
+        // Calculate vector u from the ray's head to the center of the sphere
+        Vector u = this.center.subtract(p0);
 
-        double d = Math.sqrt(u.lengthSquared() - tm * tm);
-        if (d >= radius) return null;
+        // Calculate tm, the projection of u onto the ray direction
+        double tm = alignZero(v.dotProduct(u));
 
-        double th = Math.sqrt(radius * radius - d * d);
-        if (isZero(th)) return null;
+        // Calculate the distance between the center of the sphere and the ray
+        double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
 
-        double t1 = tm + th, t2 = tm - th;
-        if (isZero(t1)) return null;
+        // Check if the ray misses the sphere
+        if (d >= this.radius) {
+            return null;
+        }
 
-        Point p1 = ray.getPoint(t1);
-        if (!(alignZero(t2) > 0)) return List.of(new GeoPoint(this, p1));
+        // Calculate th, the distance from the point of intersection to the sphere's surface
+        double th = alignZero(Math.sqrt(this.radius * this.radius - d * d));
 
-        return List.of(new GeoPoint(this, p1), new GeoPoint(this, ray.getPoint(t2)));
+        // Calculate the two possible intersection points
+        double t1 = alignZero(tm + th);
+        double t2 = alignZero(tm - th);
+
+        boolean distanceT1 = alignZero(t1 - maxDistance) <= 0;
+        boolean distanceT2 = alignZero(t2 - maxDistance) <= 0;
+        // Return the appropriate intersection points based on their validity
+        if (t1 > 0 && t2 > 0 && distanceT1 && distanceT2)
+            return List.of(new GeoPoint(this, ray.getPoint(t2)), new GeoPoint(this, ray.getPoint(t1)));
+
+        if (t1 > 0 && distanceT1)
+            return List.of(new GeoPoint(this, ray.getPoint(t1)));
+
+        if (t2 > 0 && distanceT2)
+            return List.of(new GeoPoint(this, ray.getPoint(t2)));
+
+        return null;
     }
 }

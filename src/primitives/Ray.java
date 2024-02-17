@@ -2,6 +2,7 @@ package primitives;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 import geometries.Intersectable.GeoPoint;
 
@@ -10,9 +11,19 @@ import geometries.Intersectable.GeoPoint;
  * vector.
  */
 public class Ray {
-
+    
+    /**
+     * The starting point of the ray.
+     */
     private final Point head;
+
+    /**
+     * The direction vector of the ray.
+     */
     private final Vector direction;
+
+    private static final double DELTA = 0.1;
+
         
     /**
      * constructor for ray.
@@ -30,6 +41,17 @@ public class Ray {
         return ((obj instanceof Ray other)
         && this.head.cords.equals(other.head.cords)
         && this.direction.cords.equals(other.direction.cords));
+    }
+
+    public Ray(Point head, Vector direction, Vector normal) {
+        double nv = alignZero(direction.dotProduct(normal));
+        if (nv > 0)
+            this.head = head.add(normal.scale(DELTA));
+        else if (nv < 0)
+            this.head = head.add((normal.scale(-DELTA)));
+        else
+            this.head = head;
+        this.direction = direction.normalize();
     }
 
     public Point getHead() {
@@ -73,7 +95,7 @@ public class Ray {
        
 
     public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
-        if (points.isEmpty()) {
+        if (points == null ||points.isEmpty()) {
             return null;
         }
         GeoPoint closestPoint = points.get(0);

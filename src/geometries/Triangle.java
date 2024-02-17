@@ -4,8 +4,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import static java.util.Objects.isNull;
-import static primitives.Util.compareSign;
 import static primitives.Util.isZero;
 
 import java.util.List;
@@ -27,42 +25,44 @@ public class Triangle extends Polygon{
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        List<Point> intersections = plane.findIntersections(ray);
-        if (isNull(intersections)) return null;
-
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        if (plane.findGeoIntersections(ray, maxDistance) == null)
+            return null;
+        Point intersection = plane.findIntersections(ray,maxDistance).get(0);
         Point p0 = ray.getHead();
+        // Calculate vectors from the intersection point to each vertex of the triangle
+        Vector v1 = vertices.get(0).subtract(p0);
+        Vector v2 = vertices.get(1).subtract(p0);
+        Vector v3 = vertices.get(2).subtract(p0);
 
-        Point p1 = vertices.get(0);
-        if (p1.equals(p0)) return null;
-        Vector v1 = p1.subtract(p0);
-
-        Point p2 = vertices.get(1);
-        if (p2.equals(p0)) return null;
-        Vector v2 = p2.subtract(p0);
-
-        Point p3 = vertices.get(2);
-        if (p3.equals(p0)) return null;
-        Vector v3 = p3.subtract(p0);
-
-        Vector v = ray.getDirection();
-
+        // Calculate normal vectors of the three triangles formed by the intersection point
         Vector n1 = v1.crossProduct(v2).normalize();
         Vector n2 = v2.crossProduct(v3).normalize();
         Vector n3 = v3.crossProduct(v1).normalize();
+        Vector [] n ={n1,n2,n3};
 
-        double vn1 = v.dotProduct(n1);
-        if (isZero(vn1)) return null;
+        double nv;
+        boolean tmp = false;
+        boolean sign = false;
+        Vector v = ray.getDirection();
 
-        double vn2 = v.dotProduct(n2);
-        if (isZero(vn2)) return null;
+        for(int i=0; i<3; i++) {
+            nv = v.dotProduct(n[i]);
+            // Check if the dot product is close to zero, meaning the ray is nearly parallel to the triangle
+            if (isZero(nv)) return null;
+            if (i == 0) {
+                // if it's the first dot product, set the sign
+                sign = !(nv < 0);
+                tmp = sign;
+            }
+            else {
+                // check if the sign is consistent
+                if((nv < 0 && tmp) || (nv > 0 && !tmp))
+                    return null;
+            }
+        }
+        // Return the intersection point as a list
+            return List.of(new GeoPoint(this, intersection));
 
-        double vn3 = v.dotProduct(n3);
-        if (isZero(vn3)) return null;
-
-        Point intersection = intersections.get(0);
-        if (compareSign(vn1, vn2) && compareSign(vn2, vn3)) return List.of(new GeoPoint(this, intersection));
-
-        return null;
     }
 }
