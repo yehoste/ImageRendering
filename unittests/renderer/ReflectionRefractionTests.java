@@ -7,9 +7,9 @@ import static java.awt.Color.*;
 
 import org.junit.jupiter.api.Test;
 
-import geometries.Sphere;
-import geometries.Triangle;
+import geometries.*;
 import lighting.AmbientLight;
+import lighting.PointLight;
 import lighting.SpotLight;
 import primitives.*;
 import renderer.*;
@@ -100,5 +100,40 @@ public class ReflectionRefractionTests {
          .build()
          .renderImage()
          .writeToImage();
+   }
+
+   @Test
+   public void threeShapeOneImage() {
+      scene.geometries.add(
+         new Triangle(new Point(0,0,0), new Point(0,0,4),
+         new Point(4,0,0)).setEmission(new Color(BLUE))
+            .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)),
+         new Polygon(new Point(0,0,0), new Point(0,0,4), new Point(0, 5, 4), new Point(0, 5, 0)).setEmission(new Color(RED))
+            .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)),
+         new Sphere(new Point(2, 2, 2), 1).setEmission(new Color(BLUE))
+            .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6))
+      );
+
+      scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
+
+      scene.lights.add(
+         new SpotLight(new Color(700, 400, 400), new Point(1, 1, 1), new Vector(-0.5, -0.5, 1))
+            .setkL(4E-5).setkQ(2E-7)
+         );
+      scene.lights.add(
+         new PointLight(new Color(54,23,100), new Point(2,2,2))
+      );
+
+      cameraBuilder.setLocation(new Point(7,2,2))
+         .setDirection(new Vector(5, 0, 0), new Vector(0,0,1))
+         .setRayTracer(new SimpleRayTracer(scene))
+         .setVpDistance(50)
+         .setVpSize(100, 100)
+         .setImageWriter(new ImageWriter("threeShapeOneImage", 500, 500))
+         .build()
+         .renderImage()
+         .writeToImage();
+
+      
    }
 }

@@ -57,11 +57,7 @@ public class Camera implements Cloneable {
         this.imageWriter.writePixel(i, j, pixelColor);
     }
 
-    /**
-     * This method is not supported.
-     * 
-     * @throws UnsupportedOperationException if the method is called
-     */
+
     public Camera renderImage() {
         // IMAGE RENDERING
         // Pass a ray from the camera through each pixel in the view plane and set the color
