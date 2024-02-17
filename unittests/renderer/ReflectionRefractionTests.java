@@ -5,11 +5,11 @@ package unittests.renderer;
 
 import static java.awt.Color.*;
 
+
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
 import lighting.AmbientLight;
-import lighting.PointLight;
 import lighting.SpotLight;
 import primitives.*;
 import renderer.*;
@@ -104,35 +104,46 @@ public class ReflectionRefractionTests {
 
    @Test
    public void threeShapeOneImage() {
-      scene.geometries.add(
-         new Triangle(new Point(0,0,0), new Point(0,0,4),
-         new Point(4,0,0)).setEmission(new Color(BLUE))
-            .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)),
-         new Polygon(new Point(0,0,0), new Point(0,0,4), new Point(0, 5, 4), new Point(0, 5, 0)).setEmission(new Color(RED))
-            .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)),
-         new Sphere(new Point(2, 2, 2), 1).setEmission(new Color(BLUE))
-            .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6))
-      );
+      scene.geometries.add( // center
+                           new Sphere(new Point(0, 0, -100), 50).setEmission(new Color(BLUE))
+                           .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6)),
+                           // down right
+                           new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100))
+                              .setEmission(new Color(RED)).setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60)),
+                           new Plane(new Point(0,0,-180), new Vector(0,0, 1)).setMaterial(new Material().setkR(1)).setEmission(new Color(25,68,48))
+                           );
 
-      scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
+
+      scene.setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.1))); //
 
       scene.lights.add(
-         new SpotLight(new Color(700, 400, 400), new Point(1, 1, 1), new Vector(-0.5, -0.5, 1))
-            .setkL(4E-5).setkQ(2E-7)
-         );
-      scene.lights.add(
-         new PointLight(new Color(54,23,100), new Point(2,2,2))
-      );
+         new SpotLight(new Color(700, 400, 400), new Point(0, 50, -30), new Vector(100, -100, -0.5))
+                          .setkL(4E-5).setkQ(2E-7));
 
-      cameraBuilder.setLocation(new Point(7,2,2))
-         .setDirection(new Vector(5, 0, 0), new Vector(0,0,1))
+      cameraBuilder.setLocation(Point.ZERO)
+         .setDirection(new Vector(0, 0, -1), Vector.Y)
+         .setVpDistance(20)
+         .setVpSize(500, 500)
          .setRayTracer(new SimpleRayTracer(scene))
-         .setVpDistance(50)
          .setVpSize(100, 100)
          .setImageWriter(new ImageWriter("threeShapeOneImage", 500, 500))
          .build()
          .renderImage()
          .writeToImage();
+
+         //KIND OG BOUNUS....
+         cameraBuilder.setLocation(new Point(0, 50, 0))
+         .setDirection(new Vector(0, 0, -1), Vector.Y)
+         .setVpDistance(20)
+         .setVpSize(2000, 2000)
+         .setRayTracer(new SimpleRayTracer(scene))
+         .setVpSize(100, 100)
+         .setImageWriter(new ImageWriter("threeShapeOneImage254161422", 500, 500))
+         .build()
+         .renderImage()
+         .writeToImage();
+
+
 
       
    }
