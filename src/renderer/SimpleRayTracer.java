@@ -159,8 +159,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param n        The normal vector at the point.
      * @return True if the point is unshaded, false otherwise.
      */
-        private Double3 transparency(GeoPoint gp, LightSource light,
-                Vector l, Vector n) {
+        private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Ray ray = new Ray(gp.point, lightDirection, n);
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
