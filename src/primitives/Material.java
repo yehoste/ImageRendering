@@ -21,9 +21,9 @@ public class Material {
     private int nShininess = 0;
 
     /**
-     * Sets the diffuse color of the material.
+     * 
      *
-     * @param Kd the diffuse color
+     * @param Kd
      * @return this material
      */
     public Material setKd(double Kd) {
@@ -32,9 +32,9 @@ public class Material {
     }
 
     /**
-     * Sets the diffuse color of the material.
+     * 
      *
-     * @param Kd the diffuse color
+     * @param Kd 
      * @return this material
      */
     public Material setKd(Double3 Kd) {
@@ -43,18 +43,18 @@ public class Material {
     }
 
     /**
-     * Gets the diffuse color of the material.
+     * 
      *
-     * @return the diffuse color
+     * @return
      */
     public Double3 getKd() {
         return this.Kd;
     }
 
     /**
-     * Sets the specular color of the material.
+     * 
      *
-     * @param Ks the specular color
+     * @param Ks 
      * @return this material
      */
     public Material setKs(double Ks) {
@@ -63,9 +63,9 @@ public class Material {
     }
 
     /**
-     * Sets the specular color of the material.
+     * 
      *
-     * @param Ks the specular color
+     * @param Ks 
      * @return this material
      */
     public Material setKs(Double3 Ks) {
@@ -74,9 +74,9 @@ public class Material {
     }
 
     /**
-     * Gets the specular color of the material.
+     * 
      *
-     * @return the specular color
+     * @return 
      */
     public Double3 getKs() {
         return this.Ks;
@@ -103,7 +103,7 @@ public class Material {
     }
 
     /**
-     * set kt by one double.
+     * 
      * @param kt
      * @return this object
      */
@@ -113,7 +113,7 @@ public class Material {
     }
 
     /**
-     * set kt by double3 object.
+     *
      * @param kt
      * @return this object
      */
@@ -123,7 +123,7 @@ public class Material {
     }
 
     /**
-     * set kr by one double.
+     * 
      * @param kr
      * @return this object
      */
@@ -133,7 +133,7 @@ public class Material {
     }
 
     /**
-     * set kr by double3 object.
+     * 
      * @param kr
      * @return this object
      */
