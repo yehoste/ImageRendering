@@ -19,7 +19,7 @@ public class SimpleRayTracer extends RayTracerBase {
 
     private static final int MAX_CALC_COLOR_LEVEL = 10;
     
-    private static final double MIN_CALC_COLOR_K = 0.001;
+    protected static final double MIN_CALC_COLOR_K = 0.001;
 
 
     /**
@@ -45,7 +45,7 @@ public class SimpleRayTracer extends RayTracerBase {
                 : calcColor(closestPoint, ray);
     }
 
-    private GeoPoint findClosestIntersection(Ray ray) {
+    protected GeoPoint findClosestIntersection(Ray ray) {
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray);
         return ray.findClosestGeoPoint(intersections);
     }
@@ -57,7 +57,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray - ray from camera through the pixel
      * @return pixel color
      */
-    private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
+    protected Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
         Color color = gp.geometry.getEmission();
         Vector n = gp.geometry.getNormal(gp.point);
         Vector v = ray.getDirection();
@@ -88,7 +88,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param nl       The dot product of the surface normal and the light direction.
      * @return The diffuse reflection component as a Double3 color vector.
      */
-    private Double3 calcDiffusive(Material material, double nl) {
+    protected Double3 calcDiffusive(Material material, double nl) {
         return material.getKd().scale(Math.abs(nl));
     }
 
@@ -102,7 +102,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param v        The direction from the surface point to the viewer.
      * @return The specular reflection component as a Double3 color vector.
      */
-    private Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {
+    protected Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {
         Vector r = l.subtract(n.scale(2 * nl));
         return material.getKs().scale(Math.pow(Math.max(0, -r.dotProduct(v)), material.getnShininess()));
     }
@@ -145,7 +145,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
 
-    private Color calcColor(GeoPoint gp, Ray ray) {
+    protected Color calcColor(GeoPoint gp, Ray ray) {
         return calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
                 .add(scene.ambientLight.getIntensity());
     }
@@ -159,7 +159,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param n        The normal vector at the point.
      * @return True if the point is unshaded, false otherwise.
      */
-        private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
+    protected Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Ray ray = new Ray(gp.point, lightDirection, n);
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
@@ -170,5 +170,18 @@ public class SimpleRayTracer extends RayTracerBase {
         }
         return ktr;
     }   
+
+    /**
+     * Calculates the average color of a given list of rays.
+     * @param rays The list of rays.
+     * @return The average color of all rays.
+     */
+    protected Color averageColor(List<Ray> rays) {
+        Color color = Color.BLACK;
+        for (Ray ray : rays) {
+            color = color.add(traceRay(ray));
+        }
+        return color.reduce(rays.size());
+    }
 
 }

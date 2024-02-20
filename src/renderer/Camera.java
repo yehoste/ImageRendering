@@ -65,7 +65,7 @@ public class Camera implements Cloneable {
         int Nx=this.imageWriter.getNx();
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
-                castRay(Nx, Ny, i, j);
+                castRay(Nx, this.imageWriter.getNy(), i, j);
             }
         }
         return this;

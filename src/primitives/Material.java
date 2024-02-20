@@ -4,9 +4,9 @@ package primitives;
  * A class representing a material in a ray tracer.
  */
 public class Material {
-    private Double3 Kd = Double3.ZERO;
+    private Double3 Kd = Double3.ZERO; // diffuse reflection component 
 
-    private Double3 Ks = Double3.ZERO;
+    private Double3 Ks = Double3.ZERO; // 
 
     /**
      * The attenuation coefficient of transparencys
@@ -104,7 +104,7 @@ public class Material {
 
     /**
      * 
-     * @param kt
+     * @param kt // transparency
      * @return this object
      */
     public Material setkT(double kt) {
@@ -114,7 +114,7 @@ public class Material {
 
     /**
      *
-     * @param kt
+     * @param kt // transparency
      * @return this object
      */
     public Material setkT(Double3 kt) {
