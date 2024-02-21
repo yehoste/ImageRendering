@@ -14,22 +14,22 @@ public class BlackBoardTest {
 
     @Test
     public void testGridMethod() {
-        Blackboard board = new Blackboard(3, new GeoPoint(new Plane(Point.ZERO, Vector.Z), Point.ZERO), 2, 2);
+        Blackboard board = new Blackboard(9, new GeoPoint(new Plane(Point.ZERO, Vector.Z), Point.ZERO), 10, 10);
 
-        // Test center point
+
         Point bottomLeft = board.GridMethod(0, 0);
-        assertEquals(new Point(-0.5, -0.5, 0), bottomLeft);
+        assertEquals(new Point(-4, -4, 0), bottomLeft);
 
-        // Test corner points
+
         Point topLeft = board.GridMethod(0, 1);
-        assertEquals(new Point(-0.5, 0.5, 0), topLeft);
+        assertEquals(new Point(-3, -4, 0), topLeft);
 
-        Point topRight = board.GridMethod(1, 1);
-        assertEquals(new Point(0.5, 0.5, 0), topRight);
+        Point topRight = board.GridMethod(4, 4);
+        assertEquals(new Point(0, 0, 0), topRight);
 
-        // Test points off center
-        Point bottomRight = board.GridMethod(1, 0);
-        assertEquals(new Point(0.5, -0.5, 0), bottomRight);
+
+        Point bottomRight = board.GridMethod(8, 8);
+        assertEquals(new Point(4, 4, 0), bottomRight);
     }
 
     @Test

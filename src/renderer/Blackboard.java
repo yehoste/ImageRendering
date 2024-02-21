@@ -55,12 +55,14 @@ public class Blackboard {
     }
 
     public Point GridMethod(int j, int i) {
-        double stepX = width / Nxy;
-        double stepY = height / Nxy;
+        double stepX = (width-1) / Nxy;
+        double stepY = (height-1) / Nxy;
         
-        double xj = j * stepX - width / 2;
-        double yi = -i * stepY + height / 2;
-    
+        double xj = ((j * stepX) - ((width-1) / 2)) + (stepX/2);
+
+        double yi = ((-i * stepY) + ((height-1) / 2)) - (stepY/2);
+
+
         Point pIJ = this.CenterOfBlackB.point;
         if (!isZero(xj)) pIJ = pIJ.add(this.AxisX.scale(xj));
         if (!isZero(yi)) pIJ = pIJ.add(this.AxisY.scale(yi));
@@ -72,8 +74,8 @@ public class Blackboard {
     private Point jitterdPoint(int j, int i){
         Point centerOfMiniSqure = GridMethod(j, i);
         
-        double randX = random(-(width / Nxy) /2 , (width / Nxy)/2);
-        double randY = random(-(height / Nxy) /2 , (height / Nxy)/2);
+        double randX = random(-((width-1) / Nxy) /2 , ((width-1) / Nxy)/2);
+        double randY = random(-((height-1) / Nxy) /2 , ((height-1) / Nxy)/2);
     
         if (!isZero(randX)) centerOfMiniSqure = centerOfMiniSqure.add(this.AxisX.scale(randX));
         if (!isZero(randY)) centerOfMiniSqure = centerOfMiniSqure.add(this.AxisY.scale(randY));
