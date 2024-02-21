@@ -21,6 +21,10 @@ public class SimpleRayTracer extends RayTracerBase {
     
     protected static final double MIN_CALC_COLOR_K = 0.001;
 
+    private int BlackboardSize = 0;
+    private double BbWidth;
+    private double BbHeight;
+
 
     /**
      * Constructs a new SimpleRayTracer with the specified scene.
@@ -62,23 +66,40 @@ public class SimpleRayTracer extends RayTracerBase {
         Vector n = gp.geometry.getNormal(gp.point);
         Vector v = ray.getDirection();
         double nv = alignZero(n.dotProduct(v));
+    
         if (nv == 0) return color;
+    
         Material material = gp.geometry.getMaterial();
-
+    
         for (LightSource lightSource : scene.lights) {
             Vector l = lightSource.getL(gp.point);
             double nl = alignZero(n.dotProduct(l));
-            if (nl * nv > 0) { // sign(nl) == sing(nv)
+    
+            if (nl * nv > 0) {
                 Double3 ktr = transparency(gp, lightSource, l, n);
+    
                 if (!(ktr.product(k).lowerThan(MIN_CALC_COLOR_K))) {
                     Color iL = lightSource.getIntensity(gp.point).scale(ktr);
                     color = color.add(
                             iL.scale(calcDiffusive(material, nl)
                                     .add(calcSpecular(material, n, l, nl, v))));
                 }
+            }
         }
-        }
+
         return color;
+    }
+
+    /**
+     * 
+     * 
+     */
+
+    public SimpleRayTracer setBlackboardSizeAndWidthHeight(int BlackboardSize, double BbWidth, double BbHeight) {
+        this.BlackboardSize = BlackboardSize;
+        this.BbWidth = BbWidth;
+        this.BbHeight = BbHeight;
+        return this;
     }
 
     /**
@@ -114,7 +135,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param gp The point for which the color is calculated.
      * @return The color at the specified point based on ambient light intensity.
      */
-    private Color calcColor(GeoPoint gp, Ray ray, int level, Double3 k) {
+    protected Color calcColor(GeoPoint gp, Ray ray, int level, Double3 k) {
         Color color = calcLocalEffects(gp, ray, k);
         return 1 == level ? color : color.add(calcGlobalEffects(gp, ray, level, k));
     }
@@ -136,12 +157,33 @@ public class SimpleRayTracer extends RayTracerBase {
         return new Ray(gp.point, r, n);
     }
 
-    private Color calcGlobalEffect(Ray ray, Double3 kx, int level, Double3 k) {
+    protected Color calcGlobalEffect(Ray reflectedRay, Double3 kx, int level, Double3 k) {
         Double3 kkx = kx.product(k);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-        GeoPoint gp = findClosestIntersection(ray);
-        return (gp == null ? scene.background : calcColor(gp, ray, level - 1, kkx))
-                .scale(kx);
+        GeoPoint gp = findClosestIntersection(reflectedRay);
+
+
+        if(BlackboardSize == 0) return (gp == null ? scene.background : calcColor(gp, reflectedRay, level - 1, kkx)).scale(kx);
+
+        if (gp == null) return scene.background;
+
+
+        
+        // Add supersampling for glossy and Diffuse reflection
+        Blackboard Bb = new Blackboard(BlackboardSize, gp, this.BbWidth, this.BbHeight); // Adjust the number of samples as needed
+
+        Color Reflection = Color.BLACK;
+
+        for (Point point : Bb.points) {
+            Ray SSray = new Ray(reflectedRay.getHead(), point.subtract(reflectedRay.getHead()));
+            Color sampleColor = calcColor(gp, SSray).scale(kx);
+            Reflection = Reflection.add(sampleColor);
+        }
+
+        // Average the colors from supersampling
+        Reflection = Reflection.reduce(BlackboardSize*BlackboardSize);
+    
+        return Reflection;
     }
 
 
@@ -170,18 +212,5 @@ public class SimpleRayTracer extends RayTracerBase {
         }
         return ktr;
     }   
-
-    /**
-     * Calculates the average color of a given list of rays.
-     * @param rays The list of rays.
-     * @return The average color of all rays.
-     */
-    protected Color averageColor(List<Ray> rays) {
-        Color color = Color.BLACK;
-        for (Ray ray : rays) {
-            color = color.add(traceRay(ray));
-        }
-        return color.reduce(rays.size());
-    }
 
 }

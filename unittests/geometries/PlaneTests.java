@@ -1,5 +1,8 @@
 package unittests.geometries;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
@@ -94,6 +97,27 @@ class PlaneTests {
 		// **** Group: Special cases
 		// TC08: Ray begins in the plane's referenced point (0 points)
 		assertNull(plane.findIntersections(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0))), "Ray begins in the plane's referenced point");
+	}
+
+	/**
+	 * Test method for {@link geometries.Plane#findAxisForPlane()}.
+	 */
+	@Test
+	void TestFindAxisForPlane() {
+
+		// ============ Equivalence Partitions Tests ==============
+
+		//TC01: standardCase
+		Plane plane = new Plane(null, new Vector(1, 2, 3));
+        List<Vector> axes = plane.findAxisForPlane();
+        assertNotNull(axes);
+        assertEquals(2, axes.size());
+        double tolerance = 1e-6;
+        assertTrue(Math.abs(axes.get(0).dotProduct(axes.get(1))) < tolerance);
+        assertTrue(Math.abs(axes.get(0).dotProduct(plane.getNormal())) < tolerance);
+        assertTrue(Math.abs(axes.get(1).dotProduct(plane.getNormal())) < tolerance);
+
+
 	}
 
 }

@@ -20,6 +20,18 @@ public class Point {
         cords = new Double3(x,y,z);
     }
 
+    public double getX() {
+        return cords.d1;
+    }
+
+    public double getY() {
+        return cords.d2;
+    }
+
+    public double getZ() {
+        return cords.d3;
+    }
+
     /**
      * Constructor for Point using a Double3 object as input.
      * @param cord

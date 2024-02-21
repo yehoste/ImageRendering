@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import geometries.Intersectable.GeoPoint;
+import geometries.Plane;
 import primitives.*;
 
 public class Blackboard {
@@ -20,7 +21,7 @@ public class Blackboard {
     private Vector AxisY;
 
 
-    private List<Point> points = new LinkedList<>();
+    public List<Point> points = new LinkedList<>();
     private double width;
     private double height;
     
@@ -31,14 +32,29 @@ public class Blackboard {
         this.AxisY = axisy;
         this.width = width;
         this.height = height;
+    }
+
+    public Blackboard(int NumXY, GeoPoint CenterPoint, double width, double height) {
+        this(NumXY, CenterPoint, null, null,width, height);    
+        List<Vector> lv = new Plane(CenterPoint.point, CenterPoint.geometry.getNormal(CenterPoint.point)).findAxisForPlane();
+        this.setAxis(lv.get(0), lv.get(1));
+    }
+
+    public Blackboard generateJitterdPoint() {
         for (int i = 0; i < Nxy; i++) {
             for (int j = 0; j < Nxy; j++) {
                 points.add(jitterdPoint(i, j));
             }
         }
+        return this;
     }
 
-    private Point GridMethod(int j, int i) {
+    void setAxis(Vector axisx, Vector axisy) {
+        this.AxisX = axisx;
+        this.AxisY = axisy;
+    }
+
+    public Point GridMethod(int j, int i) {
         double stepX = width / Nxy;
         double stepY = height / Nxy;
         
@@ -55,9 +71,9 @@ public class Blackboard {
 
     private Point jitterdPoint(int j, int i){
         Point centerOfMiniSqure = GridMethod(j, i);
-    
-        double randX = random(0, width / Nxy);
-        double randY = random(0, height / Nxy);
+        
+        double randX = random(-(width / Nxy) /2 , (width / Nxy)/2);
+        double randY = random(-(height / Nxy) /2 , (height / Nxy)/2);
     
         if (!isZero(randX)) centerOfMiniSqure = centerOfMiniSqure.add(this.AxisX.scale(randX));
         if (!isZero(randY)) centerOfMiniSqure = centerOfMiniSqure.add(this.AxisY.scale(randY));
