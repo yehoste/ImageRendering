@@ -49,6 +49,7 @@ public class Blackboard {
     }
 
     public Blackboard generateJitterdPoint() {
+        points = new LinkedList<>();
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
                 points.add(jitterdPoint(i, j));

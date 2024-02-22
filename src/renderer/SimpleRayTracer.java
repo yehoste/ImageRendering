@@ -93,7 +93,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * 
      */
 
-    public SimpleRayTracer setBlackboardSizeAndWidthHeight(int BlackboardSize) {
+    public SimpleRayTracer setBlackboardSize(int BlackboardSize) {
         this.BlackboardSize = BlackboardSize;
         return this;
     }

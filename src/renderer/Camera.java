@@ -70,6 +70,7 @@ public class Camera implements Cloneable {
             for (Point point : blackboard.points) {
                 pixelColor = pixelColor.add(this.rayTracer.traceRay(new Ray(ray.getHead(), point.subtract(ray.getHead()))));
             }
+            pixelColor = pixelColor.reduce(AntiAlisingX*AntiAlisingY);
         } else {
             pixelColor = this.rayTracer.traceRay(ray);
         }
