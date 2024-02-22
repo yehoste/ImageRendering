@@ -21,7 +21,7 @@ public class ShadowTests {
       .setDirection(new Vector(0, 0, -1), Vector.Y)
       .setLocation(new Point(0, 0, 2000)).setVpDistance(1000)
       .setVpSize(200, 200)
-      .setRayTracer(new SimpleRayTracer(scene));
+      .setRayTracer(new SimpleRayTracer(scene).setSoftShadowBbSize(17));
 
    /** The sphere in the tests */
    private final Intersectable  sphere     = new Sphere(new Point(0, 0, -200), 60d)
@@ -104,7 +104,7 @@ public class ShadowTests {
                        new SpotLight(new Color(700, 400, 400), new Point(40, 40, 115), new Vector(-1, -1, -4)) //
                           .setkL(4E-4).setkQ(2E-5));
 
-      camera.setImageWriter(new ImageWriter("shadowTrianglesSphere", 600, 600))
+      camera.setImageWriter(new ImageWriter("shadowTrianglesSphereSSSS", 1500, 1500))
          .build()
          .renderImage()
          .writeToImage();

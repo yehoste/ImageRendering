@@ -6,7 +6,6 @@ import static primitives.Util.random;
 import java.util.LinkedList;
 import java.util.List;
 
-import geometries.Intersectable.GeoPoint;
 import geometries.Plane;
 import primitives.*;
 
@@ -27,8 +26,8 @@ public class Blackboard {
     private double width;
     private double height;
     
-    public Blackboard(int NumX, int NumY, GeoPoint CenterPoint, Vector axisx, Vector axisy, double width, double height) {
-        if(CenterPoint != null) this.CenterOfBlackB = CenterPoint.point;
+    public Blackboard(int NumX, int NumY, Point CenterPoint, Vector axisx, Vector axisy, double width, double height) {
+        if(CenterPoint != null) this.CenterOfBlackB = CenterPoint;
         this.Nx = NumX;
         this.Ny = NumY;
         this.AxisX = axisx;
@@ -37,10 +36,9 @@ public class Blackboard {
         this.height = height;
     }
 
-    public Blackboard(int NumXY, GeoPoint CenterPoint) {
-        this(NumXY, NumXY, CenterPoint, null, null,NumXY+1, NumXY+1);    
-        List<Vector> lv = new Plane(CenterPoint.point, CenterPoint.geometry.getNormal(CenterPoint.point)).findAxisForPlane();
-        this.setAxis(lv.get(0), lv.get(1));
+    public Blackboard(int NumXY, Point CenterPoint, Vector Vto) {
+        this(NumXY, NumXY, CenterPoint, null, null, NumXY+1, NumXY+1);
+        this.setAxis(CenterPoint, Vto);
     }
 
     public Blackboard setCenterPoint(Point pt) {
@@ -58,9 +56,10 @@ public class Blackboard {
         return this;
     }
 
-    void setAxis(Vector axisx, Vector axisy) {
-        this.AxisX = axisx;
-        this.AxisY = axisy;
+    void setAxis(Point Point, Vector n) {
+        List<Vector> lv = new Plane(Point, n).findAxisForPlane();
+        this.AxisX = lv.get(0);
+        this.AxisY =  lv.get(1);
     }
 
     public Point GridMethod(int j, int i) {

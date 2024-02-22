@@ -3,10 +3,12 @@ package unittests.renderer;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.Color.PINK;
 import static java.awt.Color.RED;
 import static java.awt.Color.WHITE;
 import static java.awt.Color.YELLOW;
+import static java.awt.Color.pink;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +27,7 @@ public class NicePic {
 
     private final Scene scene = new Scene("GlossysurfacesAndBlurryGlassTests");
 
-    private final Camera.Builder cameraBuilder     = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene).setBlackboardSize(4));//.setAntiAlising(4, 4);
+    private final Camera.Builder cameraBuilder     = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene).setGlossyAndBlurryBbSize(3)).setAntiAlising(4, 4);
 
     @Test
     public void MyPicture() throws CloneNotSupportedException {
@@ -116,11 +118,11 @@ public class NicePic {
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(BLACK)),
 
-                new Sphere(new Point(-25, 185, 120),15d).setEmission(new Color(GREEN.brighter()))
+                new Sphere(new Point(-25, 185, 120),15d).setEmission(new Color(RED.brighter()))
                         .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6)),
 
-                new Sphere(new Point(-25, 185, 120), 30d).setEmission(new Color(PINK))
-                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.1)),
+                new Sphere(new Point(-25, 185, 120), 30d).setEmission(new Color(pink))
+                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.2)),
 
                 new Sphere(new Point(-300, 600, 300), 30d).setEmission(new Color(YELLOW))
                         .setMaterial(new Material().setKd(0.1).setKs(0.1).setShininess(30).setkT(0.7)),
@@ -142,7 +144,8 @@ public class NicePic {
 
 
 
-                scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
+        scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.03));
+        
         scene.lights.add(
                 new PointLight(new Color(WHITE), new Point(-300, 600, 300)).setkL(4E-5).setkQ(2E-7));
 

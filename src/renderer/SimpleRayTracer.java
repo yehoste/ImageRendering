@@ -21,7 +21,9 @@ public class SimpleRayTracer extends RayTracerBase {
     
     protected static final double MIN_CALC_COLOR_K = 0.001;
 
-    private int BlackboardSize = 0;
+    private int GlossyAndBlurryBbSize = 0;
+
+    private int SoftShadowBbSize = 0;
 
 
     /**
@@ -93,8 +95,13 @@ public class SimpleRayTracer extends RayTracerBase {
      * 
      */
 
-    public SimpleRayTracer setBlackboardSize(int BlackboardSize) {
-        this.BlackboardSize = BlackboardSize;
+    public SimpleRayTracer setGlossyAndBlurryBbSize(int BlackboardSize) {
+        this.GlossyAndBlurryBbSize = BlackboardSize;
+        return this;
+    }
+
+    public SimpleRayTracer setSoftShadowBbSize(int BlackboardSize) {
+        this.SoftShadowBbSize = BlackboardSize;
         return this;
     }
 
@@ -159,12 +166,12 @@ public class SimpleRayTracer extends RayTracerBase {
         GeoPoint gp = findClosestIntersection(reflectedRay);
 
         if (gp == null) return scene.background;
-        if(BlackboardSize == 0) 
+        if(GlossyAndBlurryBbSize == 0) 
             return calcColor(gp, reflectedRay, level - 1, kkx).scale(kx);
         else {
 
             // Add supersampling for glossy and Diffuse reflection
-            Blackboard Bb = new Blackboard(BlackboardSize, gp).generateJitterdPoint(); // Adjust the number of samples as needed
+            Blackboard Bb = new Blackboard(GlossyAndBlurryBbSize, gp.point, gp.geometry.getNormal(gp.point)).generateJitterdPoint(); // Adjust the number of samples as needed
 
             Color Reflection = Color.BLACK;
 
@@ -175,7 +182,7 @@ public class SimpleRayTracer extends RayTracerBase {
             }
 
             // Average the colors from supersampling
-            Reflection = Reflection.reduce(BlackboardSize*BlackboardSize).scale(kx);
+            Reflection = Reflection.reduce(GlossyAndBlurryBbSize*GlossyAndBlurryBbSize).scale(kx);
         
             return Reflection;
         }
@@ -200,12 +207,32 @@ public class SimpleRayTracer extends RayTracerBase {
     protected Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Ray ray = new Ray(gp.point, lightDirection, n);
+        
+        Double3 ktr = Double3.ONE;
+        if (light.getDistance(gp.point) != Double.POSITIVE_INFINITY && SoftShadowBbSize != 0){
+            Blackboard Bb = new Blackboard(SoftShadowBbSize, ray.getPoint(light.getDistance(gp.point)), l).generateJitterdPoint(); // Adjust the number of samples as needed
+            Double3 totalKtr = Double3.ZERO;
+            for (Point point : Bb.points) {
+                ktr=Double3.ONE;
+                Ray SSray = new Ray(ray.getHead(), point.subtract(ray.getHead()));
+                List<GeoPoint> intersections = scene.geometries.findGeoIntersections(SSray, light.getDistance(gp.point));
+                if (intersections == null) return Double3.ONE;
+                for (GeoPoint intersection : intersections) {
+                    ktr = ktr.product(intersection.geometry.getMaterial().kT);
+                }
+                totalKtr=totalKtr.add(ktr);
+                //totalKtr=totalKtr.scale(1/2);
+
+            }
+            return totalKtr.scale(1d/(SoftShadowBbSize*SoftShadowBbSize));
+        }
+
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
         if (intersections == null) return Double3.ONE;
-        Double3 ktr = Double3.ONE;
         for (GeoPoint intersection : intersections) {
             ktr = ktr.product(intersection.geometry.getMaterial().kT);
         }
+
         return ktr;
     }   
 

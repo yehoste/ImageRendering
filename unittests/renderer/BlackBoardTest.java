@@ -3,8 +3,6 @@ package unittests.renderer;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import geometries.Plane;
-import geometries.Intersectable.GeoPoint;
 import primitives.Point;
 import primitives.Vector;
 import renderer.Blackboard;
@@ -14,7 +12,7 @@ public class BlackBoardTest {
 
     @Test
     public void testGridMethod() {
-        Blackboard board = new Blackboard(9, new GeoPoint(new Plane(Point.ZERO, Vector.Z), Point.ZERO));
+        Blackboard board = new Blackboard(9, Point.ZERO, Vector.Z);
 
 
         Point bottomLeft = board.GridMethod(0, 0);
