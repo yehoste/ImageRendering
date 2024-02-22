@@ -14,7 +14,7 @@ public class BlackBoardTest {
 
     @Test
     public void testGridMethod() {
-        Blackboard board = new Blackboard(9, new GeoPoint(new Plane(Point.ZERO, Vector.Z), Point.ZERO), 10, 10);
+        Blackboard board = new Blackboard(9, new GeoPoint(new Plane(Point.ZERO, Vector.Z), Point.ZERO));
 
 
         Point bottomLeft = board.GridMethod(0, 0);

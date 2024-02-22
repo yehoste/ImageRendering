@@ -5,6 +5,7 @@ import primitives.*;
 import java.io.IOException;
 import java.util.MissingResourceException;
 
+import static java.awt.Color.BLACK;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
@@ -29,6 +30,14 @@ public class Camera implements Cloneable {
 
     private RayTracerBase rayTracer;
 
+    private int AntiAlisingX = 1;
+    private int AntiAlisingY = 1;
+
+    Blackboard blackboard;
+
+    Point pixelCenter;
+
+
     /**
      * default constructor for camera.
      */
@@ -52,8 +61,20 @@ public class Camera implements Cloneable {
     }
 
     private void castRay(int nx, int ny, int i, int j) {
+
         Ray ray = this.constructRay(nx, ny, i, j);
-        Color pixelColor = this.rayTracer.traceRay(ray);
+        Color pixelColor = new Color(BLACK);
+        if (AntiAlisingX != 1 && AntiAlisingY != 1) {
+            blackboard.setCenterPoint(this.pixelCenter);
+            blackboard.generateJitterdPoint();
+            for (Point point : blackboard.points) {
+                pixelColor = pixelColor.add(this.rayTracer.traceRay(new Ray(ray.getHead(), point.subtract(ray.getHead()))));
+            }
+        } else {
+            pixelColor = this.rayTracer.traceRay(ray);
+        }
+
+        
         this.imageWriter.writePixel(i, j, pixelColor);
     }
 
@@ -121,6 +142,7 @@ public class Camera implements Cloneable {
         if (!isZero(xj)) pIJ = pIJ.add(this.Vr.scale(xj));
         if (!isZero(yi)) pIJ = pIJ.add(this.Vu.scale(yi));
 
+        this.pixelCenter = pIJ;
         return new Ray(position, pIJ.subtract(position));
     }
 
@@ -154,6 +176,12 @@ public class Camera implements Cloneable {
             } else {
                 throw new IllegalArgumentException("the vectors are not vertical to each other");
             }
+            return this;
+        }
+
+        public Builder setAntiAlising(int x, int y) {
+            this.camera.AntiAlisingX = x;
+            this.camera.AntiAlisingY = y;
             return this;
         }
 
@@ -238,6 +266,7 @@ public class Camera implements Cloneable {
 
             camera.Vr = camera.Vt.crossProduct(camera.Vu).normalize();
             camera.viewPlaneCenter = camera.position.add(this.camera.Vt.scale(camera.Dist));
+            this.camera.blackboard = new Blackboard(this.camera.AntiAlisingX, this.camera.AntiAlisingY, null, this.camera.Vr, this.camera.Vu, this.camera.Width/ this.camera.imageWriter.getNx(), this.camera.Height/this.camera.imageWriter.getNx());
 
             return (Camera) camera.clone();
         }

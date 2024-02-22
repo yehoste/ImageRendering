@@ -22,8 +22,6 @@ public class SimpleRayTracer extends RayTracerBase {
     protected static final double MIN_CALC_COLOR_K = 0.001;
 
     private int BlackboardSize = 0;
-    private double BbWidth;
-    private double BbHeight;
 
 
     /**
@@ -97,8 +95,6 @@ public class SimpleRayTracer extends RayTracerBase {
 
     public SimpleRayTracer setBlackboardSizeAndWidthHeight(int BlackboardSize) {
         this.BlackboardSize = BlackboardSize;
-        this.BbWidth = (BlackboardSize-1);
-        this.BbHeight = (BlackboardSize-1);
         return this;
     }
 
@@ -162,28 +158,28 @@ public class SimpleRayTracer extends RayTracerBase {
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
         GeoPoint gp = findClosestIntersection(reflectedRay);
 
-
-        if(BlackboardSize == 0) return (gp == null ? scene.background : calcColor(gp, reflectedRay, level - 1, kkx)).scale(kx);
-
         if (gp == null) return scene.background;
+        if(BlackboardSize == 0) 
+            return calcColor(gp, reflectedRay, level - 1, kkx).scale(kx);
+        else {
 
+            // Add supersampling for glossy and Diffuse reflection
+            Blackboard Bb = new Blackboard(BlackboardSize, gp).generateJitterdPoint(); // Adjust the number of samples as needed
 
+            Color Reflection = Color.BLACK;
+
+            for (Point point : Bb.points) {
+                Ray SSray = new Ray(reflectedRay.getHead(), point.subtract(reflectedRay.getHead()));
+                Color sampleColor = calcColor(new GeoPoint(gp.geometry, point), SSray, level - 1, kkx);
+                Reflection = Reflection.add(sampleColor);
+            }
+
+            // Average the colors from supersampling
+            Reflection = Reflection.reduce(BlackboardSize*BlackboardSize).scale(kx);
         
-        // Add supersampling for glossy and Diffuse reflection
-        Blackboard Bb = new Blackboard(BlackboardSize, gp, this.BbWidth, this.BbHeight); // Adjust the number of samples as needed
-
-        Color Reflection = Color.BLACK;
-
-        for (Point point : Bb.points) {
-            Ray SSray = new Ray(reflectedRay.getHead(), point.subtract(reflectedRay.getHead()));
-            Color sampleColor = calcColor(gp, SSray).scale(kx);
-            Reflection = Reflection.add(sampleColor);
+            return Reflection;
         }
-
-        // Average the colors from supersampling
-        Reflection = Reflection.reduce(BlackboardSize*BlackboardSize);
-    
-        return Reflection;
+       /**/
     }
 
 
