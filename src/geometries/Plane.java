@@ -104,15 +104,15 @@ public class Plane extends Geometry {
         return null;
     }
 
-    public List<Vector> findAxisForPlane() {
-        double A = this.normal.getX();
-        double B = this.normal.getY();
-        double C = this.normal.getZ();
+    public static List<Vector> findAxisForPlane(Vector normal) {
+        double A = normal.getX();
+        double B = normal.getY();
+        double C = normal.getZ();
         
         // Generate a random vector within the plane defined by the normal vector
         if (A == -3 && B == 0 && C == -1) A = -4; // avoid create zero vector
-        Vector AxisXVector = this.normal.crossProduct(new Vector(A+3, B*(A+5), C+1)).normalize(); // B*(A+5) שינוי מקדם התלות הלינארי של האיקסים
-        Vector AxisYVector = this.normal.crossProduct(AxisXVector).normalize();
+        Vector AxisXVector = normal.crossProduct(new Vector(A+3, B*(A+5), C+1)).normalize(); // B*(A+5) שינוי מקדם התלות הלינארי של האיקסים
+        Vector AxisYVector = normal.crossProduct(AxisXVector).normalize();
         return List.of(AxisXVector,AxisYVector);
     }   
 

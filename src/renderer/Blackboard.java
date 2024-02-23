@@ -38,7 +38,7 @@ public class Blackboard {
 
     public Blackboard(int NumXY, Point CenterPoint, Vector Vto) {
         this(NumXY, NumXY, CenterPoint, null, null, NumXY+1, NumXY+1);
-        this.setAxis(CenterPoint, Vto);
+        this.setAxis(Vto);
     }
 
     public Blackboard setCenterPoint(Point pt) {
@@ -56,8 +56,8 @@ public class Blackboard {
         return this;
     }
 
-    void setAxis(Point Point, Vector n) {
-        List<Vector> lv = new Plane(Point, n).findAxisForPlane();
+    public void setAxis(Vector n) {
+        List<Vector> lv = Plane.findAxisForPlane(n);
         this.AxisX = lv.get(0);
         this.AxisY =  lv.get(1);
     }

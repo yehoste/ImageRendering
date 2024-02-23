@@ -106,16 +106,14 @@ class PlaneTests {
 	void TestFindAxisForPlane() {
 
 		// ============ Equivalence Partitions Tests ==============
-
-		//TC01: standardCase
-		Plane plane = new Plane(null, new Vector(1, 2, 3));
-        List<Vector> axes = plane.findAxisForPlane();
+		Vector n = new Vector(1, 2, 3);
+        List<Vector> axes = Plane.findAxisForPlane(n);
         assertNotNull(axes);
         assertEquals(2, axes.size());
         double tolerance = 1e-6;
         assertTrue(Math.abs(axes.get(0).dotProduct(axes.get(1))) < tolerance);
-        assertTrue(Math.abs(axes.get(0).dotProduct(plane.getNormal())) < tolerance);
-        assertTrue(Math.abs(axes.get(1).dotProduct(plane.getNormal())) < tolerance);
+        assertTrue(Math.abs(axes.get(0).dotProduct(n)) < tolerance);
+        assertTrue(Math.abs(axes.get(1).dotProduct(n)) < tolerance);
 
 
 	}
