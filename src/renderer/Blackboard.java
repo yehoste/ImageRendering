@@ -99,6 +99,12 @@ public class Blackboard {
     
         return centerOfMiniSqure;
     }
-     
 
+    public void AdjustForCircle(){
+        for(int i=0;i<Ny*Ny;i++){
+            if (CenterOfBlackB.distance(points.get(i))>Ny/2){
+                points.remove(i);
+            }
+        }
+    }
 }
