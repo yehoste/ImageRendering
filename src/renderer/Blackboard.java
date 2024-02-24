@@ -71,6 +71,11 @@ public class Blackboard {
     public Vector getNormal() {
         return this.normal;
     }
+
+    public Point getCenterPoint() {
+        return CenterOfBlackB;
+    }
+
     public Point GridMethod(int j, int i) {
         double stepX = (width-1) / Nx;
         double stepY = (height-1) / Ny;
@@ -100,11 +105,12 @@ public class Blackboard {
         return centerOfMiniSqure;
     }
 
-    public void AdjustForCircle(){
-        for(int i=0;i<Ny*Ny;i++){
-            if (CenterOfBlackB.distance(points.get(i))>Ny/2){
+    public void adjustForCircle() {
+        for (int i = points.size() - 1; i >= 0; i--) {
+            if (CenterOfBlackB.distance(points.get(i)) > Ny / 2) {
                 points.remove(i);
             }
         }
     }
+    
 }

@@ -31,8 +31,14 @@ public class BlackBoardTest {
     }
 
     @Test
-    public void testJitterdPoint() {
-        
+    public void testAdjustForCircle() {
+        Blackboard board = new Blackboard(9, Point.ZERO, Vector.Z);
+        board.generateJitterdPoint();
+        board.adjustForCircle();
+        for(int i=0;i<board.points.size();i++){
+            assertTrue((board.points.get(i).distance(board.getCenterPoint()) <= 4.5));
+        }
     }
+
 
 }

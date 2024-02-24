@@ -27,7 +27,7 @@ public class NicePic {
 
     private final Scene scene = new Scene("GlossysurfacesAndBlurryGlassTests");
 
-    private final Camera.Builder cameraBuilder     = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene).setGlossyAndBlurryBbSize(3)).setAntiAlising(4, 4);
+    private final Camera.Builder cameraBuilder     = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene).setGlossyAndBlurryBbSize(3));
 
     @Test
     public void MyPicture() throws CloneNotSupportedException {
