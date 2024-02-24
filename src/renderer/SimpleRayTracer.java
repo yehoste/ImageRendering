@@ -8,6 +8,7 @@ import java.util.List;
 
 import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
+import lighting.PointLight;
 import primitives.*;
 
 /**
@@ -23,7 +24,11 @@ public class SimpleRayTracer extends RayTracerBase {
 
     private int GlossyAndBlurryBbSize = 0;
 
+    private Blackboard  GlossyAndBlurryBlackBoard;
+
     private int SoftShadowBbSize = 0;
+
+    private Blackboard SoftShadowBlackBoard;
 
 
     /**
@@ -97,11 +102,13 @@ public class SimpleRayTracer extends RayTracerBase {
 
     public SimpleRayTracer setGlossyAndBlurryBbSize(int BlackboardSize) {
         this.GlossyAndBlurryBbSize = BlackboardSize;
+        GlossyAndBlurryBlackBoard = new Blackboard(GlossyAndBlurryBbSize, null, null);
         return this;
     }
 
     public SimpleRayTracer setSoftShadowBbSize(int BlackboardSize) {
         this.SoftShadowBbSize = BlackboardSize;
+        SoftShadowBlackBoard = new Blackboard(SoftShadowBbSize, null, null);
         return this;
     }
 
@@ -169,13 +176,14 @@ public class SimpleRayTracer extends RayTracerBase {
         if(GlossyAndBlurryBbSize == 0) 
             return calcColor(gp, reflectedRay, level - 1, kkx).scale(kx);
         else {
+            GlossyAndBlurryBlackBoard.setCenterPoint(gp.point);
+            Vector n = gp.geometry.getNormal(gp.point);
 
-            // Add supersampling for glossy and Diffuse reflection
-            Blackboard Bb = new Blackboard(GlossyAndBlurryBbSize, gp.point, gp.geometry.getNormal(gp.point)).generateJitterdPoint(); // Adjust the number of samples as needed
+            if (!n.equals(GlossyAndBlurryBlackBoard.getNormal())) GlossyAndBlurryBlackBoard.setAxis(n);
 
             Color Reflection = Color.BLACK;
-
-            for (Point point : Bb.points) {
+            GlossyAndBlurryBlackBoard.generateJitterdPoint();
+            for (Point point : GlossyAndBlurryBlackBoard.points) {
                 Ray SSray = new Ray(reflectedRay.getHead(), point.subtract(reflectedRay.getHead()));
                 Color sampleColor = calcColor(new GeoPoint(gp.geometry, point), SSray, level - 1, kkx);
                 Reflection = Reflection.add(sampleColor);
@@ -209,10 +217,13 @@ public class SimpleRayTracer extends RayTracerBase {
         Ray ray = new Ray(gp.point, lightDirection, n);
         
         Double3 ktr = Double3.ONE;
-        if (light.getDistance(gp.point) != Double.POSITIVE_INFINITY && SoftShadowBbSize != 0){
-            Blackboard Bb = new Blackboard(SoftShadowBbSize, ray.getPoint(light.getDistance(gp.point)), l).generateJitterdPoint(); // Adjust the number of samples as needed
+        if (SoftShadowBbSize != 0 && light instanceof PointLight PosLight){
+
+            SoftShadowBlackBoard.setCenterPoint(PosLight.getPosition());
+            SoftShadowBlackBoard.setAxis(lightDirection);
+            SoftShadowBlackBoard.generateJitterdPoint(); 
             Double3 totalKtr = Double3.ZERO;
-            for (Point point : Bb.points) {
+            for (Point point : SoftShadowBlackBoard.points) {
                 ktr=Double3.ONE;
                 Ray SSray = new Ray(ray.getHead(), point.subtract(ray.getHead()));
                 List<GeoPoint> intersections = scene.geometries.findGeoIntersections(SSray, light.getDistance(gp.point));

@@ -21,6 +21,8 @@ public class Blackboard {
 
     private Vector AxisY;
 
+    private Vector normal;
+
 
     public List<Point> points = new LinkedList<>();
     private double width;
@@ -34,11 +36,14 @@ public class Blackboard {
         this.AxisY = axisy;
         this.width = width;
         this.height = height;
+        if (axisx == null || axisy == null) this.normal = null;
+        else this.normal = axisx.crossProduct(axisy).normalize();
     }
 
     public Blackboard(int NumXY, Point CenterPoint, Vector Vto) {
         this(NumXY, NumXY, CenterPoint, null, null, NumXY+1, NumXY+1);
-        this.setAxis(Vto);
+        this.normal = Vto;
+        if (Vto != null) this.setAxis(Vto);
     }
 
     public Blackboard setCenterPoint(Point pt) {
@@ -57,11 +62,15 @@ public class Blackboard {
     }
 
     public void setAxis(Vector n) {
+        this.normal = n;
         List<Vector> lv = Plane.findAxisForPlane(n);
         this.AxisX = lv.get(0);
         this.AxisY =  lv.get(1);
     }
 
+    public Vector getNormal() {
+        return this.normal;
+    }
     public Point GridMethod(int j, int i) {
         double stepX = (width-1) / Nx;
         double stepY = (height-1) / Ny;

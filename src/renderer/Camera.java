@@ -63,14 +63,14 @@ public class Camera implements Cloneable {
     private void castRay(int nx, int ny, int i, int j) {
 
         Ray ray = this.constructRay(nx, ny, i, j);
-        Color pixelColor = new Color(BLACK);
+        Color pixelColor = Color.BLACK;
         if (AntiAlisingX != 1 && AntiAlisingY != 1) {
-
-
+            Point h = ray.getHead();
             blackboard.setCenterPoint(this.pixelCenter);
             blackboard.generateJitterdPoint();
+            
             for (Point point : blackboard.points) {
-                pixelColor = pixelColor.add(this.rayTracer.traceRay(new Ray(ray.getHead(), point.subtract(ray.getHead()))));
+                pixelColor = pixelColor.add(this.rayTracer.traceRay(new Ray(h, point.subtract(h))));
             }
             pixelColor = pixelColor.reduce(AntiAlisingX*AntiAlisingY);
 
