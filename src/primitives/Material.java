@@ -18,6 +18,28 @@ public class Material {
      */
     public Double3 kR = Double3.ZERO;
 
+    private double glossiness=0;
+
+    private double blurriness=0;
+
+    public double getGlossiness() {
+        return glossiness;
+    }
+
+    public Material setGlossiness(double glossiness) {
+        this.glossiness = glossiness;
+        return this;
+    }
+
+    public double getBlurriness() {
+        return blurriness;
+    }
+
+    public Material setBlurriness(double blurriness) {
+        this.blurriness = blurriness;
+        return this;
+    }
+
     private int nShininess = 0;
 
     /**
