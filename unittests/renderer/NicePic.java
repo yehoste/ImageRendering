@@ -2,9 +2,6 @@ package unittests.renderer;
 
 import static java.awt.Color.BLACK;
 import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.LIGHT_GRAY;
-import static java.awt.Color.PINK;
 import static java.awt.Color.RED;
 import static java.awt.Color.WHITE;
 import static java.awt.Color.YELLOW;

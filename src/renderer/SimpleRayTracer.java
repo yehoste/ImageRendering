@@ -152,30 +152,33 @@ public class SimpleRayTracer extends RayTracerBase {
         return new Ray(gp.point, r, n);
     }
 
-    protected Color calcGlobalEffect(Ray reflectedRay, Double3 kx, int x, int level, Double3 k) {
+    private Color calcGlobalEffect(Ray ray, Double3 kx, int x, int level, Double3 k) {
+        GeoPoint gp = findClosestIntersection(ray);
         Double3 kkx = kx.product(k);
-        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-        GeoPoint gp = findClosestIntersection(reflectedRay);
-
-        if (gp == null) return scene.background;
-        if (x == 0) {
-            return calcColor(gp, reflectedRay, level - 1, kkx).scale(kx);
-        } else {
-            Blackboard GlossyAndBlurryBlackBoard = new Blackboard(x, gp.point, gp.geometry.getNormal(gp.point));
-
-            Color Reflection = Color.BLACK;
-            GlossyAndBlurryBlackBoard.generateJitterdPoint();
-            for (Point point : GlossyAndBlurryBlackBoard.points) {
-                Ray SSray = new Ray(reflectedRay.getHead(), point.subtract(reflectedRay.getHead()));
-                Color sampleColor = calcColor(new GeoPoint(gp.geometry, point), SSray, level - 1, kkx).scale(kx);
-                Reflection = Reflection.add(sampleColor);
-            }
-
-            // Average the colors from supersampling
-            Reflection = Reflection.reduce(x*x);
-
-            return Reflection;
+        if (x == 0)  {
+            if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+            if (gp == null) return scene.background;
+            return  calcColor(gp, ray, level - 1, kkx).scale(kx);
         }
+        Blackboard GlossyAndBlurryBlackBoard = new Blackboard(x, ray.getPoint((100/x)+20), ray.getDirection());
+        Color color = Color.BLACK;
+        GlossyAndBlurryBlackBoard.generateJitterdPoint();
+        for (Point point : GlossyAndBlurryBlackBoard.points) {
+            Ray SSray = new Ray(ray.getHead(), point.subtract(ray.getHead()));
+            GeoPoint gp1 = findClosestIntersection(SSray);
+            if (gp1 == null) {
+                color = color.add(scene.background);
+            } else {
+                Color sampleColor = calcColor(gp1, SSray, level - 1, kkx);
+                color = color.add(sampleColor);
+            }
+        }
+
+        // Average the colors from supersampling
+        color = color.reduce(GlossyAndBlurryBlackBoard.points.size()).scale(kx);
+
+        return color;
+        
     }
 
     

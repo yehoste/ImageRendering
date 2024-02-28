@@ -5,7 +5,6 @@ import primitives.*;
 import java.io.IOException;
 import java.util.MissingResourceException;
 
-import static java.awt.Color.BLACK;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
@@ -64,6 +63,7 @@ public class Camera implements Cloneable {
 
         Ray ray = this.constructRay(nx, ny, i, j);
         Color pixelColor = Color.BLACK;
+        
         if (AntiAlisingX != 1 && AntiAlisingY != 1) {
             Point h = ray.getHead();
             blackboard.setCenterPoint(this.pixelCenter);
