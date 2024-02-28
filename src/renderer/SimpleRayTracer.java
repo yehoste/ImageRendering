@@ -158,9 +158,9 @@ public class SimpleRayTracer extends RayTracerBase {
         GeoPoint gp = findClosestIntersection(reflectedRay);
 
         if (gp == null) return scene.background;
-        if(x == 0) 
+        if (x == 0) {
             return calcColor(gp, reflectedRay, level - 1, kkx).scale(kx);
-
+        } else {
             Blackboard GlossyAndBlurryBlackBoard = new Blackboard(x, gp.point, gp.geometry.getNormal(gp.point));
 
             Color Reflection = Color.BLACK;
@@ -173,9 +173,10 @@ public class SimpleRayTracer extends RayTracerBase {
 
             // Average the colors from supersampling
             Reflection = Reflection.reduce(x*x);
-        
+
             return Reflection;
-       }
+        }
+    }
 
     
 
