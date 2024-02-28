@@ -39,6 +39,7 @@ public class Blackboard {
      * @param axisy Y-axis vector
      * @param width Width of the blackboard
      * @param height Height of the blackboard
+     *
      */
     public Blackboard(int NumX, int NumY, Point CenterPoint, Vector axisx, Vector axisy, double width, double height) {
         if(CenterPoint != null) this.CenterOfBlackB = CenterPoint;

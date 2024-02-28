@@ -236,7 +236,7 @@ public class SimpleRayTracer extends RayTracerBase {
 
             }
             return totalKtr.scale(1d/(SoftShadowBbSize*SoftShadowBbSize));
-        }*/
+        } */
 
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
         if (intersections == null) return Double3.ONE;
