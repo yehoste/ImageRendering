@@ -86,7 +86,7 @@ public class Blackboard {
         points = new LinkedList<>();
         for (int i = 0; i < Ny; i++) {
             for (int j = 0; j < Nx; j++) {
-                points.add(GridMethod(i, j));
+                points.add(jitterdPoint(i, j));
             }
         }
         return this;

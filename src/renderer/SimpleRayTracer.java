@@ -8,7 +8,6 @@ import java.util.List;
 
 import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
-import lighting.PointLight;
 import primitives.*;
 
 /**
@@ -153,13 +152,14 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Color calcGlobalEffect(Ray ray, Double3 kx, int x, int level, Double3 k) {
-        GeoPoint gp = findClosestIntersection(ray);
         Double3 kkx = kx.product(k);
         if (x == 0)  {
+            GeoPoint gp = findClosestIntersection(ray);
             if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
             if (gp == null) return scene.background;
             return  calcColor(gp, ray, level - 1, kkx).scale(kx);
         }
+        
         Blackboard GlossyAndBlurryBlackBoard = new Blackboard(x, ray.getPoint((100/x)+20), ray.getDirection());
         Color color = Color.BLACK;
         GlossyAndBlurryBlackBoard.generateJitterdPoint();
