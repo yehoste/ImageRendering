@@ -62,6 +62,10 @@ public class Camera implements Cloneable {
         private static Object mutexNext = new Object();
         private static Object mutexPixels = new Object();
 
+        private static long counter = 0;
+        private static int percents = 0;
+        private static long nextCounter = 0;
+
         static void initialize(int maxRows, int maxCols, double interval) {
             Pixel.maxRows = maxRows;
             Pixel.maxCols = maxCols;
@@ -96,6 +100,32 @@ public class Camera implements Cloneable {
             }
             if (flag) System.out.printf(PRINT_FORMAT, percentage / 10d);
         }
+
+        /**
+         * Internal function for thread-safe manipulating of main follow up Pixel object - this function is
+         * critical section for all the threads, and main Pixel object data is the shared data of this critical* section.<br/>
+         * The function provides next pixel number each call.
+         * @param target target secondary Pixel object to copy the row/column of the next pixel
+         * @return the progress percentage for follow up: if it is 0 - nothing to print, if it is -1 - the task is* finished, any other value - the progress percentage (only when it changes)
+         */
+        private synchronized int nextP(Pixel target) {
+            ++cCol; ++counter;
+            if (col < maxCols) {
+                target.cRow = this.row; target.cCol = this.col;
+                if (print && counter == nextCounter) {
+                    ++percents; nextCounter = pixels * (percents + 1) / 100; return percents;}
+                return 0;
+            }
+            ++cRow;
+            if (row < maxRows) {
+                cCol = 0;
+                if (print && counter == nextCounter) {
+                    ++percents; nextCounter = pixels * (percents + 1) / 100; return percents;}
+                return 0;
+            }
+            return -1;
+        }
+
     }
 
     /**
