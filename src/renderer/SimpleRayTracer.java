@@ -22,13 +22,9 @@ public class SimpleRayTracer extends RayTracerBase {
     
     protected static final double MIN_CALC_COLOR_K = 0.001;
 
-    private int GlossyAndBlurryBbSize = 0;
+    //private int SoftShadowBbSize = 0;
 
-    private Blackboard  GlossyAndBlurryBlackBoard;
-
-    private int SoftShadowBbSize = 0;
-
-    private Blackboard SoftShadowBlackBoard;
+    //private Blackboard SoftShadowBlackBoard;
 
 
     /**
@@ -95,22 +91,11 @@ public class SimpleRayTracer extends RayTracerBase {
         return color;
     }
 
-    /**
-     * 
-     * 
-     */
-
-    public SimpleRayTracer setGlossyAndBlurryBbSize(int BlackboardSize) {
-        this.GlossyAndBlurryBbSize = BlackboardSize;
-        GlossyAndBlurryBlackBoard = new Blackboard(GlossyAndBlurryBbSize, null, null);
-        return this;
-    }
-
-    public SimpleRayTracer setSoftShadowBbSize(int BlackboardSize) {
+    /**public SimpleRayTracer setSoftShadowBbSize(int BlackboardSize) {
         this.SoftShadowBbSize = BlackboardSize;
         SoftShadowBlackBoard = new Blackboard(SoftShadowBbSize, null, null);
         return this;
-    }
+    }*/
 
     /**
      * Calculates the diffuse reflection component of light interaction with a surface.
@@ -152,8 +137,8 @@ public class SimpleRayTracer extends RayTracerBase {
 
     private Color calcGlobalEffects(GeoPoint gp, Ray ray, int level, Double3 k) {
         Material material = gp.geometry.getMaterial();
-        return calcGlobalEffect(constructRefractedRay(gp, ray), material.kT, level, k)
-                .add(calcGlobalEffect(constructReflectedRay(gp, ray), material.kR, level, k));
+        return calcGlobalEffect(constructRefractedRay(gp, ray), material.kT, material.getBlurriness(), level, k)
+                .add(calcGlobalEffect(constructReflectedRay(gp, ray), material.kR, material.getGlossiness(), level, k));
     }
 
     private Ray constructRefractedRay(GeoPoint gp, Ray ray) {
@@ -167,35 +152,32 @@ public class SimpleRayTracer extends RayTracerBase {
         return new Ray(gp.point, r, n);
     }
 
-    protected Color calcGlobalEffect(Ray reflectedRay, Double3 kx, int level, Double3 k) {
+    protected Color calcGlobalEffect(Ray reflectedRay, Double3 kx, int x, int level, Double3 k) {
         Double3 kkx = kx.product(k);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
         GeoPoint gp = findClosestIntersection(reflectedRay);
 
         if (gp == null) return scene.background;
-        if(GlossyAndBlurryBbSize == 0) 
+        if(x == 0) 
             return calcColor(gp, reflectedRay, level - 1, kkx).scale(kx);
-        else {
-            GlossyAndBlurryBlackBoard.setCenterPoint(gp.point);
-            Vector n = gp.geometry.getNormal(gp.point);
 
-            if (!n.equals(GlossyAndBlurryBlackBoard.getNormal())) GlossyAndBlurryBlackBoard.setAxis(n);
+            Blackboard GlossyAndBlurryBlackBoard = new Blackboard(x, gp.point, gp.geometry.getNormal(gp.point));
 
             Color Reflection = Color.BLACK;
             GlossyAndBlurryBlackBoard.generateJitterdPoint();
             for (Point point : GlossyAndBlurryBlackBoard.points) {
                 Ray SSray = new Ray(reflectedRay.getHead(), point.subtract(reflectedRay.getHead()));
-                Color sampleColor = calcColor(new GeoPoint(gp.geometry, point), SSray, level - 1, kkx);
+                Color sampleColor = calcColor(new GeoPoint(gp.geometry, point), SSray, level - 1, kkx).scale(kx);
                 Reflection = Reflection.add(sampleColor);
             }
 
             // Average the colors from supersampling
-            Reflection = Reflection.reduce(GlossyAndBlurryBbSize*GlossyAndBlurryBbSize).scale(kx);
+            Reflection = Reflection.reduce(x*x);
         
             return Reflection;
-        }
-       /**/
-    }
+       }
+
+    
 
 
     protected Color calcColor(GeoPoint gp, Ray ray) {

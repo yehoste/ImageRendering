@@ -21,7 +21,7 @@ public class ShadowTests {
       .setDirection(new Vector(0, 0, -1), Vector.Y)
       .setLocation(new Point(0, 0, 2000)).setVpDistance(1000)
       .setVpSize(200, 200)
-      .setRayTracer(new SimpleRayTracer(scene).setSoftShadowBbSize(17));
+      .setRayTracer(new SimpleRayTracer(scene));//.setSoftShadowBbSize(17));
 
    /** The sphere in the tests */
    private final Intersectable  sphere     = new Sphere(new Point(0, 0, -200), 60d)

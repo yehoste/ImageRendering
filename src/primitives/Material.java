@@ -18,24 +18,24 @@ public class Material {
      */
     public Double3 kR = Double3.ZERO;
 
-    private double glossiness=0;
+    private int glossiness=0;
 
-    private double blurriness=0;
+    private int blurriness=0;
 
-    public double getGlossiness() {
+    public int getGlossiness() {
         return glossiness;
     }
 
-    public Material setGlossiness(double glossiness) {
+    public Material setGlossiness(int glossiness) {
         this.glossiness = glossiness;
         return this;
     }
 
-    public double getBlurriness() {
+    public int getBlurriness() {
         return blurriness;
     }
 
-    public Material setBlurriness(double blurriness) {
+    public Material setBlurriness(int blurriness) {
         this.blurriness = blurriness;
         return this;
     }

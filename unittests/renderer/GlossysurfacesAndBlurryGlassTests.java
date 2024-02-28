@@ -33,14 +33,8 @@ public class GlossysurfacesAndBlurryGlassTests{
 			.setDirection(new Vector(0, 0, -1), Vector.Y)
 			.setLocation(new Point(0, 0, 2000)).setVpDistance(1000)
 			.setVpSize(200, 200)
-			.setRayTracer(new SimpleRayTracer(scene).setSoftShadowBbSize(17));
+			.setRayTracer(new SimpleRayTracer(scene));
 
-	/** The sphere in the tests */
-	private final Intersectable sphere     = new Sphere(new Point(0, 0, -200), 60d)
-			.setEmission(new Color(BLUE))
-			.setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(30));
-	/** The material of the triangles in the tests */
-	private final Material       trMaterial = new Material().setKd(0.5).setKs(0.5).setShininess(30);
 	@Test
 	public void blurryTest(){
 		scene.geometries.add(
@@ -49,11 +43,11 @@ public class GlossysurfacesAndBlurryGlassTests{
 				new Triangle(new Point(-10, 0, 70), new Point(0, 90, 40), new Point(80, 0, 50))
 						.setMaterial(new Material().setkT(0.3).setBlurriness(0)).setEmission(new Color(GRAY)),
 				new Triangle(new Point(-10, 0, 70), new Point(0, 90, 40), new Point(-80, 0, 50))
-						.setMaterial(new Material().setkT(0.3).setBlurriness(9)).setEmission(new Color(GRAY)),
+						.setMaterial(new Material().setkT(0.3).setBlurriness(3)).setEmission(new Color(GRAY)),
 				new Triangle(new Point(-10, 0, 70), new Point(0,-90, 40), new Point(-80, 0, 50))
-						.setMaterial(new Material().setkT(0.3).setBlurriness(40)).setEmission(new Color(GRAY)),
+						.setMaterial(new Material().setkT(0.3).setBlurriness(9)).setEmission(new Color(GRAY)),
 				new Triangle(new Point(-10, 0, 70), new Point(0,-90, 40), new Point(80, 0, 50))
-						.setMaterial(new Material().setkT(0.3).setBlurriness(81)).setEmission(new Color(GRAY))
+						.setMaterial(new Material().setkT(0.3).setBlurriness(17)).setEmission(new Color(GRAY))
 		);
 
 		scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
@@ -73,7 +67,7 @@ public class GlossysurfacesAndBlurryGlassTests{
 				new Sphere( new Point(0, 0, 0), 50d).setMaterial(new Material().setKd(0.3).setKs(0.5).setShininess(10))
 						.setEmission(new Color(130, 80, 0)),
 				new Plane(new Point(70, 0, -140), new Vector(-0.35, 0, 1))
-						.setMaterial(new Material().setGlossiness(80).setkR(0.9)).setEmission(new Color(0, 30, 50)));
+						.setMaterial(new Material().setGlossiness(17).setkR(0.9)).setEmission(new Color(0, 30, 50)));
 
 		scene.setAmbientLight(new AmbientLight(new Color(WHITE), 0.15));
 		scene.setBackground(new Color(30, 10, 0));
