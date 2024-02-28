@@ -217,7 +217,7 @@ public class SimpleRayTracer extends RayTracerBase {
         Ray ray = new Ray(gp.point, lightDirection, n);
         
         Double3 ktr = Double3.ONE;
-        if (SoftShadowBbSize != 0 && light instanceof PointLight PosLight){
+        /*if (SoftShadowBbSize != 0 && light instanceof PointLight PosLight){
 
             SoftShadowBlackBoard.setCenterPoint(PosLight.getPosition());
             SoftShadowBlackBoard.setAxis(lightDirection);
@@ -236,7 +236,7 @@ public class SimpleRayTracer extends RayTracerBase {
 
             }
             return totalKtr.scale(1d/(SoftShadowBbSize*SoftShadowBbSize));
-        }
+        }*/
 
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
         if (intersections == null) return Double3.ONE;
