@@ -13,19 +13,36 @@ import java.util.List;
  * The class inherits from the Polygon class.
  */
 public class Triangle extends Polygon{
+
     /**
-     * Constructs a new Triangle with three specified vertices.
+     * Constructs a new Triangle with three specified vertices and calculates the bounding box.
      *
      * @param point1 The first vertex of the triangle.
      * @param point2 The second vertex of the triangle.
      * @param point3 The third vertex of the triangle.
      */
-    public Triangle(Point point1, Point point2, Point point3){
+    public Triangle(Point point1, Point point2, Point point3) {
         super(point1, point2, point3);
+
+        // Find minimum and maximum points for the bounding box
+        this.minPoint = new Point(
+                Math.min(point1.getX(), Math.min(point2.getX(), point3.getX())),
+                Math.min(point1.getY(), Math.min(point2.getY(), point3.getY())),
+                Math.min(point1.getZ(), Math.min(point2.getZ(), point3.getZ()))
+        );
+        this.maxPoint = new Point(
+                Math.max(point1.getX(), Math.max(point2.getX(), point3.getX())),
+                Math.max(point1.getY(), Math.max(point2.getY(), point3.getY())),
+                Math.max(point1.getZ(), Math.max(point2.getZ(), point3.getZ()))
+        );
     }
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        // Check if the ray intersects the bounding box before proceeding with further calculations
+        if (!isRayIntersectingBoundingBox(ray, maxDistance)) {
+            return null;
+        }
         if (plane.findGeoIntersections(ray, maxDistance) == null)
             return null;
         Point intersection = plane.findIntersections(ray,maxDistance).get(0);

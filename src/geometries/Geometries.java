@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 
 /**
  * This class represents a group of shapes in the space that represent a picture.
@@ -19,8 +21,35 @@ public class Geometries extends Intersectable {
     public List<Intersectable> geometriesList = new LinkedList<>();
 
     public Geometries(Intersectable... geometriesList) {
-
         this.add(geometriesList);
+        this.maxPoint = findMaxPoint(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        this.minPoint = findMinPoint(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    }
+
+    private Point findMaxPoint(double x, double y, double z) {
+        for (Intersectable intersectable : geometriesList) {
+            Point point;
+            if (intersectable instanceof Geometries geos) point = geos.maxPoint;
+            else point = intersectable.maxPoint;
+            
+            if (point.getX() > x) x = point.getX();
+            if (point.getY() > y) y = point.getY();
+            if (point.getZ() > z) z = point.getZ();
+        }
+        return new Point(x, y, z);
+    }
+
+    private Point findMinPoint(double x, double y, double z) {
+        for (Intersectable intersectable : geometriesList) {
+            Point point;
+            if (intersectable instanceof Geometries geos) point = geos.minPoint;
+            else point = intersectable.minPoint;
+            
+            if (point.getX() < x) x = point.getX();
+            if (point.getY() < y) y = point.getY();
+            if (point.getZ() < z) z = point.getZ();
+        }
+        return new Point(x, y, z);
     }
 
     public void add(Intersectable... newGeometriesList) {
@@ -35,6 +64,7 @@ public class Geometries extends Intersectable {
         List<GeoPoint> points = null;
         // Iterate over each geometry in the collection
         for (Intersectable geometry : this.geometriesList) {
+            if (!geometry.isRayIntersectingBoundingBox(ray, maxDistance)) continue;
             var geoPoints = geometry.findGeoIntersections(ray, maxDistance);
             // If there are intersections, add them to the list
             if (geoPoints != null) {

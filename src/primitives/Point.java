@@ -32,6 +32,53 @@ public class Point {
         return cords.d3;
     }
 
+    
+    /**
+     * Returns the ith component of the point.
+     * 
+     * @param i the index of the component to return (0, 1, or 2)
+     * @return the ith component of the point
+     * @throws IllegalArgumentException if i is not 0, 1, or 2
+     */
+    public double get(int i) {
+        switch (i) {
+            case 0:
+                return cords.d1;
+            case 1:
+                return cords.d2;
+            case 2:
+                return cords.d3;
+            default:
+                throw new IllegalArgumentException("Invalid value for cord");
+        }
+    }
+
+    /**
+     * Returns the axis along which this vector has the largest absolute value.
+     *
+     * @return The index (0, 1, or 2) representing the axis with the largest absolute value.
+     *         - 0: X-axis
+     *         - 1: Y-axis
+     *         - 2: Z-axis
+     */
+    public int getAxis() {
+        // Find the absolute values of each component (X, Y, Z)
+        double absX = Math.abs(getX());
+        double absY = Math.abs(getY());
+        double absZ = Math.abs(getZ());
+    
+        // Find the index (0, 1, or 2) corresponding to the largest absolute value
+        int largestIndex = 0;
+        if (absY > absX) {
+            largestIndex = 1;
+        }
+        if (absZ > absY) {
+            largestIndex = 2;
+        }
+    
+        return largestIndex;
+    }
+
     /**
      * Constructor for Point using a Double3 object as input.
      * @param cord

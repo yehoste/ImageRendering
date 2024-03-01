@@ -20,6 +20,8 @@ public class Polygon extends Geometry {
    protected final Plane       plane;
    /** The size of the polygon - the amount of the vertices in the polygon */
    private final int           size;
+   /** Minimum and maximum points of the bounding box */
+   
 
    /**
     * Polygon constructor based on vertices list. The list must be ordered by edge
@@ -52,6 +54,10 @@ public class Polygon extends Geometry {
       // polygon with this plane.
       // The plane holds the invariant normal (orthogonal unit) vector to the polygon
       plane         = new Plane(vertices[0], vertices[1], vertices[2]);
+      // Calculate the bounding box
+      minPoint = findMinPoint(vertices);
+      maxPoint = findMaxPoint(vertices);
+
       if (size == 3) return; // no need for more tests for a Triangle
 
       Vector  n        = plane.getNormal();
@@ -77,9 +83,29 @@ public class Polygon extends Geometry {
          edge2 = vertices[i].subtract(vertices[i - 1]);
          if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
             throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
-      }
-   }
+      
+  }
+}
 
+  private Point findMinPoint(Point[] vertices) {
+      double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, minZ = Double.MAX_VALUE;
+      for (Point point : vertices) {
+          minX = Math.min(minX, point.getX());
+          minY = Math.min(minY, point.getY());
+          minZ = Math.min(minZ, point.getZ());
+      }
+      return new Point(minX, minY, minZ);
+  }
+
+  private Point findMaxPoint(Point[] vertices) {
+      double maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE, maxZ = Double.MIN_VALUE;
+      for (Point point : vertices) {
+          maxX = Math.max(maxX, point.getX());
+          maxY = Math.max(maxY, point.getY());
+          maxZ = Math.max(maxZ, point.getZ());
+      }
+      return new Point(maxX, maxY, maxZ);
+  }
    /**
     * Returns the normal vector of the polygon at the given point.
     *
@@ -93,6 +119,10 @@ public class Polygon extends Geometry {
 
    @Override
    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+      // Check if the ray intersects the bounding box before proceeding with further calculations
+      if (!isRayIntersectingBoundingBox(ray, maxDistance)) {
+         return null;
+      }
       Plane plane = this.plane;
       if (plane.findIntersections(ray) == null)
          return null;

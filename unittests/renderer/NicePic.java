@@ -9,6 +9,7 @@ import static java.awt.Color.pink;
 
 import org.junit.jupiter.api.Test;
 
+import geometries.Geometries;
 import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
@@ -30,7 +31,26 @@ public class NicePic {
     public void MyPicture() throws CloneNotSupportedException {
         cameraBuilder.setDirection(new Vector(-1,1,0), new Vector(0,0,1));
         
-        scene.geometries.add(
+        Geometries roof = new Geometries(
+                new Triangle(new Point(0,100,50), new Point(0,150,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
+
+                new Triangle(new Point(-50,100,50), new Point(-50,150,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
+
+                new Triangle(new Point(-50,100,50), new Point(0,100,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
+
+                new Triangle(new Point(0,150,50), new Point(-50,150,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)) 
+        );
+
+
+        scene.geometries.add(roof,
                 new Plane(new Point(1,1,0), new Point(1,0,0), new Point(0,1,0))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(BLUE)),
@@ -66,22 +86,6 @@ public class NicePic {
                 new Triangle(new Point(0,100,0), new Point(0,100,50), new Point(0,150,50))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(150,75,0)),
-
-                new Triangle(new Point(0,100,50), new Point(0,150,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
-
-                new Triangle(new Point(-50,100,50), new Point(-50,150,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
-
-                new Triangle(new Point(-50,100,50), new Point(0,100,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
-
-                new Triangle(new Point(0,150,50), new Point(-50,150,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
 
                 new Triangle(new Point(-10,170,0), new Point(-40,170,0), new Point(-10,170,120))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
