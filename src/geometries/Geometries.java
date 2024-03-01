@@ -15,6 +15,7 @@ public class Geometries extends Intersectable {
     /**
      * geometriesList - list of all components in the scene
      */
+
     public List<Intersectable> geometriesList = new LinkedList<>();
 
     public Geometries(Intersectable... geometriesList) {

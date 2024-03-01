@@ -89,6 +89,9 @@ public class ShadowTests {
     * producing a shading */
    @Test
    public void trianglesSphere() {
+
+
+
       scene.geometries.add(
                            new Triangle(new Point(-150, -150, -115), new Point(150, -150, -135),
                                         new Point(75, 75, -150)) //
@@ -104,7 +107,10 @@ public class ShadowTests {
                        new SpotLight(new Color(700, 400, 400), new Point(40, 40, 115), new Vector(-1, -1, -4)) //
                           .setkL(4E-4).setkQ(2E-5));
 
-      camera.setImageWriter(new ImageWriter("shadowTrianglesSphereSSSS", 1500, 1500))
+      camera.setImageWriter(new ImageWriter("shadowTrianglesSphereSSSS", 1000, 1000))
+         .setAntiAlising(7, 7)
+         .setMultithreading(5)
+         .setDebugPrint(0.1)
          .build()
          .renderImage()
          .writeToImage();

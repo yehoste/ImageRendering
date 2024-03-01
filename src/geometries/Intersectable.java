@@ -3,12 +3,17 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Interface for all the objects that can be intersected
  */
 public abstract class Intersectable {
+
+    protected List<Point> pointsOfBoundryBox = new LinkedList<>();
+
+
     /**
      * A class that represents a point in space and the geometry it belongs to.
      */
@@ -72,4 +77,13 @@ public abstract class Intersectable {
     }
 
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
+
+    protected void createBoundriesPoints(List<Geometry> boundriesGeo) {
+        if (boundriesGeo.size() == 1) {
+            var l = boundriesGeo.get(0).pointsOfBoundryBox;
+            for (Point point : l) pointsOfBoundryBox.add(point);
+            return;
+        }
+        
+    }
 }

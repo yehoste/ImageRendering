@@ -24,7 +24,7 @@ public class NicePic {
 
     private final Scene scene = new Scene("GlossysurfacesAndBlurryGlassTests");
 
-    private final Camera.Builder cameraBuilder = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene));
+    private final Camera.Builder cameraBuilder = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene)).setAntiAlising(9, 9);
 
     @Test
     public void MyPicture() throws CloneNotSupportedException {
@@ -119,7 +119,7 @@ public class NicePic {
                         .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6)),
 
                 new Sphere(new Point(-25, 185, 120), 30d).setEmission(new Color(pink))
-                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setBlurriness(9).setShininess(30).setkT(0.2)),
+                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.2)),
 
                 new Sphere(new Point(-300, 600, 300), 30d).setEmission(new Color(YELLOW))
                         .setMaterial(new Material().setKd(0.1).setKs(0.1).setShininess(30).setkT(0.7)),
@@ -127,7 +127,7 @@ public class NicePic {
                 new Triangle(new Point(-250, 400, 0), new Point(-400, 100, 0),
                         new Point(-250, 400, 200))
                         .setEmission(new Color(20,20,20))
-                        .setMaterial(new Material().setkR(1).setGlossiness(3)),
+                        .setMaterial(new Material().setkR(1)),
 
                 new Triangle(new Point(-400,100,200), new Point(-400, 100, 0),
                         new Point(-250, 400, 200))
@@ -149,8 +149,8 @@ public class NicePic {
         cameraBuilder.setLocation(new Point(1200, -1100, 150)).setVpDistance(1000)
                 .setVpSize(500, 500)
                 .setImageWriter(new ImageWriter("MyPictureGB", 1000, 1000))
-                .setMultithreading(3) //
-                .setDebugPrint(0.1)
+                //.setMultithreading(3) //
+                //.setDebugPrint(0.1)
                 .build()
                 .renderImage()
                 .writeToImage();
