@@ -90,8 +90,6 @@ public class ShadowTests {
    @Test
    public void trianglesSphere() {
 
-
-
       scene.geometries.add(
                            new Triangle(new Point(-150, -150, -115), new Point(150, -150, -135),
                                         new Point(75, 75, -150)) //
@@ -109,7 +107,7 @@ public class ShadowTests {
 
       camera.setImageWriter(new ImageWriter("shadowTrianglesSphereSSSS", 1000, 1000))
          .setAntiAlising(7, 7)
-         .setMultithreading(5)
+         .setMultithreading(3)
          .setDebugPrint(0.1)
          .build()
          .renderImage()

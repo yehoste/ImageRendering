@@ -114,7 +114,12 @@ public class Plane extends Geometry {
         Vector AxisXVector = normal.crossProduct(new Vector(A+3, B*(A+5), C+1)).normalize(); // B*(A+5) שינוי מקדם התלות הלינארי של האיקסים
         Vector AxisYVector = normal.crossProduct(AxisXVector).normalize();
         return List.of(AxisXVector,AxisYVector);
-    }   
+    } 
+    
+    @Override
+    public boolean isRayIntersectingBoundingBox(Ray ray,double maxDistance) {
+        return true;
+    }
 
 }
         

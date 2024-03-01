@@ -49,7 +49,7 @@ public class NicePic {
                         .setEmission(new Color(RED)) 
         );
 
-        Geometries house= new Geometries(
+        Geometries Bottomhouse= new Geometries(
                 new Triangle(new Point(0,100,0), new Point(-50,100,0), new Point(-50,100,50))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(150,75,0)),
@@ -82,6 +82,8 @@ public class NicePic {
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(150,75,0))
         );
+
+        Geometries house= new Geometries(Bottomhouse, roof);
 
         Geometries miror= new Geometries(
                 new Triangle(new Point(-250, 400, 0), new Point(-400, 100, 0),
@@ -136,8 +138,10 @@ public class NicePic {
                         .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.2))
         );
 
+        Geometries fullPiller= new Geometries(piller, halfSphere);
 
-        scene.geometries.add(roof,house,miror,piller,halfSphere,
+
+        scene.geometries.add(house,miror,fullPiller,
                 new Plane(new Point(1,1,0), new Point(1,0,0), new Point(0,1,0))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(BLUE)),
