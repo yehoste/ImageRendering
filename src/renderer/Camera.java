@@ -62,9 +62,6 @@ public class Camera implements Cloneable {
         private static Object mutexNext = new Object();
         private static Object mutexPixels = new Object();
 
-        private static long counter = 0;
-        private static int percents = 0;
-        private static long nextCounter = 0;
 
         static void initialize(int maxRows, int maxCols, double interval) {
             Pixel.maxRows = maxRows;

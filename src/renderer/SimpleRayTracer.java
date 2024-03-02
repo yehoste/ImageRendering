@@ -1,6 +1,5 @@
 package renderer;
 
-import lighting.PointLight;
 import scene.Scene;
 
 import static primitives.Util.alignZero;
@@ -21,10 +20,6 @@ public class SimpleRayTracer extends RayTracerBase {
     private static final int MAX_CALC_COLOR_LEVEL = 10;
     
     protected static final double MIN_CALC_COLOR_K = 0.001;
-
-    private int SoftShadowBbSize = 0;
-
-    private Blackboard SoftShadowBlackBoard;
 
 
     /**
@@ -91,11 +86,6 @@ public class SimpleRayTracer extends RayTracerBase {
         return color;
     }
 
-    public SimpleRayTracer setSoftShadowBbSize(int BlackboardSize) {
-        this.SoftShadowBbSize = BlackboardSize;
-        SoftShadowBlackBoard = new Blackboard(SoftShadowBbSize, null, null);
-        return this;
-    }
 
     /**
      * Calculates the diffuse reflection component of light interaction with a surface.
@@ -205,30 +195,6 @@ public class SimpleRayTracer extends RayTracerBase {
         
         Double3 ktr = Double3.ONE;
         List<GeoPoint> intersections;
-
-
-        /*if (SoftShadowBbSize != 0 && light.getDistance(Point.ZERO)!=Double.POSITIVE_INFINITY ){
-            PointLight PosLight = (PointLight) light;
-
-            SoftShadowBlackBoard.setCenterPoint(PosLight.getPosition());
-            SoftShadowBlackBoard.setAxis(lightDirection);
-            SoftShadowBlackBoard.generateJitterdPoint().adjustForCircle();
-            Double3 totalKtr = Double3.ZERO;
-            for (Point point : SoftShadowBlackBoard.points) {
-                ktr = Double3.ONE;
-                Ray SSray = new Ray(gp.point, point.subtract(gp.point));
-                intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
-                if (intersections == null) {
-                    totalKtr = totalKtr.add(ktr);
-                } else {
-                    for (GeoPoint intersection : intersections) {
-                        ktr = ktr.product(intersection.geometry.getMaterial().kT);
-                    }
-                    totalKtr = totalKtr.add(ktr);
-                }
-            }
-            return totalKtr.scale(1d/(SoftShadowBbSize*SoftShadowBbSize));
-        }*/
 
         intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
         if (intersections == null) return Double3.ONE;

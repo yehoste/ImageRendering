@@ -31,6 +31,8 @@ public class Plane extends Geometry {
         // Calculate the cross product of the vectors to get the normal vector 
         // And normalize the normal vector to have a unit length
         this.normal = (v1.crossProduct(v2)).normalize();
+        this.minPoint = null;
+        this.maxPoint = null;
     }
 
     /**
@@ -118,7 +120,8 @@ public class Plane extends Geometry {
     
     @Override
     public boolean isRayIntersectingBoundingBox(Ray ray,double maxDistance) {
-        return true;
+        if(!isZero(this.normal.dotProduct(ray.getDirection()))) return true;
+        return false;
     }
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 
 import primitives.Point;
 import primitives.Ray;
-import primitives.Vector;
 
 /**
  * This class represents a group of shapes in the space that represent a picture.
@@ -28,26 +27,22 @@ public class Geometries extends Intersectable {
 
     private Point findMaxPoint(double x, double y, double z) {
         for (Intersectable intersectable : geometriesList) {
-            Point point;
-            if (intersectable instanceof Geometries geos) point = geos.maxPoint;
-            else point = intersectable.maxPoint;
+            if (intersectable.maxPoint == null) continue;
             
-            if (point.getX() > x) x = point.getX();
-            if (point.getY() > y) y = point.getY();
-            if (point.getZ() > z) z = point.getZ();
+            if (intersectable.maxPoint.getX() > x) x = intersectable.maxPoint.getX();
+            if (intersectable.maxPoint.getY() > y) y = intersectable.maxPoint.getY();
+            if (intersectable.maxPoint.getZ() > z) z = intersectable.maxPoint.getZ();
         }
         return new Point(x, y, z);
     }
 
     private Point findMinPoint(double x, double y, double z) {
         for (Intersectable intersectable : geometriesList) {
-            Point point;
-            if (intersectable instanceof Geometries geos) point = geos.minPoint;
-            else point = intersectable.minPoint;
+            if (intersectable.minPoint == null) continue;
             
-            if (point.getX() < x) x = point.getX();
-            if (point.getY() < y) y = point.getY();
-            if (point.getZ() < z) z = point.getZ();
+            if (intersectable.minPoint.getX() < x) x = intersectable.minPoint.getX();
+            if (intersectable.minPoint.getY() < y) y = intersectable.minPoint.getY();
+            if (intersectable.minPoint.getZ() < z) z = intersectable.minPoint.getZ();
         }
         return new Point(x, y, z);
     }

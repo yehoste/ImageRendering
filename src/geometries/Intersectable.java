@@ -3,7 +3,6 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -79,26 +78,23 @@ public abstract class Intersectable {
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
 
     protected boolean isRayIntersectingBoundingBox(Ray ray, double maxDistance) {
-        // Check for intersection with each bounding box plane (6 planes in total)
-        double tmin = Double.MIN_VALUE;
-        double tmax = Double.MAX_VALUE;
-
+        // Check for axis-wise intersection with the AABB
         for (int i = 0; i < 3; i++) {
-            double t1 = intersectPlane(ray, minPoint.get(i), maxPoint.get(i), ray.getDirection().get(i));
-            double t2 = intersectPlane(ray, maxPoint.get(i), minPoint.get(i), ray.getDirection().get(i));
-
-            tmin = Math.max(tmin, Math.min(t1, t2));
-            tmax = Math.min(tmax, Math.max(t1, t2));
+            double tmin = (minPoint.get(i) - ray.getHead().get(i)) / ray.getDirection().get(i);  // Nearest plane intersection on x-axis
+            double tmax = (maxPoint.get(i) - ray.getHead().get(i)) / ray.getDirection().get(i);  // Farthest plane intersection on x-axis
+        
+            // Swap tmin and tmax if necessary (ensure tmin < tmax)
+            if (tmin > tmax) {
+            double temp = tmin;
+            tmin = tmax;
+            tmax = temp;
+            }
+        
+            // Check if the intersection falls outside the ray's parameter range
+            if (tmin > maxDistance || tmax < 0) {
+            return false;
+            }    
         }
-
-        // If no intersection or negative t values, return false
-        return (tmin <= tmax) && (tmin >= 0.0) && (tmax <= maxDistance);
+        return true;
     }
-
-    private double intersectPlane(Ray ray, double p1, double p2, double dir) {
-        // Calculate t value for intersection with plane defined by a single axis
-        double t = (p1 - ray.getHead().get(ray.getDirection().getAxis())) / dir;
-        return t;
-    }
-
 }
