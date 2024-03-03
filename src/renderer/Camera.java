@@ -33,6 +33,8 @@ public class Camera implements Cloneable {
 
     private int AntiAlisingX = 1;
     private int AntiAlisingY = 1;
+
+    private Pixelmanage Pixelmanage;
     private final int SPARE_THREADS = 2; //  Spare threads if trying to use all the cores
     private double printInterval = 0; //  printing progress percentage interval
     private int threadsCount = 0; // -2 auto, -1 range/stream, 0 no threads, 1+ number of threadsprivate final int SPARE_THREADS = 2; // Spare threads if trying to use all the coresprivate double printInterval = 0; // printing progress percentage interval
@@ -47,57 +49,6 @@ public class Camera implements Cloneable {
      * default constructor for camera.
      */
     private Camera() {}
-
-    record Pixel(int row, int col) {
-        private static int maxRows = 0;
-        private static int maxCols = 0;
-        private static long totalPixels = 0L;
-        private static volatile int cRow = 0;
-        private static volatile int cCol = -1;
-        private static volatile long pixels = 0L;
-        private static volatile int lastPrinted = 0;
-        private static boolean print = false;
-        private static long printInterval = 100l;
-        private static final String PRINT_FORMAT = "%5.1f%%\r";
-        private static Object mutexNext = new Object();
-        private static Object mutexPixels = new Object();
-
-
-        static void initialize(int maxRows, int maxCols, double interval) {
-            Pixel.maxRows = maxRows;
-            Pixel.maxCols = maxCols;
-            Pixel.totalPixels = (long) maxRows * maxCols;
-            printInterval = (int) (interval * 10);
-            if (print = printInterval != 0) System.out.printf(PRINT_FORMAT, 0d);
-        }
-
-        static Pixel nextPixel() {
-            synchronized (mutexNext) {
-                if (cRow == maxRows) return null;
-                ++cCol;
-                if (cCol < maxCols) return new Pixel(cRow, cCol);
-                cCol = 0;
-                ++cRow;
-                if (cRow < maxRows) return new Pixel(cRow, cCol);
-            }
-            return null;
-        }
-        static void pixelDone() {
-            boolean flag = false;
-            int percentage = 0;
-            synchronized (mutexPixels) {
-                ++pixels;
-                if (print) {
-                    percentage = (int) (1000l * pixels / totalPixels);
-                    if (percentage - lastPrinted >= printInterval) {
-                        lastPrinted = percentage;
-                        flag = true;
-                    }
-                }
-            }
-            if (flag) System.out.printf(PRINT_FORMAT, percentage / 10d);
-        }
-    }
 
     /**
      * get the builder for the camera.
@@ -138,42 +89,44 @@ public class Camera implements Cloneable {
 
         
         this.imageWriter.writePixel(i, j, pixelColor);
-        Pixel.pixelDone();
+        Pixelmanage.pixelDone();
     }
 
 
     public Camera renderImage() {
         final int nX = imageWriter.getNx();
         final int nY = imageWriter.getNy();
-        Pixel.initialize(nY, nX, printInterval);
+        Pixelmanage = new Pixelmanage(nY, nX, printInterval);
+
         if (threadsCount == 0) {
             for (int i = 0; i < nY; ++i)
                 for (int j = 0; j < nX; ++j)
                     castRay(nX, nY, j, i);
-        } else if (threadsCount == -1) {
-            IntStream.range(0, nY).parallel() //
-                    .forEach(i -> IntStream.range(0, nX).parallel() //
-                            .forEach(j -> castRay(nX, nY, j, i)));
-       } else {
-            var threads = new LinkedList<Thread>();
-            while (threadsCount-- > 0)
-                threads.add(new Thread(() -> {
-                    Pixel pixel;
-                    while ((pixel = Pixel.nextPixel()) != null)
-                        castRay(nX, nY, pixel.col(), pixel.row());
-                }));
-            for (var thread : threads) thread.start();
-            try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}}
-            return this;
         }
+        else { // see further... option 2
+                var threads = new LinkedList<Thread>(); // list of threads
+                while (threadsCount-- > 0) // add appropriate number of threads
+                    threads.add(new Thread(() -> { // add a thread with its code
+                        Pixelmanage.Pixel pixel; // current pixel(row,col)
+                        // allocate pixel(row,col) in loop until there are no more pixels
+                        while ((pixel = Pixelmanage.nextPixel()) != null)
+                            // cast ray through pixel (and color it – inside castRay)
+                            castRay(nX, nY, pixel.col(), pixel.row());
+                    }));
+                // start all the threads
+                for (var thread : threads) thread.start();
+                // wait until all the threads have finished
+                try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
+            }
 
 
-    /**
-     * This method is used to draw a grid on the image.
-     * 
-     * @param interval the interval between each grid line
-     * @param color    the color of the grid lines
-     */
+
+            /**
+             * This method is used to draw a grid on the image.
+             *
+             * @param interval the interval between each grid line
+             * @param color    the color of the grid lines
+             */
     public Camera printGrid(int interval, Color color){
         if (this.imageWriter == null) {
             throw new MissingResourceException("missing resource value", ImageWriter.class.getName(), "");
