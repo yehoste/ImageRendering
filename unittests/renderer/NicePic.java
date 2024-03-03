@@ -162,7 +162,7 @@ public class NicePic {
                 .setVpSize(500, 500)
                 .setImageWriter(new ImageWriter("MyPictureAA", 1000, 1000))
                 .setMultithreading(3) //
-                .setDebugPrint(0.1)
+                .setDebugPrint(0.7)
                 .build()
                 .renderImage()
                 .writeToImage();
