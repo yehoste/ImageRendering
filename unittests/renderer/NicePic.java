@@ -135,7 +135,7 @@ public class NicePic {
                 new Sphere(new Point(-25, 185, 120),15d).setEmission(new Color(RED.brighter()))
                         .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6)),
                 new Sphere(new Point(-25, 185, 120), 30d).setEmission(new Color(pink))
-                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.2))
+                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.5))
         );
 
         Geometries fullPiller= new Geometries(piller, halfSphere);

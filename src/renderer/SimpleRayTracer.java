@@ -21,6 +21,10 @@ public class SimpleRayTracer extends RayTracerBase {
     
     protected static final double MIN_CALC_COLOR_K = 0.001;
 
+    private int GlossyAndBlurryBbSize = 0;
+
+    private Blackboard GlossyAndBlurryBlackBoard;
+
 
     /**
      * Constructs a new SimpleRayTracer with the specified scene.
@@ -86,6 +90,11 @@ public class SimpleRayTracer extends RayTracerBase {
         return color;
     }
 
+    public SimpleRayTracer setGlossyAndBlurryBbSize(int BlackboardSize) {
+        this.GlossyAndBlurryBbSize = BlackboardSize;
+        GlossyAndBlurryBlackBoard = new Blackboard(GlossyAndBlurryBbSize, null, null);
+        return this;
+    }
 
     /**
      * Calculates the diffuse reflection component of light interaction with a surface.
@@ -144,14 +153,16 @@ public class SimpleRayTracer extends RayTracerBase {
 
     private Color calcGlobalEffect(Ray ray, Double3 kx, int x, int level, Double3 k) {
         Double3 kkx = kx.product(k);
-        if (x == 0)  {
+        if (GlossyAndBlurryBbSize == 0 || x == 0)  {
             GeoPoint gp = findClosestIntersection(ray);
             if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
             if (gp == null) return scene.background;
             return  calcColor(gp, ray, level - 1, kkx).scale(kx);
         }
         
-        Blackboard GlossyAndBlurryBlackBoard = new Blackboard(x, ray.getPoint((100/x)+20), ray.getDirection());
+
+        GlossyAndBlurryBlackBoard.setCenterPoint(ray.getPoint((100/x)+10));
+        GlossyAndBlurryBlackBoard.setAxis( ray.getDirection());
         Color color = Color.BLACK;
         GlossyAndBlurryBlackBoard.generateJitterdPoint();
         for (Point point : GlossyAndBlurryBlackBoard.points) {
