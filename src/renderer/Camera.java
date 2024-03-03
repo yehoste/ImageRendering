@@ -117,7 +117,13 @@ public class Camera implements Cloneable {
                 for (var thread : threads) thread.start();
                 // wait until all the threads have finished
                 try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
-            }
+        }
+        return this;
+    }
+
+    /**
+    }
+    
 
 
 
@@ -178,7 +184,7 @@ public class Camera implements Cloneable {
     /**
      * This inner class represents a Builder for the camera.
      */
-    public static class Builder{
+    public static class Builder {
 
         private final Camera camera = new Camera();
 
