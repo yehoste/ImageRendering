@@ -5,7 +5,6 @@ import primitives.*;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.MissingResourceException;
-import java.util.stream.IntStream;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
@@ -33,11 +32,9 @@ public class Camera implements Cloneable {
 
     private int AntiAlisingX = 1;
     private int AntiAlisingY = 1;
-
-    private Pixelmanage Pixelmanage;
-    private final int SPARE_THREADS = 2; //  Spare threads if trying to use all the cores
-    private double printInterval = 0; //  printing progress percentage interval
-    private int threadsCount = 0; // -2 auto, -1 range/stream, 0 no threads, 1+ number of threadsprivate final int SPARE_THREADS = 2; // Spare threads if trying to use all the coresprivate double printInterval = 0; // printing progress percentage interval
+    private PixelManager pixelManager;
+    private int threadsCount=0;
+    private double printInterval=0;
 
 
     Blackboard blackboard;
@@ -89,50 +86,47 @@ public class Camera implements Cloneable {
 
         
         this.imageWriter.writePixel(i, j, pixelColor);
-        Pixelmanage.pixelDone();
+        pixelManager.pixelDone();
     }
 
 
     public Camera renderImage() {
+        // IMAGE RENDERING
+        // Pass a ray from the camera through each pixel in the view plane and set the color
         final int nX = imageWriter.getNx();
         final int nY = imageWriter.getNy();
-        Pixelmanage = new Pixelmanage(nY, nX, printInterval);
 
-        if (threadsCount == 0) {
+        pixelManager = new PixelManager(nY, nX, printInterval);
+
+        if (threadsCount == 0)
             for (int i = 0; i < nY; ++i)
                 for (int j = 0; j < nX; ++j)
                     castRay(nX, nY, j, i);
-        }
         else { // see further... option 2
-                var threads = new LinkedList<Thread>(); // list of threads
-                while (threadsCount-- > 0) // add appropriate number of threads
-                    threads.add(new Thread(() -> { // add a thread with its code
-                        Pixelmanage.Pixel pixel; // current pixel(row,col)
-                        // allocate pixel(row,col) in loop until there are no more pixels
-                        while ((pixel = Pixelmanage.nextPixel()) != null)
-                            // cast ray through pixel (and color it – inside castRay)
-                            castRay(nX, nY, pixel.col(), pixel.row());
-                    }));
+            var threads = new LinkedList<Thread>(); // list of threads
+            while (threadsCount-- > 0) // add appropriate number of threads
+                threads.add(new Thread(() -> { // add a thread with its code
+                PixelManager.Pixel pixel; // current pixel(row,col)
+                // allocate pixel(row,col) in loop until there are no more pixels
+                while ((pixel = pixelManager.nextPixel()) != null)
+                    // cast ray through pixel (and color it – inside castRay)
+                    castRay(nX, nY, pixel.col(), pixel.row());
+                }));
                 // start all the threads
                 for (var thread : threads) thread.start();
                 // wait until all the threads have finished
                 try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
         }
+
         return this;
     }
 
     /**
-    }
-    
-
-
-
-            /**
-             * This method is used to draw a grid on the image.
-             *
-             * @param interval the interval between each grid line
-             * @param color    the color of the grid lines
-             */
+     * This method is used to draw a grid on the image.
+     * 
+     * @param interval the interval between each grid line
+     * @param color    the color of the grid lines
+     */
     public Camera printGrid(int interval, Color color){
         if (this.imageWriter == null) {
             throw new MissingResourceException("missing resource value", ImageWriter.class.getName(), "");
@@ -184,22 +178,9 @@ public class Camera implements Cloneable {
     /**
      * This inner class represents a Builder for the camera.
      */
-    public static class Builder {
+    public static class Builder{
 
         private final Camera camera = new Camera();
-
-        public Builder setMultithreading(int threads) {
-            if (threads < -2) throw new IllegalArgumentException("Multithreading must be -2 or higher");if (threads >= -1) this.camera.threadsCount = threads;
-            else { // == -2
-                int cores = Runtime.getRuntime().availableProcessors() - this.camera.SPARE_THREADS;
-                this.camera.threadsCount = cores <= 2 ? 1 : cores;
-            }
-            return this;
-        }
-        public Builder setDebugPrint(double interval) {
-            this.camera.printInterval = interval;
-            return this;
-        }
 
         /**
          * set the position of the camera.
@@ -319,6 +300,15 @@ public class Camera implements Cloneable {
             return (Camera) camera.clone();
         }
 
+        public Builder setMultithreading(int i) {
+            camera.threadsCount =i;
+            return this;
+        }
+
+        public Builder setDebugPrint(double d) {
+            camera.printInterval = d;
+            return this;
+        }
     }
 
     /**

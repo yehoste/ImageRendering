@@ -160,9 +160,9 @@ public class NicePic {
 
         cameraBuilder.setLocation(new Point(1200, -1100, 150)).setVpDistance(1000)
                 .setVpSize(500, 500)
-                .setImageWriter(new ImageWriter("MyPictureGB", 1000, 1000))
-                //.setMultithreading(3) //
-                //.setDebugPrint(0.1)
+                .setImageWriter(new ImageWriter("MyPictureAA", 1000, 1000))
+                .setMultithreading(3) //
+                .setDebugPrint(0.1)
                 .build()
                 .renderImage()
                 .writeToImage();
