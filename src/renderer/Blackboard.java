@@ -14,8 +14,10 @@ import geometries.Plane;
 import primitives.*;
 
 /**
- * The Blackboard class represents a virtual blackboard used for rendering purposes.
- * It facilitates generating jittered points on a grid and adjusting them for circular shape.
+ * The Blackboard class represents a virtual blackboard used for rendering
+ * purposes.
+ * It facilitates generating jittered points on a grid and adjusting them for
+ * circular shape.
  */
 public class Blackboard {
 
@@ -32,38 +34,43 @@ public class Blackboard {
     /**
      * Constructs a Blackboard object with specified parameters.
      *
-     * @param NumX Number of divisions along the X-axis
-     * @param NumY Number of divisions along the Y-axis
+     * @param NumX        Number of divisions along the X-axis
+     * @param NumY        Number of divisions along the Y-axis
      * @param CenterPoint Center point of the blackboard
-     * @param axisx X-axis vector
-     * @param axisy Y-axis vector
-     * @param width Width of the blackboard
-     * @param height Height of the blackboard
+     * @param axisx       X-axis vector
+     * @param axisy       Y-axis vector
+     * @param width       Width of the blackboard
+     * @param height      Height of the blackboard
      *
      */
     public Blackboard(int NumX, int NumY, Point CenterPoint, Vector axisx, Vector axisy, double width, double height) {
-        if(CenterPoint != null) this.CenterOfBlackB = CenterPoint;
+        if (CenterPoint != null)
+            this.CenterOfBlackB = CenterPoint;
         this.Nx = NumX;
         this.Ny = NumY;
         this.AxisX = axisx;
         this.AxisY = axisy;
         this.width = width;
         this.height = height;
-        if (axisx == null || axisy == null) this.normal = null;
-        else this.normal = axisx.crossProduct(axisy).normalize();
+        if (axisx == null || axisy == null)
+            this.normal = null;
+        else
+            this.normal = axisx.crossProduct(axisy).normalize();
     }
 
     /**
-     * Constructs a Blackboard object with specified parameters, assuming equal divisions along both axes.
+     * Constructs a Blackboard object with specified parameters, assuming equal
+     * divisions along both axes.
      *
-     * @param NumXY Number of divisions along both axes
+     * @param NumXY       Number of divisions along both axes
      * @param CenterPoint Center point of the blackboard
-     * @param Vto Normal vector of the blackboard
+     * @param Vto         Normal vector of the blackboard
      */
     public Blackboard(int NumXY, Point CenterPoint, Vector Vto) {
-        this(NumXY, NumXY, CenterPoint, null, null, NumXY+1, NumXY+1);
+        this(NumXY, NumXY, CenterPoint, null, null, NumXY + 1, NumXY + 1);
         this.normal = Vto;
-        if (Vto != null) this.setAxis(Vto);
+        if (Vto != null)
+            this.setAxis(Vto);
     }
 
     /**
@@ -101,7 +108,7 @@ public class Blackboard {
         this.normal = n;
         List<Vector> lv = Plane.findAxisForPlane(n);
         this.AxisX = lv.get(0);
-        this.AxisY =  lv.get(1);
+        this.AxisY = lv.get(1);
     }
 
     /**
@@ -130,15 +137,17 @@ public class Blackboard {
      * @return The calculated point on the blackboard grid
      */
     public Point GridMethod(int j, int i) {
-        double stepX = (width-1) / Nx;
-        double stepY = (height-1) / Ny;
+        double stepX = (width - 1) / Nx;
+        double stepY = (height - 1) / Ny;
 
-        double xj = ((j * stepX) - ((width-1) / 2)) + (stepX/2);
-        double yi = ((-i * stepY) + ((height-1) / 2)) - (stepY/2);
+        double xj = ((j * stepX) - ((width - 1) / 2)) + (stepX / 2);
+        double yi = ((-i * stepY) + ((height - 1) / 2)) - (stepY / 2);
 
         Point pIJ = this.CenterOfBlackB;
-        if (!isZero(xj)) pIJ = pIJ.add(this.AxisX.scale(xj));
-        if (!isZero(yi)) pIJ = pIJ.add(this.AxisY.scale(yi));
+        if (!isZero(xj))
+            pIJ = pIJ.add(this.AxisX.scale(xj));
+        if (!isZero(yi))
+            pIJ = pIJ.add(this.AxisY.scale(yi));
 
         return pIJ;
     }
@@ -150,20 +159,23 @@ public class Blackboard {
      * @param i Index along the Y-axis
      * @return The generated jittered point
      */
-    private Point jitterdPoint(int j, int i){
+    private Point jitterdPoint(int j, int i) {
         Point centerOfMiniSqure = GridMethod(j, i);
 
-        double randX = random(-((width-1) / Nx) /2 , ((width-1) / Nx)/2);
-        double randY = random(-((height-1) / Ny) /2 , ((height-1) / Ny)/2);
+        double randX = random(-((width - 1) / Nx) / 2, ((width - 1) / Nx) / 2);
+        double randY = random(-((height - 1) / Ny) / 2, ((height - 1) / Ny) / 2);
 
-        if (!isZero(randX)) centerOfMiniSqure = centerOfMiniSqure.add(this.AxisX.scale(randX));
-        if (!isZero(randY)) centerOfMiniSqure = centerOfMiniSqure.add(this.AxisY.scale(randY));
+        if (!isZero(randX))
+            centerOfMiniSqure = centerOfMiniSqure.add(this.AxisX.scale(randX));
+        if (!isZero(randY))
+            centerOfMiniSqure = centerOfMiniSqure.add(this.AxisY.scale(randY));
 
         return centerOfMiniSqure;
     }
 
     /**
-     * Adjusts the generated points on the blackboard to fit within a circular shape.
+     * Adjusts the generated points on the blackboard to fit within a circular
+     * shape.
      */
     public void adjustForCircle() {
         for (int i = points.size() - 1; i >= 0; i--) {

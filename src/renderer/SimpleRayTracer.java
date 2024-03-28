@@ -76,6 +76,9 @@ public class SimpleRayTracer extends RayTracerBase {
             double nl = alignZero(n.dotProduct(l));
     
             if (nl * nv > 0) {
+
+
+                
                 Double3 ktr = transparency(gp, lightSource, l, n);
     
                 if (!(ktr.product(k).lowerThan(MIN_CALC_COLOR_K))) {
