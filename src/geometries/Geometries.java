@@ -19,10 +19,16 @@ public class Geometries extends Intersectable {
 
     public List<Intersectable> geometriesList = new LinkedList<>();
 
+    private boolean isBvh = false;
+
     public Geometries(Intersectable... geometriesList) {
         this.add(geometriesList);
         this.maxPoint = findMaxPoint(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
         this.minPoint = findMinPoint(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    }
+
+    public void setBvh() {
+        this.isBvh = true;
     }
 
     private Point findMaxPoint(double x, double y, double z) {
@@ -59,7 +65,8 @@ public class Geometries extends Intersectable {
         List<GeoPoint> points = null;
         // Iterate over each geometry in the collection
         for (Intersectable geometry : this.geometriesList) {
-            if (!geometry.isRayIntersectingBoundingBox(ray, maxDistance)) continue;
+            
+            if (!geometry.isRayIntersectingBoundingBox(ray, maxDistance) ) continue; // && isBvh
             var geoPoints = geometry.findGeoIntersections(ray, maxDistance);
             // If there are intersections, add them to the list
             if (geoPoints != null) {
@@ -73,5 +80,9 @@ public class Geometries extends Intersectable {
             }
         }
         return points;
+    }
+
+    public boolean getBvh() {
+        return isBvh;
     }
 }

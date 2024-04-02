@@ -57,6 +57,16 @@ public abstract class Intersectable {
 
     }
 
+    public Point getMinPoint()
+    {
+        return minPoint;
+    }
+
+    public Point getMaxPoint()
+    {
+        return maxPoint;
+    }
+
     public List<Point> findIntersections(Ray ray) {
         var geoList = findGeoIntersections(ray);
         return geoList == null ? null : geoList.stream().map(gp -> gp.point).toList();
