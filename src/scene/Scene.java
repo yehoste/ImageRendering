@@ -33,8 +33,8 @@ public class Scene {
         return this;
     }
 
-    public static class KMeans {
-        public List<List<Integer>> cluster(List<Point> points, int k) {
+    private static class KMeans {
+        private List<List<Integer>> cluster(List<Point> points, int k) {
             List<List<Integer>> clusters = new ArrayList<>();
 
             // Step 1: Initialize centroids randomly

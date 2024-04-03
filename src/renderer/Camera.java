@@ -36,8 +36,6 @@ public class Camera implements Cloneable {
     private int threadsCount = 0;
     private double printInterval = 0;
 
-    Blackboard blackboard;
-
     Point pixelCenter;
 
     /**
@@ -68,7 +66,8 @@ public class Camera implements Cloneable {
 
         Ray ray = this.constructRay(nx, ny, i, j);
         Color pixelColor = Color.BLACK;
-
+        Blackboard blackboard = new Blackboard(this.AntiAlisingX, this.AntiAlisingY, null,
+        this.Vr, this.Vu, this.Width / this.imageWriter.getNx(), this.Height / this.imageWriter.getNx());
         if (AntiAlisingX != 1 && AntiAlisingY != 1) {
             Point h = ray.getHead();
             blackboard.setCenterPoint(this.pixelCenter);
@@ -308,9 +307,6 @@ public class Camera implements Cloneable {
 
             camera.Vr = camera.Vt.crossProduct(camera.Vu).normalize();
             camera.viewPlaneCenter = camera.position.add(this.camera.Vt.scale(camera.Dist));
-            this.camera.blackboard = new Blackboard(this.camera.AntiAlisingX, this.camera.AntiAlisingY, null,
-                    this.camera.Vr, this.camera.Vu, this.camera.Width / this.camera.imageWriter.getNx(),
-                    this.camera.Height / this.camera.imageWriter.getNx());
 
             return (Camera) camera.clone();
         }

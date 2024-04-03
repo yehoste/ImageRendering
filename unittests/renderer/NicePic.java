@@ -9,7 +9,7 @@ import static java.awt.Color.pink;
 
 import org.junit.jupiter.api.Test;
 
-import geometries.Geometries;
+//import geometries.Geometries;
 import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
@@ -23,33 +23,18 @@ import scene.Scene;
 
 public class NicePic {
 
-    private final Scene scene = new Scene("GlossysurfacesAndBlurryGlassTests");
-
-    private final Camera.Builder cameraBuilder = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene)).setAntiAlising(4, 4);
+    private final Scene scene = new Scene("GlossysurfacesAndBlurryGlassTests").setKMeans(7);
+    private final Camera.Builder cameraBuilder = Camera.getBuilder().setRayTracer(new SimpleRayTracer(scene));
 
     @Test
     public void MyPicture() throws CloneNotSupportedException {
         cameraBuilder.setDirection(new Vector(-1,1,0), new Vector(0,0,1));
         
-        Geometries roof = new Geometries(
-                new Triangle(new Point(0,100,50), new Point(0,150,50), new Point(-25,125,90))
+        scene.geometries.add(
+                new Plane(new Point(1,1,0), new Point(1,0,0), new Point(0,1,0))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
+                        .setEmission(new Color(BLUE)),
 
-                new Triangle(new Point(-50,100,50), new Point(-50,150,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
-
-                new Triangle(new Point(-50,100,50), new Point(0,100,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)),
-
-                new Triangle(new Point(0,150,50), new Point(-50,150,50), new Point(-25,125,90))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(RED)) 
-        );
-
-        Geometries Bottomhouse= new Geometries(
                 new Triangle(new Point(0,100,0), new Point(-50,100,0), new Point(-50,100,50))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(150,75,0)),
@@ -80,24 +65,24 @@ public class NicePic {
 
                 new Triangle(new Point(0,100,0), new Point(0,100,50), new Point(0,150,50))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(150,75,0))
-        );
+                        .setEmission(new Color(150,75,0)),
 
-        Geometries house= new Geometries(Bottomhouse, roof);
+                new Triangle(new Point(0,100,50), new Point(0,150,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
 
-        Geometries miror= new Geometries(
-                new Triangle(new Point(-250, 400, 0), new Point(-400, 100, 0),
-                        new Point(-250, 400, 200))
-                        .setEmission(new Color(20,20,20))
-                        .setMaterial(new Material().setkR(1)),
+                new Triangle(new Point(-50,100,50), new Point(-50,150,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
 
-                new Triangle(new Point(-400,100,200), new Point(-400, 100, 0),
-                        new Point(-250, 400, 200))
-                        .setEmission(new Color(20,20,20))
-                        .setMaterial(new Material().setkR(1))
-        );
+                new Triangle(new Point(-50,100,50), new Point(0,100,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
 
-        Geometries piller= new Geometries(
+                new Triangle(new Point(0,150,50), new Point(-50,150,50), new Point(-25,125,90))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
+                        .setEmission(new Color(RED)),
+
                 new Triangle(new Point(-10,170,0), new Point(-40,170,0), new Point(-10,170,120))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
                         .setEmission(new Color(BLACK)),
@@ -128,26 +113,26 @@ public class NicePic {
 
                 new Triangle(new Point(-40,170,120), new Point(-40,170,0), new Point(-40,200,120))
                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(BLACK))
-        );
+                        .setEmission(new Color(BLACK)),
 
-        Geometries halfSphere= new Geometries(
                 new Sphere(new Point(-25, 185, 120),15d).setEmission(new Color(RED.brighter()))
                         .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(30).setkT(0.6)),
+
                 new Sphere(new Point(-25, 185, 120), 30d).setEmission(new Color(pink))
-                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setShininess(30).setkT(0.5))
-        );
-
-        Geometries fullPiller= new Geometries(piller, halfSphere);
-
-
-        scene.geometries.add(house,miror,fullPiller,
-                new Plane(new Point(1,1,0), new Point(1,0,0), new Point(0,1,0))
-                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
-                        .setEmission(new Color(BLUE)),
+                        .setMaterial(new Material().setKd(0.001).setKs(0.001).setBlurriness(9).setShininess(30).setkT(0.2)),
 
                 new Sphere(new Point(-300, 600, 300), 30d).setEmission(new Color(YELLOW))
                         .setMaterial(new Material().setKd(0.1).setKs(0.1).setShininess(30).setkT(0.7)),
+
+                new Triangle(new Point(-250, 400, 0), new Point(-400, 100, 0),
+                        new Point(-250, 400, 200))
+                        .setEmission(new Color(20,20,20))
+                        .setMaterial(new Material().setkR(1).setGlossiness(3)),
+
+                new Triangle(new Point(-400,100,200), new Point(-400, 100, 0),
+                        new Point(-250, 400, 200))
+                        .setEmission(new Color(20,20,20))
+                        .setMaterial(new Material().setkR(1)),
 
                 new Plane(new Point(-1000,0,0), new Point(0,1000,0), new Point(-0,1000,1000))
                 .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(60))
@@ -161,7 +146,8 @@ public class NicePic {
         cameraBuilder.setLocation(new Point(1200, -1100, 150)).setVpDistance(1000)
                 .setVpSize(500, 500)
                 .setImageWriter(new ImageWriter("MyPictureAA", 1000, 1000))
-                .setMultithreading(3) //
+                .setAntiAlising(7, 7)
+                .setMultithreading(5) //
                 .setDebugPrint(0.7)
                 .build()
                 .renderImage()
